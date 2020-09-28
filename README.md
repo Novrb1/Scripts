@@ -1,1 +1,1 @@
-# Scripts
+# tbh im shit at coding
