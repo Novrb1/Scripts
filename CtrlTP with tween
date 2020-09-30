@@ -1,7 +1,8 @@
-local UIS = game:GetService('UserInputService')
-local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
-local mouse = game.Players.LocalPlayer:GetMouse()
+local lp = game.Players.LocalPlayer
+local hrp = lp.Character.HumanoidRootPart
+local mouse = lp:GetMouse()
 local TS = game:GetService('TweenService')
+local UIS = game:GetService('UserInputService')
 local CtrlDown = false
 UIS.InputBegan:connect(function(key)
     if key.KeyCode == Enum.KeyCode.LeftControl then
