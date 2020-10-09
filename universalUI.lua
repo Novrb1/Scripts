@@ -473,16 +473,24 @@ tc.MouseButton1Click:Connect(function()
 		teamcheck = false
 	end
 end)
+m.Button2Up:Connect(function()
+	lol = false
+end)
+m.Button2Down:Connect(function()
+	lol = true
+end)
 while wait() do
+    if lol == true then
 	if en == true then
 		if enable.Text == "X" then
-			local w = spray.Text
 			if m.Target and plrs:FindFirstChild(m.Target.Parent.Name) then
 				local HitPlayer = plrs:FindFirstChild(m.Target.Parent.Name)
 				if HitPlayer.Team ~= lp.Team or not teamcheck then
+				    local w = spray.Text
 					mouse1press(); wait(w); mouse1release()
 				end
 			end
 		end
 	end
+end
 end
