@@ -430,10 +430,9 @@ partfloat.MouseButton1Click:Connect(function()
 	pt.CanCollide = true
 	while wait() do
 		if partfloat.Text == "X" then
-			pt.CFrame = hrp.CFrame + Vector3.new(0,-4,0)
-			if partfloat.Text == "" then
-				pt:Destroy()
-			end
+    			pt.CFrame = hrp.CFrame + Vector3.new(0,-4,0)
+			else
+				pt.CFrame = CFrame.new(math.huge,0,math.huge)
 		end
 	end
 end)
