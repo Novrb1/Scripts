@@ -431,6 +431,9 @@ partfloat.MouseButton1Click:Connect(function()
 	while wait() do
 		if partfloat.Text == "X" then
 			pt.CFrame = hrp.CFrame + Vector3.new(0,-4,0)
+			if partfloat.Text == "" then
+				pt:Destroy()
+			end
 		end
 	end
 end)
