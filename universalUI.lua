@@ -29,6 +29,9 @@ local TextLabel_6 = Instance.new("TextLabel")
 local TextLabel_7 = Instance.new("TextLabel")
 local TextLabel_8 = Instance.new("TextLabel")
 local FOV = Instance.new("TextBox")
+local topthingy = Instance.new("Frame")
+local heeee = Instance.new("Frame")
+local infou = Instance.new("TextLabel")
 
 screengui.Name = "screengui"
 screengui.Parent = game.CoreGui
@@ -39,7 +42,7 @@ frame.Parent = screengui
 frame.Active = true
 frame.BackgroundColor3 = Color3.new(0.113725, 0.113725, 0.129412)
 frame.BorderColor3 = Color3.new(0.121569, 0.121569, 0.141176)
-frame.Position = UDim2.new(0.226986766, 0, 0.184009105, 0)
+frame.Position = UDim2.new(0.342629939, 0, 0.30616194, 0)
 frame.Size = UDim2.new(0, 553, 0, 382)
 frame.Draggable = true
 
@@ -57,7 +60,7 @@ twigger.BackgroundTransparency = 1
 twigger.Position = UDim2.new(0.254972875, 0, 0.0235602092, 0)
 twigger.Size = UDim2.new(0, 216, 0, 50)
 twigger.Font = Enum.Font.SourceSans
-twigger.Text = "Triggerbot"
+twigger.Text = "Aim-Assist"
 twigger.TextColor3 = Color3.new(0.898039, 0.898039, 0.898039)
 twigger.TextScaled = true
 twigger.TextSize = 14
@@ -221,12 +224,12 @@ TextLabel_4.TextSize = 32
 
 actual2.Name = "actual2"
 actual2.Parent = frame
+actual2.Active = true
 actual2.BackgroundColor3 = Color3.new(0.113725, 0.113725, 0.129412)
 actual2.BorderColor3 = Color3.new(0.12549, 0.12549, 0.141176)
 actual2.BorderSizePixel = 0
-actual2.Position = UDim2.new(999, 0, 999, 0)
+actual2.Position = UDim2.new(1.27486467, 0, 9999, 0)
 actual2.Size = UDim2.new(0, 553, 0, 318)
-actual2.Visible = false
 
 Line_2.Name = "Line"
 Line_2.Parent = actual2
@@ -366,6 +369,38 @@ FOV.Text = ""
 FOV.TextColor3 = Color3.new(0, 0, 0)
 FOV.TextSize = 14
 
+topthingy.Name = "topthingy"
+topthingy.Parent = screengui
+topthingy.Active = true
+topthingy.BackgroundColor3 = Color3.new(0.239216, 0.239216, 0.239216)
+topthingy.BorderSizePixel = 0
+topthingy.Position = UDim2.new(0.0125504136, 0, 0.0102442801, 0)
+topthingy.Size = UDim2.new(0, 272, 0, 20)
+
+heeee.Name = "heeee"
+heeee.Parent = topthingy
+heeee.Active = true
+heeee.BackgroundColor3 = Color3.new(0.745098, 0.435294, 0)
+heeee.BorderSizePixel = 0
+heeee.Position = UDim2.new(-0.0294117648, 0, 0, 0)
+heeee.Size = UDim2.new(0, 8, 0, 20)
+
+infou.Name = "infou"
+infou.Parent = topthingy
+infou.Active = true
+infou.BackgroundColor3 = Color3.new(1, 1, 1)
+infou.BackgroundTransparency = 1
+infou.BorderSizePixel = 0
+infou.Position = UDim2.new(0, 0, 2.38418579e-07, 0)
+infou.Size = UDim2.new(0, 272, 0, 21)
+infou.Font = Enum.Font.SourceSans
+infou.Text = "Thans For Using"
+infou.TextColor3 = Color3.new(1, 1, 1)
+infou.TextScaled = true
+infou.TextSize = 14
+infou.TextWrapped = true
+infou.Text = "GameID: " .. game.PlaceId .. " Thanks For Using " .. game.Players.LocalPlayer.Name
+
 local plrs = game:GetService("Players")
 local lp = plrs.LocalPlayer
 local m = lp:GetMouse()
@@ -378,6 +413,7 @@ local KDown = false
 local en = false
 local teamcheck = false
 local pt = Instance.new("Part")
+local h = RS.Heartbeat
 UIS.InputBegan:connect(function(key)
 	if key.KeyCode == Enum.KeyCode.Space then
 		SpaceDown = true
@@ -430,15 +466,15 @@ partfloat.MouseButton1Click:Connect(function()
 	pt.CanCollide = true
 	while wait() do
 		if partfloat.Text == "X" then
-    			pt.CFrame = hrp.CFrame + Vector3.new(0,-4,0)
-			else
-				pt.CFrame = CFrame.new(math.huge,0,math.huge)
+			pt.CFrame = hrp.CFrame + Vector3.new(0,-4,0)
+		else
+			pt.CFrame = CFrame.new(math.huge,0,math.huge)
 		end
 	end
 end)
 field.MouseButton1Click:Connect(function()
 	local txt = FOV.text
-	game.Camera.FieldOfView = txt
+	game.Workspace.Camera.FieldOfView = txt
 end)
 misc.MouseButton1Click:Connect(function()
 	actual.Active = false
@@ -481,18 +517,19 @@ end)
 m.Button2Down:Connect(function()
 	lol = true
 end)
-while wait() do
-    if lol == true then
-	if en == true then
-		if enable.Text == "X" then
-			if m.Target and plrs:FindFirstChild(m.Target.Parent.Name) then
-				local HitPlayer = plrs:FindFirstChild(m.Target.Parent.Name)
-				if HitPlayer.Team ~= lp.Team or not teamcheck then
-				    local w = spray.Text
-					mouse1press(); wait(w); mouse1release()
+infou.Text = "GameID: " .. game.PlaceId .. " Thanks For Using " .. game.Players.LocalPlayer.Name
+while h:Wait() do
+	if lol == true then
+		if en == true then
+			if enable.Text == "X" then
+				if m.Target and plrs:FindFirstChild(m.Target.Parent.Name) then
+					local HitPlayer = plrs:FindFirstChild(m.Target.Parent.Name)
+					if HitPlayer.Team ~= lp.Team or not teamcheck then
+						local w = spray.Text
+						mouse1press(); wait(w); mouse1release()
+					end
 				end
 			end
 		end
 	end
-end
 end
