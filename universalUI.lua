@@ -32,6 +32,7 @@ local FOV = Instance.new("TextBox")
 local topthingy = Instance.new("Frame")
 local heeee = Instance.new("Frame")
 local infou = Instance.new("TextLabel")
+infou.Text = "GameID: " .. game.PlaceId .. " Thanks For Using " .. game.Players.LocalPlayer.Name
 
 screengui.Name = "screengui"
 screengui.Parent = game.CoreGui
@@ -404,78 +405,88 @@ infou.Text = "GameID: " .. game.PlaceId .. " Thanks For Using " .. game.Players.
 local plrs = game:GetService("Players")
 local lp = plrs.LocalPlayer
 local m = lp:GetMouse()
-local UIS = game:GetService('UserInputService')
-local RS = game:GetService('RunService')
-local hrp = lp.Character.HumanoidRootPart
-local hum = lp.Character.Humanoid
+local uis = game:GetService('UserInputService')
+local rservice = game:GetService('RunService')
+local h = rservice.Heartbeat
 local SpaceDown = false
 local KDown = false
 local en = false
 local teamcheck = false
 local pt = Instance.new("Part")
-local h = RS.Heartbeat
-UIS.InputBegan:connect(function(key)
+pt.Parent = game.Workspace
+pt.Anchored = true
+pt.CanCollide = true
+
+uis.InputBegan:connect(function(key)
 	if key.KeyCode == Enum.KeyCode.Space then
 		SpaceDown = true
 	end
-end)
-UIS.InputEnded:connect(function(key)
-	if key.KeyCode == Enum.KeyCode.Space then
-		SpaceDown = false
-	end
-end)
-UIS.InputBegan:connect(function(key)
 	if key.KeyCode == Enum.KeyCode.LeftShift then
 		KDown = true
 	end
+	if key.KeyCode == Enum.KeyCode.Insert then
+	    frame.Visible = not frame.Visible
+	end
 end)
-UIS.InputEnded:connect(function(key)
+
+uis.InputEnded:connect(function(key)
+	if key.KeyCode == Enum.KeyCode.Space then
+		SpaceDown = false
+	end
 	if key.KeyCode == Enum.KeyCode.LeftShift then
 		KDown = false
 	end
 end)
 
 speed.MouseButton1Click:Connect(function()
-	speed.Text = "X"
-	RS.Stepped:connect(function()
-		if KDown then
-			hrp.CFrame = hrp.CFrame + hrp.CFrame.lookVector * 1
-		end
-	end)
-	wait(0.2)
-	speed.Text = ""
+	if speed.Text == "" then
+	   speed.Text = "X"
+	else
+	   speed.Text = ""
+	end
 end)
+
 infjump.MouseButton1Click:Connect(function()
-	infjump.Text = "X"
-	RS.Stepped:connect(function()
-		if SpaceDown then
-			hum:ChangeState('Jumping')
-		end
-	end)
-	wait(0.2)
-	infjump.Text = ""
+	if infjump.Text == "" then
+	    infjump.Text = "X"
+	else
+	    infjump.Text = ""
+	end
 end)
+
 partfloat.MouseButton1Click:Connect(function()
 	if partfloat.Text == "" then
 		partfloat.Text = "X"
 	else
 		partfloat.Text = ""
-	end
-	pt.Parent = game.Workspace
-	pt.Anchored = true
-	pt.CanCollide = true
-	while wait() do
-		if partfloat.Text == "X" then
-			pt.CFrame = hrp.CFrame + Vector3.new(0,-4,0)
-		else
-			pt.CFrame = CFrame.new(math.huge,0,math.huge)
-		end
+		pt.CFrame = pt.CFrame + Vector3.new(0,math.huge,0)
 	end
 end)
+
+rservice.Stepped:Connect(function()
+    if SpaceDown then
+        if infjump.Text == "X" then
+            repeat h:Wait() until lp and lp.Character and lp.Character:FindFirstChild("HumanoidRootPart")
+            lp.Character.Humanoid:ChangeState("Jumping") 
+        end
+    end
+    if KDown then
+        if speed.Text == "X" then
+            repeat h:Wait() until lp and lp.Character and lp.Character:FindFirstChild("HumanoidRootPart")
+            lp.Character.HumanoidRootPart.CFrame = lp.Character.HumanoidRootPart.CFrame + lp.Character.HumanoidRootPart.CFrame.lookVector * 0.5
+        end
+    end
+    if partfloat.Text == "X" then
+        repeat h:Wait() until lp and lp.Character and lp.Character:FindFirstChild("HumanoidRootPart")
+		pt.CFrame = lp.Character.HumanoidRootPart.CFrame + Vector3.new(0,-3.7,0)
+	end
+end)
+
 field.MouseButton1Click:Connect(function()
 	local txt = FOV.text
 	game.Workspace.Camera.FieldOfView = txt
 end)
+
 misc.MouseButton1Click:Connect(function()
 	actual.Active = false
 	actual.Visible = false
@@ -484,6 +495,7 @@ misc.MouseButton1Click:Connect(function()
 	actual2.Visible = true
 	actual2.Position = UDim2.new(0, 0, 0.167539269, 0)
 end)
+
 twigger.MouseButton1Click:Connect(function()
 	actual.Active = true
 	actual.Visible = true
@@ -502,6 +514,7 @@ enable.MouseButton1Click:Connect(function()
 		en = false
 	end
 end)
+
 tc.MouseButton1Click:Connect(function()
 	if tc.Text == "" then
 		tc.Text = "X"
@@ -511,16 +524,18 @@ tc.MouseButton1Click:Connect(function()
 		teamcheck = false
 	end
 end)
+
 m.Button2Up:Connect(function()
 	lol = false
 end)
+
 m.Button2Down:Connect(function()
 	lol = true
 end)
-infou.Text = "GameID: " .. game.PlaceId .. " Thanks For Using " .. game.Players.LocalPlayer.Name
+
 while h:Wait() do
-	if lol == true then
-		if en == true then
+	if lol then
+		if en then
 			if enable.Text == "X" then
 				if m.Target and plrs:FindFirstChild(m.Target.Parent.Name) then
 					local HitPlayer = plrs:FindFirstChild(m.Target.Parent.Name)
