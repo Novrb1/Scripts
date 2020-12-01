@@ -408,9 +408,8 @@ local m = lp:GetMouse()
 local uis = game:GetService('UserInputService')
 local rservice = game:GetService('RunService')
 local h = rservice.Heartbeat
-local SpaceDown = false
-local KDown = false
-local en = false
+local space = false
+local shift = false
 local teamcheck = false
 local pt = Instance.new("Part")
 pt.Parent = game.Workspace
@@ -419,10 +418,10 @@ pt.CanCollide = true
 
 uis.InputBegan:connect(function(key)
 	if key.KeyCode == Enum.KeyCode.Space then
-		SpaceDown = true
+		space = true
 	end
 	if key.KeyCode == Enum.KeyCode.LeftShift then
-		KDown = true
+		shift = true
 	end
 	if key.KeyCode == Enum.KeyCode.Insert then
 	    frame.Visible = not frame.Visible
@@ -431,10 +430,10 @@ end)
 
 uis.InputEnded:connect(function(key)
 	if key.KeyCode == Enum.KeyCode.Space then
-		SpaceDown = false
+		space = false
 	end
 	if key.KeyCode == Enum.KeyCode.LeftShift then
-		KDown = false
+		shift = false
 	end
 end)
 
@@ -464,13 +463,13 @@ partfloat.MouseButton1Click:Connect(function()
 end)
 
 rservice.Stepped:Connect(function()
-    if SpaceDown then
+    if space then
         if infjump.Text == "X" then
             repeat h:Wait() until lp and lp.Character and lp.Character:FindFirstChild("HumanoidRootPart")
             lp.Character.Humanoid:ChangeState("Jumping") 
         end
     end
-    if KDown then
+    if shift then
         if speed.Text == "X" then
             repeat h:Wait() until lp and lp.Character and lp.Character:FindFirstChild("HumanoidRootPart")
             lp.Character.HumanoidRootPart.CFrame = lp.Character.HumanoidRootPart.CFrame + lp.Character.HumanoidRootPart.CFrame.lookVector * 0.5
@@ -483,8 +482,7 @@ rservice.Stepped:Connect(function()
 end)
 
 field.MouseButton1Click:Connect(function()
-	local txt = FOV.text
-	game.Workspace.Camera.FieldOfView = txt
+	game.Workspace.Camera.FieldOfView = FOV.text
 end)
 
 misc.MouseButton1Click:Connect(function()
@@ -508,10 +506,8 @@ end)
 enable.MouseButton1Click:Connect(function()
 	if enable.Text == "" then
 		enable.Text = "X"
-		en = true
 	else
 		enable.Text = ""
-		en = false
 	end
 end)
 
@@ -535,14 +531,11 @@ end)
 
 while h:Wait() do
 	if lol then
-		if en then
-			if enable.Text == "X" then
-				if m.Target and plrs:FindFirstChild(m.Target.Parent.Name) then
-					local HitPlayer = plrs:FindFirstChild(m.Target.Parent.Name)
-					if HitPlayer.Team ~= lp.Team or not teamcheck then
-						local w = spray.Text
-						mouse1press(); wait(w); mouse1release()
-					end
+		if enable.Text == "X" then
+			if m.Target and plrs:FindFirstChild(m.Target.Parent.Name) then
+				local HitPlayer = plrs:FindFirstChild(m.Target.Parent.Name)
+				if HitPlayer.Team ~= lp.Team or not teamcheck then
+					mouse1press(); wait(spray.Text); mouse1release()
 				end
 			end
 		end
