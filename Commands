@@ -1,4 +1,4 @@
-print("Thanks For Using Uh My Discord Is Feens#7908 Add If Errors or Bugs Or just to join my server")
+warn("Thanks For Using Uh My Discord Is Feens#7908 Add If Errors or Bugs Or just to join my server")
 local lp = game.Players.LocalPlayer
 local mouse = lp:GetMouse()
 local rservice = game:GetService("RunService")
@@ -10,7 +10,6 @@ local kEy = 'f'
 local cam = false
 local Commands = {}
 local Prefix = "/"
-print("Prefix is", Prefix)
 warn("Prefix is", Prefix)
 function say(t)
     game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(t,"All")
@@ -87,7 +86,6 @@ end
 
 local function Help()
     for _, v in pairs(Commands) do 
-        print(v.Name, v.Description)
         warn(v.Name, v.Description)
     end
 end
