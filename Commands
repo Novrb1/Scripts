@@ -281,20 +281,6 @@ end)
 AddCmd("unac", "-Un Anti-Claim", function(Args)
     ac = false
 end)
-AddCmd("rpp", "-RocketPropulsion Player", function(Args)
-    for _,v in pairs(game.Players:GetPlayers()) do
-        if v.Name:lower():sub(1,#Args[1]) == Args[1]:lower() then
-            sys("Flinging Player " .. v.Name,255,255,255)
-            local bav = Instance.new("RocketPropulsion",lp.Character.HumanoidRootPart)
-            bav.Target = v.Character.HumanoidRootPart
-            bav.MaxSpeed = 9999
-            bav.MaxThrust = 9999999999
-            bav:Fire()
-            sys("Resetted",255,255,255)
-            lp.Character:BreakJoints()
-        end
-    end
-end)
 AddCmd("re", "-Resets Player", function(Args)
     sys("Reset'd",255,255,255)
     lp.Character:BreakJoints()
@@ -328,17 +314,18 @@ AddCmd("sh", "-Server Hops", function(Args)
 end)
 local stopit = false
 AddCmd("ungtools", "-Stops GrabTools", function(Args)
-    sys("Stopped Anything Related To Tools",255,255,255)
+    sys("Grab Tools Off",255,255,255)
     stopit = true
 end)
 AddCmd("gtools", "-Grabs Tools", function(Args)
     sys("Grab Tools On",255,255,255)
     stopit = false
     repeat heartbeat:Wait()
-        repeat heartbeat:Wait() until lp.Character and lp.Character:FindFirstChild("HumanoidRootPart")
         for _,z in pairs(game.Workspace:GetChildren()) do
             if z:IsA'Tool' then
-                z.Handle.CFrame = lp.Character.HumanoidRootPart.CFrame
+                pcall(function()
+                    z.Handle.CFrame = lp.Character.HumanoidRootPart.CFrame
+                end)
             end
         end
     until stopit == true
@@ -353,13 +340,13 @@ AddCmd("etools", "-Equips Tools", function(Args)
 end)
 AddCmd("dtools", "-Drops Tools", function(Args)
     sys("Drop Tools On",255,255,255)
-    stopit = false
     repeat heartbeat:Wait() until lp and lp.Character and lp.Character:FindFirstChild("HumanoidRootPart")
     for _,z in pairs(lp.Backpack:GetChildren()) do
         if z:IsA'Tool' then
             z.Parent = lp.Character
         end
     end
+    wait()
     for _,z in pairs(lp.Character:GetChildren()) do
         if z:IsA'Tool' then
             z.Parent = game.Workspace
