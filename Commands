@@ -9,6 +9,7 @@ local v3n = Vector3.new
 local cfn = CFrame.new
 local kEy = 'f'
 local cam = false
+local bpp = false
 local Commands = {}
 local Prefix = "/"
 warn("Prefix is", Prefix)
@@ -374,7 +375,14 @@ AddCmd("clip", "-Unclips Character", function(Args)
     sys("Noclip Off",255,255,255)
     noClip = false
 end)
-
+AddCmd("bpp", "-Turns On BackpackPlay", function(Args)
+    sys("BackpackPlay On",255,255,255)
+    bpp = true
+end)
+AddCmd("unbpp", "-Turns Off BackpackPlay", function(Args)
+    sys("BackpackPlay Off",255,255,255)
+    bpp = false
+end)
 --credits to infinite yield ; noclip cam
 AddCmd("cam", "-Noclips Camera", function(Args)
     sys("Camera Noclip On",255,255,255)
@@ -461,6 +469,13 @@ rservice.Stepped:Connect(function()
                    end
                end
            end
+        end
+        if bpp == true then
+            for _,z in pairs(lp.Backpack:GetDescendants()) do
+                if z:IsA'Sound' then
+                   z.Playing = true 
+                end
+            end
         end
     end)
 end)
