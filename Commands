@@ -5,7 +5,8 @@ local rservice = game:GetService("RunService")
 local heartbeat = rservice.Heartbeat
 local uis = game:GetService("UserInputService")
 local ts = game:GetService("TweenService")
-local v = game:GetService("VirtualUser")
+local v3n = Vector3.new
+local cfn = CFrame.new
 local kEy = 'f'
 local cam = false
 local Commands = {}
@@ -33,7 +34,7 @@ function selp(player)
     sb.Name = "NILLASD123151"
     sb.Parent = player
     sb.Adornee = player
-    sb.Size = Vector3.new(1,1,1)
+    sb.Size = v3n(1,1,1)
     sb.ZIndex = 1
     sb.AlwaysOnTop = true
     sb.Transparency = 0.7
@@ -62,12 +63,16 @@ function clone(tf)
         end
     end
 end
-function addpt(name,anchored,cancollide,cf)
+function addpt(name,anchored,cancollide,size,cf)
     local variable = Instance.new("Part",workspace)
     variable.Name = name
     variable.Anchored = anchored
     variable.CanCollide = cancollide
-    variable.Size = Vector3.new(0.5,0.5,0.5)
+    if size == nil then
+        variable.Size = v3n(4,1,2)
+    else 
+        variable.Size = v3n(size,size,size)
+    end
     variable.CFrame = cf
 end
 
@@ -252,7 +257,7 @@ AddCmd("cl", "-Claims Player [[ToolsNeeded]]", function(Args)
                     num = num + 1
                 end)
             until num == 20
-            lp.Character.HumanoidRootPart.CFrame = CFrame.new(0,workspace.FallenPartsDestroyHeight + 5,0)
+            lp.Character.HumanoidRootPart.CFrame = cfn(0,workspace.FallenPartsDestroyHeight + 5,0)
         end
     end
 end)
@@ -260,7 +265,7 @@ AddCmd("bring", "-Brings Player [[ToolsNeeded]]", function(Args)
     for _,v in pairs(game.Players:GetPlayers()) do
         if v.Name:lower():sub(1,#Args[1]) == Args[1]:lower() then
             if v and v.Character then sys("FEing Player " .. v.Name,255,255,255) end
-            addpt('ndsww',true,false,lp.Character.HumanoidRootPart.CFrame)
+            addpt('ndsww',true,false,nil,lp.Character.HumanoidRootPart.CFrame)
             clone(true)
             local num = 0
             repeat wait()
