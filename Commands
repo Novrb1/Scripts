@@ -424,7 +424,7 @@ function cadd()
                 if thing.Name == "nilthisplease" then
                     
                 else
-                    wait()
+                    heartbeat:Wait()
                     thing.Parent = lp.Backpack
                 end
             end
