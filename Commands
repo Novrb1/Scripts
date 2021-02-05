@@ -72,7 +72,11 @@ function addpt(name,anchored,cancollide,size,cf)
     end
     variable.CFrame = cf
 end
-
+if isfolder("Playerss") == false then
+    makefolder("Playerss")
+else
+    print("Already A Folder or Cannot Make")
+end
 --credits to Zells for the cmd handler
 local function AddCmd(CmdName, Desc, Func)
     Commands[#Commands + 1] = {["Name"] = CmdName, ["Description"] = Desc, ["Function"] = Func}
@@ -111,95 +115,18 @@ AddCmd("jp", "-JumpPower Changer", function(Args)
     lp.Character.Humanoid.JumpPower = Args[1]
     popup("JumpPower Set To" .. " " .. Args[1],0.5)
 end)
-
---made this from a logger i found uses discordwebhooks
 AddCmd("info", "-Checks Name/Age/Checks Friends Sends To Discord", function(Args)
     for _,v in pairs(game.Players:GetPlayers()) do
         if v.Name:lower():sub(1,#Args[1]) == Args[1]:lower() then
-            popup(v.Name .. " | " .. v.AccountAge,1)
-            msg = {
-                ["embeds"] = {{
-                                ["title"] = "Info Thingy",
-                                ["description"] = "Trust me",
-                                ["color"] = 3983420,
-                                ["fields"] = {
-                                {
-                                    ["name"] = "Name",
-                                    ["value"] = v.Name,
-                                    ["inline"] = true,
-                                },
-                                {
-                                    ["name"] = "Profile Link",
-                                    ["value"] = "https://www.roblox.com/users/" .. v.UserId .. " Days - " .. v.AccountAge,
-                                    ["inline"] = false,
-                                },
-                                {
-                                    ["name"] = "Invetory",
-                                    ["value"] = "https://www.roblox.com/users/" .. v.UserId .. "/inventory/#!/accessories",
-                                    ["inline"] = false,
-                                },
-                                {
-                                ["name"] = "Game",
-                                ["value"] = "https://www.roblox.com/games/" .. game.PlaceId,
-                                ["inline"] = true,
-                                },
-                            },
-                            ["footer"] = {
-                            ["text"] = "Feens#7908",
-                            },
-                        },
-                    },
-                    ["username"] = v.Name,
-                    ["avatar_url"] = "https://cdn.discordapp.com/attachments/764924261051662386/764937041086775346/iu.png"
-                }
-                local response = syn.request({
-                    Url = "https://discordapp.com/api/webhooks/765621885366435862/V2wx1GJi6TlE5NF4GgRY7LtaIFlivBxTQvQixrdkXPsKEr3lL30LbjIjo725YjB4ANiD",
-                    Method = "POST",
-                    Headers = {
-                    ["Content-Type"] = "application/json"
-                    },
-                    Body = game:GetService("HttpService"):JSONEncode(msg)
-                })
-                for _,z in pairs(game.Players:GetChildren()) do
-                    if z:IsFriendsWith(v.UserId) then
-                        print(z.Name .. " Is Friends With " .. v.Name)
-                        ee = {
-                            ["embeds"] = {{
-                            ["title"] = "Friends With " .. v.Name,
-                            ["description"] = "",
-                            ["color"] = 3983420,
-                            ["fields"] = {
-                            {
-                            ["name"] = "Name",
-                            ["value"] = z.Name,
-                            ["inline"] = true,
-                            },
-                            {
-                            ["name"] = "Profile",
-                            ["value"] = "https://roblox.com/users/" .. z.UserId,
-                            ["inline"] = true,
-                            },
-                        },
-                        ["footer"] = {
-                        ["text"] = "Feens#7908",
-                        },
-                    },
-                },
-                ["username"] = "Friends",
-                ["avatar_url"] = "https://cdn.discordapp.com/attachments/764924261051662386/764937041086775346/iu.png"
-                }
-                local response = syn.request({
-                    Url = "https://discordapp.com/api/webhooks/765621885366435862/V2wx1GJi6TlE5NF4GgRY7LtaIFlivBxTQvQixrdkXPsKEr3lL30LbjIjo725YjB4ANiD",
-                    Method = "POST",
-                    Headers = {
-                    ["Content-Type"] = "application/json"
-                    },
-                    Body = game:GetService("HttpService"):JSONEncode(ee)
-                })
+            writefile("Playerss/".. v.Name .. ".txt","Name: " .. v.Name .. " | Age: " .. v.AccountAge .. " | Roblox Profile: https://www.roblox.com/users/" .. v.UserId .. "/profile")
+            for _,f in pairs(game.Players:GetPlayers()) do
+                if f:IsFriendsWith(z.UserId) then
+                    writefile("Playerss/".. v.Name .. " Friend.txt","Name: " .. f.Name .. " | Age: " .. f.AccountAge .. " | Roblox Profile: https://www.roblox.com/users/" .. f.UserId .. "/profile")
                 end
             end
         end
     end
+    popup("Sent Information In Workspace Folder",1)
 end)
 AddCmd("rj", "-Rejoins", function(Args)
     popup("Rejoining...",1)
