@@ -413,6 +413,18 @@ AddCmd("unfreeze", "-UnFreeze's Character", function(Args)
     end
     popup("UnFroze Character",0.5)
 end)
+AddCmd("spec", "-Spectates Player", function(Args)
+    for _,v in pairs(game.Players:GetPlayers()) do
+        if v.Name:lower():sub(1,#Args[1]) == Args[1]:lower() then
+            if v and v.Character then else popup("Cannot Spectate",1) end
+            workspace.CurrentCamera.CameraSubject = v.Character.Head
+        end
+    end
+    popup("Spectating Player",0.5)
+end)
+AddCmd("unspec", "Fixes Camera", function(Args)
+    workspace.CurrentCamera.CameraSubject = lp.Character.Humanoid
+end)
 game.Players.LocalPlayer.Chatted:Connect(function(Msg)
     CheckCmd(Msg)
 end)
