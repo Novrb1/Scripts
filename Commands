@@ -115,7 +115,7 @@ AddCmd("jp", "-JumpPower Changer", function(Args)
     lp.Character.Humanoid.JumpPower = Args[1]
     popup("JumpPower Set To" .. " " .. Args[1],0.5)
 end)
-AddCmd("info", "-Checks Name/Age/Checks Friends Sends To Discord", function(Args)
+AddCmd("info", "-Checks Name/Age/Checks Friends Sends To Workspace", function(Args)
     for _,v in pairs(game.Players:GetPlayers()) do
         if v.Name:lower():sub(1,#Args[1]) == Args[1]:lower() then
             writefile("Playerss/".. v.Name .. ".txt","Name: " .. v.Name .. " | Age: " .. v.AccountAge .. " | Roblox Profile: https://www.roblox.com/users/" .. v.UserId .. "/profile")
