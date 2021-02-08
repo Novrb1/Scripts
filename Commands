@@ -380,6 +380,20 @@ function cadd()
         end
     end)
 end
+local tnems = {}
+function wrem()
+    workspace .ChildRemoved:Connect(function(instance)
+        if instance:IsA'Tool' then
+            if trename then
+                table.insert(tnems,instance.Name)
+                instance.Name = "nilthisplease"
+                heartbeat:Wait()
+                instance.Name = tnems[1]
+                table.remove(tnems,1)
+            end
+        end
+    end)
+end
 local tneams = {}
 function badd()
     lp.Backpack.ChildRemoved:Connect(function(instance)
@@ -394,6 +408,7 @@ function badd()
 end
 cadd()
 badd()
+wrem()
 lp.CharacterAdded:Connect(function()
     cadd()
     badd()
