@@ -178,7 +178,7 @@ AddCmd("cl", "-Claims Player [[ToolsNeeded]]", function(Args)
                     lp.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame
                     num = num + 1
                 end)
-            until num == 20
+            until num == 15
             lp.Character.HumanoidRootPart.CFrame = cfn(0,workspace.FallenPartsDestroyHeight + 5,0)
         end
     end
@@ -287,6 +287,15 @@ AddCmd("unbpp", "-Turns Off BackpackPlay", function(Args)
     bpp = false
     popup("BackpackPlay Off",0.5)
 end)
+AddCmd("toolr", "-Bypass Own AntiClaim So That You Can Hold Tools", function(Args)
+    trename = not trename
+    if trename == true then
+        popup("Turned On Tool Rename :D",0.5)
+    end
+    if trename == false then
+        popup("Turned Off Tool Rename D:",0.5)
+    end
+end)
 --credits to infinite yield ; noclip cam
 AddCmd("cam", "-Noclips Camera", function(Args)
     cam = true
@@ -363,16 +372,31 @@ function cadd()
                 if thing.Name == "nilthisplease" then
                     
                 else
-                    heartbeat:Wait()
-                    thing.Parent = lp.Backpack
+                    thing:Destroy()
+                    wait(0.1)
+                    thing:Destroy()
                 end
             end
         end
     end)
 end
+local tneams = {}
+function badd()
+    lp.Backpack.ChildRemoved:Connect(function(instance)
+        if trename == true then
+            table.insert(tneams,instance.Name)
+            instance.Name = "nilthisplease"
+            heartbeat:Wait()
+            instance.Name = tneams[1]
+            table.remove(tneams,1)
+        end
+    end)
+end
 cadd()
+badd()
 lp.CharacterAdded:Connect(function()
     cadd()
+    badd()
 end)
 rservice.Stepped:Connect(function()
     pcall(function()
