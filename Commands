@@ -19,16 +19,26 @@ function r6()
         return false
     end
 end
-function popup(msg,wdel)
-    local sg = Instance.new("ScreenGui",game:GetService("CoreGui"))
-    local tlabel = Instance.new("TextLabel",sg)
-    tlabel.BackgroundTransparency = 1
-    tlabel.Size = UDim2.new(0,400,0,50)
-    tlabel.Position = UDim2.new(0,0,0,mouse.ViewSizeY/2-50)
-    tlabel.Text = msg
-    tlabel.TextScaled = true
-    wait(wdel)
-    sg:Destroy()
+local function notify(text,full,corner)
+    local sg = Instance.new("ScreenGui",game.CoreGui)
+    sg.Name = "BrEaktWsl9102340_"
+    local tl = Instance.new("TextLabel",sg)
+    tl.BackgroundTransparency = 1
+    tl.TextScaled = true
+    tl.Text = text
+    tl.TextColor3 = Color3.new(255,255,255)
+    if corner then
+        tl.Size = UDim2.new(0,400,0,50)
+        tl.Position = UDim2.new(0, mouse.ViewSizeX - 600, 0, mouse.ViewSizeY - 50)
+    end
+    local mytick = tick()
+    rservice.Stepped:Connect(function()
+        pcall(function()
+            if tick() - mytick > 2 then
+                sg:Destroy() 
+            end
+        end)
+    end)
 end
 function say(t)
     game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(t,"All")
@@ -66,7 +76,7 @@ function addpt(name,anchored,cancollide,size,cf)
     variable.Anchored = anchored
     variable.CanCollide = cancollide
     if size == nil then
-        variable.Size = v3n(4,1,2)
+        variable.Size = v3n(4,1,false,true)
     else 
         variable.Size = v3n(size,size,size)
     end
@@ -109,11 +119,11 @@ end
 
 AddCmd("ws", "-WalkSpeed Changer", function(Args)
     lp.Character.Humanoid.WalkSpeed = Args[1]
-    popup("WalkSpeed Set To" .. " " .. Args[1],0.5)
+    notify("WalkSpeed Set To" .. " " .. Args[1],false,true)
 end)
 AddCmd("jp", "-JumpPower Changer", function(Args)
     lp.Character.Humanoid.JumpPower = Args[1]
-    popup("JumpPower Set To" .. " " .. Args[1],0.5)
+    notify("JumpPower Set To" .. " " .. Args[1],false,true)
 end)
 AddCmd("info", "-Checks Name/Age/Checks Friends Sends To Workspace", function(Args)
     for _,v in pairs(game.Players:GetPlayers()) do
@@ -126,15 +136,15 @@ AddCmd("info", "-Checks Name/Age/Checks Friends Sends To Workspace", function(Ar
             end
         end
     end
-    popup("Sent Information In Workspace Folder",1)
+    notify("Sent Information In Workspace Folder",false,true)
 end)
 AddCmd("rj", "-Rejoins", function(Args)
-    popup("Rejoining...",1)
+    notify("Rejoining...",false,true)
     game:GetService("TeleportService"):Teleport(game.PlaceId,lp)
 end)
 AddCmd("toolanim", "-No Tool Animation", function(Args)
     game.Players.LocalPlayer.Character:FindFirstChild("Animate").toolnone.ToolNoneAnim.AnimationId = "nil"        
-    popup("Turned Off Tool Anim",1)
+    notify("Turned Off Tool Anim",false,true)
 end)
 AddCmd("goto", "-Tps To Player", function(Args)
     for _,v in pairs(game.Players:GetPlayers()) do
@@ -148,9 +158,9 @@ AddCmd("esp", "-ESP's Player", function(Args)
         if v.Name:lower():sub(1,#Args[1]) == Args[1]:lower() then
             if v and v.Character and v.Character:FindFirstChild("Head") then
                 selp(v.Character.Head)
-                popup("Esp'd" .. " " .. v.Name,0.5)
+                notify("Esp'd" .. " " .. v.Name,false,true)
             else
-                popup("Cant Esp" .. " " .. v.Name,0.5)
+                notify("Cant Esp" .. " " .. v.Name,false,true)
             end
         end
     end
@@ -160,9 +170,9 @@ AddCmd("unesp", "-UnESP's Player", function(Args)
         if v.Name:lower():sub(1,#Args[1]) == Args[1]:lower() then
             if v.Character.Head:FindFirstChildOfClass("BoxHandleAdornment") ~= nil then
                 v.Character.Head['NILLASD123151']:Destroy()
-                popup("UnEsp'd" .. " " .. v.Name,0.5)
+                notify("UnEsp'd" .. " " .. v.Name,false,true)
             else
-                popup("Cant UnEsp" .. " " .. v.Name,0.5)
+                notify("Cant UnEsp" .. " " .. v.Name,false,true)
             end
         end
     end
@@ -170,7 +180,7 @@ end)
 AddCmd("cl", "-Claims Player [[ToolsNeeded]]", function(Args)
     for _,v in pairs(game.Players:GetPlayers()) do
         if v.Name:lower():sub(1,#Args[1]) == Args[1]:lower() then
-            if v and v.Character then else popup("Cannot Kill",1) end
+            if v and v.Character then else notify("Cannot Kill",false,true) end
             clone(true)
             local num = 0
             repeat wait()
@@ -182,12 +192,12 @@ AddCmd("cl", "-Claims Player [[ToolsNeeded]]", function(Args)
             lp.Character.HumanoidRootPart.CFrame = cfn(0,workspace.FallenPartsDestroyHeight + 5,0)
         end
     end
-    popup("Killed Player",0.5)
+    notify("Killed Player",false,true)
 end)
 AddCmd("bring", "-Brings Player [[ToolsNeeded]]", function(Args)
     for _,v in pairs(game.Players:GetPlayers()) do
         if v.Name:lower():sub(1,#Args[1]) == Args[1]:lower() then
-            if v and v.Character then else popup("Cannot Bring",1) end
+            if v and v.Character then else notify("Cannot Bring",false,true) end
             addpt('ndswdasasdsaddsaasdq123w',true,false,nil,lp.Character.HumanoidRootPart.CFrame)
             clone(true)
             local num = 0
@@ -201,25 +211,25 @@ AddCmd("bring", "-Brings Player [[ToolsNeeded]]", function(Args)
             workspace['ndswdasasdsaddsaasdq123w']:Destroy()
         end
     end
-    popup("Brung Player",0.5)
+    notify("Brung Player",false,true)
 end)
 ac = false
 AddCmd("ac", "-Anti-Claim", function(Args)
     ac = true
-    popup("Anti-Claim On",0.5)
+    notify("Anti-Claim On",false,true)
 end)
 AddCmd("unac", "-Un Anti-Claim", function(Args)
     ac = false
-    popup("Anti-Claim Off",0.5)
+    notify("Anti-Claim Off",false,true)
 end)
 AddCmd("re", "-Resets Player", function(Args)
     lp.Character:BreakJoints()
-    popup("Reseted",0.5)
+    notify("Reseted",false,true)
 end)
 
 --cmdx serverhopper creds to that
 AddCmd("sh", "-Server Hops", function(Args)
-    popup("ServerHopping Wait",1)
+    notify("ServerHopping Wait",false,true)
     if syn.queue_on_teleport then
         syn.queue_on_teleport('game:GetService("ReplicatedFirst"):RemoveDefaultLoadingScreen()')
     end
@@ -245,11 +255,11 @@ end)
 local stopit = false
 AddCmd("ungtools", "-Stops GrabTools", function(Args)
     stopit = false
-    popup("Grab Tools Off",0.5)
+    notify("Grab Tools Off",false,true)
 end)
 AddCmd("gtools", "-Grabs Tools", function(Args)
     stopit = true
-    popup("Grab Tools On",0.5)
+    notify("Grab Tools On",false,true)
 end)
 AddCmd("etools", "-Equips Tools", function(Args)
     for _,z in pairs(lp.Backpack:GetChildren()) do
@@ -257,7 +267,7 @@ AddCmd("etools", "-Equips Tools", function(Args)
             z.Parent = lp.Character
         end
     end
-    popup("Equip Tools",0.5)
+    notify("Equip Tools",false,true)
 end)
 AddCmd("dtools", "-Drops Tools", function(Args)
     for _,z in pairs(lp.Character:GetChildren()) do
@@ -265,60 +275,60 @@ AddCmd("dtools", "-Drops Tools", function(Args)
             z.Parent = game.Workspace
         end
     end
-    popup("Dropped Tools",0.5)
+    notify("Dropped Tools",false,true)
 end)
 AddCmd("fov", "-Field Of View Changer", function(Args)
     game.Workspace.Camera.FieldOfView = Args[1]
-    popup("FOV Changed To " .. Args[1],0.5)
+    notify("FOV Changed To " .. Args[1],false,true)
 end)
 AddCmd("noclip", "-Noclips Character", function(Args)
     noClip = true
-    popup("Noclip On",0.5)
+    notify("Noclip On",false,true)
 end)
 AddCmd("clip", "-Unclips Character", function(Args)
     noClip = false
-    popup("Noclip Off",0.5)
+    notify("Noclip Off",false,true)
 end)
 AddCmd("bpp", "-Turns On BackpackPlay", function(Args)
     bpp = true
-    popup("BackpackPlay On",0.5)
+    notify("BackpackPlay On",false,true)
 end)
 AddCmd("unbpp", "-Turns Off BackpackPlay", function(Args)
     bpp = false
-    popup("BackpackPlay Off",0.5)
+    notify("BackpackPlay Off",false,true)
 end)
 AddCmd("toolr", "-Bypass Own AntiClaim So That You Can Hold Tools", function(Args)
     trename = not trename
     if trename == true then
-        popup("Turned On Tool Rename :D",0.5)
+        notify("Turned On Tool Rename :D",false,true)
     end
     if trename == false then
-        popup("Turned Off Tool Rename D:",0.5)
+        notify("Turned Off Tool Rename D:",false,true)
     end
 end)
 --credits to infinite yield ; noclip cam
 AddCmd("cam", "-Noclips Camera", function(Args)
     cam = true
-    popup("Camera Noclip On",0.5)
+    notify("Camera Noclip On",false,true)
 end)
 AddCmd("uncam", "-Clips Camera", function(Args)
     cam = false
-    popup("Camera Noclip Off",0.5)
+    notify("Camera Noclip Off",false,true)
 end)
 AddCmd("anims", "-Changes Anim Speed", function(Args)
 	local Hum = lp.Character:FindFirstChild("Humanoid") or lp.Character:FindFirstChildOfClass("AnimationController")
-	popup("Server mute On " .. Args[1],0.5)
+	notify("Server mute On " .. Args[1],false,true)
 	for _,z in next, Hum:GetPlayingAnimationTracks() do
 		z:AdjustSpeed(tonumber(Args[1] or 1))
 	end
 end)
 AddCmd("smute", "-Server Mutes Boombox's", function(Args)
     smute = true
-    popup("Server mute On",0.5)
+    notify("Server mute On",false,true)
 end)
 AddCmd("unsmute", "-UnServer Mutes Boombox's", function(Args)
     smute = false
-    popup("Server mute Off",0.5)
+    notify("Server mute Off",false,true)
 end)
 AddCmd("tpa", "-Changes TimePos", function(Args)
     for _,z in pairs(game:GetDescendants()) do
@@ -327,7 +337,7 @@ AddCmd("tpa", "-Changes TimePos", function(Args)
             local numsdmsdmsd = tonumber(Args[1])
         end
     end
-    popup("TimePosition Changed",0.5)
+    notify("TimePosition Changed",false,true)
 end)
 AddCmd("freeze", "-Freeze's Character", function(Args)
     for _,z in pairs(lp.Character:GetDescendants()) do
@@ -337,7 +347,7 @@ AddCmd("freeze", "-Freeze's Character", function(Args)
             end
         end
     end
-    popup("Froze Character",0.5)
+    notify("Froze Character",false,true)
 end)
 AddCmd("unfreeze", "-UnFreeze's Character", function(Args)
     for _,z in pairs(lp.Character:GetDescendants()) do
@@ -347,16 +357,16 @@ AddCmd("unfreeze", "-UnFreeze's Character", function(Args)
             end
         end
     end
-    popup("UnFroze Character",0.5)
+    notify("UnFroze Character",false,true)
 end)
 AddCmd("spec", "-Spectates Player", function(Args)
     for _,v in pairs(game.Players:GetPlayers()) do
         if v.Name:lower():sub(1,#Args[1]) == Args[1]:lower() then
-            if v and v.Character then else popup("Cannot Spectate",1) end
+            if v and v.Character then else notify("Cannot Spectate",1) end
             workspace.CurrentCamera.CameraSubject = v.Character.Head
         end
     end
-    popup("Spectating Player",0.5)
+    notify("Spectating Player",false,true)
 end)
 AddCmd("unspec", "Fixes Camera", function(Args)
     workspace.CurrentCamera.CameraSubject = lp.Character.Humanoid
@@ -380,20 +390,6 @@ function cadd()
         end
     end)
 end
-local tnems = {}
-function wrem()
-    workspace .ChildRemoved:Connect(function(instance)
-        if instance:IsA'Tool' then
-            if trename then
-                table.insert(tnems,instance.Name)
-                instance.Name = "nilthisplease"
-                heartbeat:Wait()
-                instance.Name = tnems[1]
-                table.remove(tnems,1)
-            end
-        end
-    end)
-end
 local tneams = {}
 function badd()
     lp.Backpack.ChildRemoved:Connect(function(instance)
@@ -408,7 +404,6 @@ function badd()
 end
 cadd()
 badd()
-wrem()
 lp.CharacterAdded:Connect(function()
     cadd()
     badd()
@@ -461,4 +456,4 @@ rservice.Stepped:Connect(function()
         end
     end)
 end)
-popup("Thanks For Using Shit Script :D",2)
+notify("Thanks For Using Shit Script :D",false,true)
