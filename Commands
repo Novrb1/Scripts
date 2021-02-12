@@ -31,14 +31,7 @@ local function notify(text,full,corner)
         tl.Size = UDim2.new(0,400,0,50)
         tl.Position = UDim2.new(0, mouse.ViewSizeX - 600, 0, mouse.ViewSizeY - 50)
     end
-    local mytick = tick()
-    rservice.Stepped:Connect(function()
-        pcall(function()
-            if tick() - mytick > 2 then
-                sg:Destroy() 
-            end
-        end)
-    end)
+    game:GetService("Debris"):AddItem(sg,2)
 end
 function say(t)
     game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(t,"All")
