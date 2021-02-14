@@ -316,7 +316,7 @@ AddCmd("uncam", "-Clips Camera", function(Args)
 end)
 AddCmd("anims", "-Changes Anim Speed", function(Args)
 	local Hum = lp.Character:FindFirstChild("Humanoid") or lp.Character:FindFirstChildOfClass("AnimationController")
-	notify("Server mute On " .. Args[1])
+	notify("Animation Speed Changed To " .. tonumber(Args[1]))
 	for _,z in next, Hum:GetPlayingAnimationTracks() do
 		z:AdjustSpeed(tonumber(Args[1] or 1))
 	end
