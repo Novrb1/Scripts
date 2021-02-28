@@ -9,8 +9,19 @@ local cfn = CFrame.new
 local cam = false
 local bpp = false
 local Commands = {}
-local Prefix = "/"
+local Prefix = ";"
 warn("Prefix is", Prefix)
+
+local sg = Instance.new("ScreenGui",game.CoreGui)
+local cmdBar = Instance.new("TextBox",sg)
+cmdBar.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+cmdBar.BorderSizePixel = 0
+cmdBar.Position = UDim2.new(0, 99999, 0, 99999)
+cmdBar.Size = UDim2.new(0, 230, 0, 30)
+cmdBar.TextColor3 = Color3.fromRGB(255, 255, 255)
+cmdBar.TextSize = 25
+cmdBar.TextXAlignment = Enum.TextXAlignment.Left
+
 function r6()
     if lp.Character:FindFirstChildOfClass("Humanoid").RigType == Enum.HumanoidRigType.R6 then
         return true
@@ -111,97 +122,147 @@ local function CheckCmd(Cmd)
     end
 end
 
+mouse.KeyDown:Connect(function(key)
+    if key == Prefix then
+        cmdBar.Position = UDim2.new(0,mouse.ViewSizeX - 230,0,mouse.ViewSizeY)
+        cmdBar:CaptureFocus()
+    end
+end)
+
+AddCmd("prefix", "-Changes Prefix", function(Args)
+    if Args[1] and Args[1] ~= "" and Args[1] ~= " " and Args[1] ~= "/" then
+        Prefix = Args[1]
+    else
+        notif("Need Second Argument, Cannot Put / As Your Prefix D:")
+    end
+end)
 AddCmd("ws", "-WalkSpeed Changer", function(Args)
-    lp.Character.Humanoid.WalkSpeed = Args[1]
-    notif("WalkSpeed Set To" .. " " .. Args[1])
+    if Args[1] and Args[1] ~= "" and Args[1] ~= " " and tonumber(Args[1]) then
+        lp.Character.Humanoid.WalkSpeed = tonumber(Args[1])
+        notif("WalkSpeed Set To" .. " " .. tonumber(Args[1]))
+    else
+        notif("Need Second Argument, Need Number")
+    end
 end)
 AddCmd("jp", "-JumpPower Changer", function(Args)
-    lp.Character.Humanoid.JumpPower = Args[1]
-    notif("JumpPower Set To" .. " " .. Args[1])
+    if Args[1] and Args[1] ~= "" and Args[1] ~= " " and tonumber(Args[1]) then
+        lp.Character.Humanoid.JumpPower = tonumber(Args[1])
+        notif("JumpPower Set To" .. " " .. tonumber(Args[1]))
+    else
+        notif("Need Second Argument, Need Number")
+    end
 end)
 AddCmd("info", "-Checks Name/Age/Checks Friends Sends To Workspace", function(Args)
-    for _,v in pairs(game.Players:GetPlayers()) do
-        if v.Name:lower():sub(1,#Args[1]) == Args[1]:lower() then
-            writefile("Playerss/".. v.Name .. ".txt","Name: " .. v.Name .. " | Age: " .. v.AccountAge .. " | Roblox Profile: https://www.roblox.com/users/" .. v.UserId .. "/profile")
-            for _,f in pairs(game.Players:GetPlayers()) do
-                if f:IsFriendsWith(v.UserId) then
-                    writefile("Playerss/".. v.Name .. " Friend.txt","Name: " .. f.Name .. " | Age: " .. f.AccountAge .. " | Roblox Profile: https://www.roblox.com/users/" .. f.UserId .. "/profile")
+    if Args[1] and Args[1] ~= "" and Args[1] ~= " " then
+        for _,v in pairs(game.Players:GetPlayers()) do
+            if v.Name:lower():sub(1,#Args[1]) == Args[1]:lower() then
+                writefile("Playerss/".. v.Name .. ".txt","Name: " .. v.Name .. " | Age: " .. v.AccountAge .. " | Roblox Profile: https://www.roblox.com/users/" .. v.UserId .. "/profile")
+                for _,f in pairs(game.Players:GetPlayers()) do
+                    if f:IsFriendsWith(v.UserId) then
+                        writefile("Playerss/".. v.Name .. " Friend.txt","Name: " .. f.Name .. " | Age: " .. f.AccountAge .. " | Roblox Profile: https://www.roblox.com/users/" .. f.UserId .. "/profile")
+                    end
                 end
             end
         end
+        notif("Info In Workspace/Playerss")
+    else
+        notif("Need Second Argument")
     end
-    notif("Info In Workspace/Playerss")
 end)
 AddCmd("rj", "-Rejoins", function(Args)
     notif("Rejoining...")
     game:GetService("TeleportService"):Teleport(game.PlaceId,lp)
 end)
 AddCmd("goto", "-Tps To Player", function(Args)
-    for _,v in pairs(game.Players:GetPlayers()) do
-        if v.Name:lower():sub(1,#Args[1]) == Args[1]:lower() then
-            lp.Character.HumanoidRootPart.CFrame = v.Character.Head.CFrame
+    if Args[1] and Args[1] ~= "" and Args[1] ~= " " then
+        for _,v in pairs(game.Players:GetPlayers()) do
+            if v.Name:lower():sub(1,#Args[1]) == Args[1]:lower() then
+                if v and lp and v.Character and lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") and v.Character:FindFirstChild("Head") then
+                    lp.Character.HumanoidRootPart.CFrame = v.Character.Head.CFrame
+                else
+                    notif("Cannot TP To Person No Character")
+                end
+            end
         end
+    else
+        notif("Need Second Argument")
     end
 end)
 AddCmd("esp", "-ESP's Player", function(Args)
-    for _,v in pairs(game.Players:GetPlayers()) do
-        if v.Name:lower():sub(1,#Args[1]) == Args[1]:lower() then
-            if v and v.Character and v.Character:FindFirstChild("Head") then
-                selp(v.Character.Head)
-                notif("Esp'd" .. " " .. v.Name)
-            else
-                notif("Cant Esp" .. " " .. v.Name)
+    if Args[1] and Args[1] ~= "" and Args[1] ~= " " then
+        for _,v in pairs(game.Players:GetPlayers()) do
+            if v.Name:lower():sub(1,#Args[1]) == Args[1]:lower() then
+                if v and v.Character and v.Character:FindFirstChild("Head") then
+                    selp(v.Character.Head)
+                    notif("Esp'd" .. " " .. v.Name)
+                else
+                    notif("Cant Esp" .. " " .. v.Name)
+                end
             end
         end
+    else
+        notif("Need Second Argument")
     end
 end)
 AddCmd("unesp", "-UnESP's Player", function(Args)
-    for _,v in pairs(game.Players:GetPlayers()) do
-        if v.Name:lower():sub(1,#Args[1]) == Args[1]:lower() then
-            if v.Character.Head:FindFirstChildOfClass("BoxHandleAdornment") ~= nil then
-                v.Character.Head['NILLASD123151']:Destroy()
-                notif("UnEsp'd" .. " " .. v.Name)
-            else
-                notif("Cant UnEsp" .. " " .. v.Name)
+    if Args[1] and Args[1] ~= "" and Args[1] ~= " " then
+        for _,v in pairs(game.Players:GetPlayers()) do
+            if v.Name:lower():sub(1,#Args[1]) == Args[1]:lower() then
+                if v.Character.Head:FindFirstChildOfClass("BoxHandleAdornment") ~= nil then
+                    v.Character.Head['NILLASD123151']:Destroy()
+                    notif("UnEsp'd" .. " " .. v.Name)
+                else
+                    notif("Cant UnEsp" .. " " .. v.Name)
+                end
             end
         end
+    else
+        notif("Need Second Argument")
     end
 end)
 AddCmd("cl", "-Claims Player [[ToolsNeeded]]", function(Args)
-    for _,v in pairs(game.Players:GetPlayers()) do
-        if v.Name:lower():sub(1,#Args[1]) == Args[1]:lower() then
-            if v and v.Character then else notif("Cannot Kill") end
-            clone(true)
-            local num = 0
-            repeat wait()
-                pcall(function()
-                    lp.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame
-                    num = num + 1
-                end)
-            until num == 15
-            lp.Character.HumanoidRootPart.CFrame = cfn(0,workspace.FallenPartsDestroyHeight + 5,0)
+    if Args[1] and Args[1] ~= "" and Args[1] ~= " " then
+        for _,v in pairs(game.Players:GetPlayers()) do
+            if v.Name:lower():sub(1,#Args[1]) == Args[1]:lower() then
+                if lp and lp.Character and v and v.Character then else notif("Cannot Kill") end
+                clone(true)
+                local num = 0
+                repeat wait()
+                    pcall(function()
+                        lp.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame
+                        num = num + 1
+                    end)
+                until num == 15
+                lp.Character.HumanoidRootPart.CFrame = cfn(0,workspace.FallenPartsDestroyHeight + 5,0)
+            end
         end
+        notif("Killed Player")
+    else
+        notif("Need Second Argument")
     end
-    notif("Killed Player")
 end)
 AddCmd("bring", "-Brings Player [[ToolsNeeded]]", function(Args)
-    for _,v in pairs(game.Players:GetPlayers()) do
-        if v.Name:lower():sub(1,#Args[1]) == Args[1]:lower() then
-            if v and v.Character then else notif("Cannot Bring") end
-            addpt('ndswdasasdsaddsaasdq123w',true,false,nil,lp.Character.HumanoidRootPart.CFrame)
-            clone(true)
-            local num = 0
-            repeat wait()
-                pcall(function()
-                    lp.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame
-                    num = num + 1
-                end)
-            until num == 20
-            lp.Character.HumanoidRootPart.CFrame = workspace['ndsww'].CFrame
-            workspace['ndswdasasdsaddsaasdq123w']:Destroy()
+    if Args[1] and Args[1] ~= "" and Args[1] ~= " " then
+        for _,v in pairs(game.Players:GetPlayers()) do
+            if v.Name:lower():sub(1,#Args[1]) == Args[1]:lower() then
+                if lp and lp.Character and v and v.Character then else notif("Cannot Bring") end
+                addpt('ndswdasasdsaddsaasdq123w',true,false,nil,lp.Character.HumanoidRootPart.CFrame)
+                clone(true)
+                local num = 0
+                repeat wait()
+                    pcall(function()
+                        lp.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame
+                        num = num + 1
+                    end)
+                until num == 20
+                lp.Character.HumanoidRootPart.CFrame = workspace['ndsww'].CFrame
+                workspace['ndswdasasdsaddsaasdq123w']:Destroy()
+            end
         end
+        notif("Brung Player")
+    else
+        notif("Need Second Argument")
     end
-    notif("Brung Player")
 end)
 ac = false
 AddCmd("ac", "-Anti-Claim", function(Args)
@@ -213,8 +274,12 @@ AddCmd("unac", "-Un Anti-Claim", function(Args)
     notif("Anti-Claim Off")
 end)
 AddCmd("re", "-Resets Player", function(Args)
-    lp.Character:BreakJoints()
-    notif("Reseted")
+    if lp and lp.Character then
+        lp.Character:BreakJoints()
+        notif("Reseted")
+    else
+        notif("Cannot Reset No Character")
+    end
 end)
 
 --cmdx serverhopper creds to that
@@ -268,8 +333,12 @@ AddCmd("dtools", "-Drops Tools", function(Args)
     notif("Dropped Tools")
 end)
 AddCmd("fov", "-Field Of View Changer", function(Args)
-    workspace.Camera.FieldOfView = Args[1]
-    notif("FOV Changed To " .. Args[1])
+    if Args[1] and Args[1] ~= "" and Args[1] ~= " " and tonumber(Args[1]) <= 120 then
+        workspace.Camera.FieldOfView = Args[1]
+        notif("FOV Changed To " .. Args[1])
+    else
+        notif("Need Second Argument, Need Lower Number")
+    end
 end)
 AddCmd("noclip", "-Noclips Character", function(Args)
     noClip = true
@@ -289,11 +358,15 @@ AddCmd("uncam", "-Clips Camera", function(Args)
     notif("Camera Noclip Off")
 end)
 AddCmd("anims", "-Changes Anim Speed", function(Args)
-	local Hum = lp.Character:FindFirstChild("Humanoid") or lp.Character:FindFirstChildOfClass("AnimationController")
-	notif("Animation Speed Changed To " .. tonumber(Args[1]))
-	for _,z in next, Hum:GetPlayingAnimationTracks() do
-		z:AdjustSpeed(tonumber(Args[1] or 1))
-	end
+    if tonumber(Args[1]) and tonumber(Args[1]) ~= "" and tonumber(Args[1]) ~= " " then
+    	local Hum = lp.Character:FindFirstChild("Humanoid") or lp.Character:FindFirstChildOfClass("AnimationController")
+    	notif("Animation Speed Changed To " .. tonumber(Args[1]))
+    	for _,z in next, Hum:GetPlayingAnimationTracks() do
+    		z:AdjustSpeed(tonumber(Args[1] or 1))
+    	end
+    else
+    	notif("Need Second Argument, Need Number")
+    end
 end)
 AddCmd("smute", "-Server Mutes Boombox's", function(Args)
     smute = true
@@ -304,12 +377,16 @@ AddCmd("unsmute", "-UnServer Mutes Boombox's", function(Args)
     notif("Server mute Off")
 end)
 AddCmd("tpa", "-Changes TimePos", function(Args)
-    for _,z in pairs(game:GetDescendants()) do
-        if z:IsA'Sound' then
-            z.TimePosition = Args[1]
+    if tonumber(Args[1]) and tonumber(Args[1]) ~= "" and tonumber(Args[1]) ~= " " then
+        for _,z in pairs(game:GetDescendants()) do
+            if z:IsA'Sound' then
+                z.TimePosition = Args[1]
+            end
         end
+        notif("TimePos Changed")
+    else
+        notif("Need Second Argument, Need Number")
     end
-    notif("TimePos Changed")
 end)
 AddCmd("freeze", "-Freeze's Character", function(Args)
     for _,z in pairs(lp.Character:GetDescendants()) do
@@ -332,19 +409,24 @@ AddCmd("unfreeze", "-UnFreeze's Character", function(Args)
     notif("UnFroze Character")
 end)
 AddCmd("spec", "-Spectates Player", function(Args)
-    for _,v in pairs(game.Players:GetPlayers()) do
-        if v.Name:lower():sub(1,#Args[1]) == Args[1]:lower() then
-            if v and v.Character then else notif("Cannot Spectate",1) end
-            workspace.CurrentCamera.CameraSubject = v.Character.Head
+    if Args[1] and Args[1] ~= "" and Args[1] ~= " " then
+        for _,v in pairs(game.Players:GetPlayers()) do
+            if v.Name:lower():sub(1,#Args[1]) == Args[1]:lower() then
+                if v and v.Character then else notif("Cannot Spectate",1) end
+                workspace.CurrentCamera.CameraSubject = v.Character.Head
+            end
         end
+        notif("Spectating Player")
+    else
+        notif("Need Second Argument")
     end
-    notif("Spectating Player")
 end)
 AddCmd("unspec", "Fixes Camera", function(Args)
     workspace.CurrentCamera.CameraSubject = lp.Character.Humanoid
 end)
-game.Players.LocalPlayer.Chatted:Connect(function(Msg)
-    CheckCmd(Msg)
+cmdBar.FocusLost:Connect(function()
+    cmdBar.Position = UDim2.new(0,99999,0,99999)
+    CheckCmd(cmdBar.Text)
 end)
 Help()
 local tneams = {}
@@ -359,16 +441,18 @@ function cadd()
         end
     end)
 end
-function badd()
+function brem()
     lp.Backpack.ChildRemoved:Connect(function(instance)
         table.insert(tneams,instance)
+        wait(0.01)
+        table.remove(tneams,1)
     end)
 end
 cadd()
-badd()
+brem()
 lp.CharacterAdded:Connect(function()
     cadd()
-    badd()
+    brem()
 end)
 rservice.Stepped:Connect(function()
     pcall(function()
