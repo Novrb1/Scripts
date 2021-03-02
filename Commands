@@ -44,13 +44,11 @@ function notif(text)
     game.Debris:AddItem(screengui,2)
 end
 function say(t)
-    game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(t,"All")
+    game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(t, "All")
 end
-function selp(thingtoespyesyesyes)
-    local sb = Instance.new("BoxHandleAdornment")
-    sb.Name = "NILLASD123151"
-    sb.Parent = thingtoespyesyesyes
-    sb.Adornee = thingtoespyesyesyes
+function selp(player)
+    local sb = Instance.new("BoxHandleAdornment",game.CoreGui)
+    sb.Name = player.Name
     sb.CFrame = cfn(0,-1.5,0)
     sb.Size = v3n(2,2,1)
     sb.Color3 = Color3.fromRGB(255,0,0)
@@ -94,7 +92,11 @@ else
 end
 --credits to Zells for the cmd handler
 local function AddCmd(CmdName, Desc, Func)
-    Commands[#Commands + 1] = {["Name"] = CmdName, ["Description"] = Desc, ["Function"] = Func}
+    Commands[#Commands + 1] = {
+        ["Name"] = CmdName, 
+        ["Description"] = Desc, 
+        ["Function"] = Func
+    }
 end
 
 local function Search(CmdName)
@@ -193,7 +195,7 @@ AddCmd("esp", "-ESP's Player", function(Args)
         for _,v in pairs(game.Players:GetPlayers()) do
             if v.Name:lower():sub(1,#Args[1]) == Args[1]:lower() then
                 if v and v.Character and v.Character:FindFirstChild("Head") then
-                    selp(v.Character.Head)
+                    selp(v)
                     notif("Esp'd" .. " " .. v.Name)
                 else
                     notif("Cant Esp" .. " " .. v.Name)
@@ -208,8 +210,8 @@ AddCmd("unesp", "-UnESP's Player", function(Args)
     if Args[1] and Args[1] ~= "" and Args[1] ~= " " then
         for _,v in pairs(game.Players:GetPlayers()) do
             if v.Name:lower():sub(1,#Args[1]) == Args[1]:lower() then
-                if v.Character.Head:FindFirstChildOfClass("BoxHandleAdornment") ~= nil then
-                    v.Character.Head['NILLASD123151']:Destroy()
+                if game.CoreGui:FindFirstChild(v.Name) then
+                    game.CoreGui:FindFirstChild(v.Name):Destroy()
                     notif("UnEsp'd" .. " " .. v.Name)
                 else
                     notif("Cant UnEsp" .. " " .. v.Name)
@@ -281,7 +283,6 @@ AddCmd("re", "-Resets Player", function(Args)
         notif("Cannot Reset No Character")
     end
 end)
-
 --cmdx serverhopper creds to that
 AddCmd("sh", "-Server Hops", function(Args)
     notif("ServerHopping Wait")
@@ -324,14 +325,6 @@ AddCmd("etools", "-Equips Tools", function(Args)
     end
     notif("Equip Tools")
 end)
-AddCmd("dtools", "-Drops Tools", function(Args)
-    for _,z in pairs(lp.Character:GetChildren()) do
-        if z:IsA'Tool' then
-            z.Parent = workspace
-        end
-    end
-    notif("Dropped Tools")
-end)
 AddCmd("fov", "-Field Of View Changer", function(Args)
     if Args[1] and Args[1] ~= "" and Args[1] ~= " " and tonumber(Args[1]) <= 120 then
         workspace.Camera.FieldOfView = Args[1]
@@ -350,11 +343,13 @@ AddCmd("clip", "-Unclips Character", function(Args)
 end)
 --credits to infinite yield ; noclip cam
 AddCmd("cam", "-Noclips Camera", function(Args)
-    cam = true
+    lp.CameraMinZoomDistance = math.huge - math.huge
+    lp.CameraMaxZoomDistance = math.huge - math.huge 
     notif("Camera Noclip On")
 end)
 AddCmd("uncam", "-Clips Camera", function(Args)
-    cam = false
+    lp.CameraMinZoomDistance = 0.05
+	lp.CameraMaxZoomDistance = 400
     notif("Camera Noclip Off")
 end)
 AddCmd("anims", "-Changes Anim Speed", function(Args)
@@ -414,6 +409,9 @@ AddCmd("spec", "-Spectates Player", function(Args)
             if v.Name:lower():sub(1,#Args[1]) == Args[1]:lower() then
                 if v and v.Character then else notif("Cannot Spectate",1) end
                 workspace.CurrentCamera.CameraSubject = v.Character.Head
+                v.Character:FindFirstChildOfClass("Humanoid").Died:Connect(function()
+                    workspace.CurrentCamera.CameraSubject = lp.Character.Humanoid
+                end)
             end
         end
         notif("Spectating Player")
@@ -422,7 +420,11 @@ AddCmd("spec", "-Spectates Player", function(Args)
     end
 end)
 AddCmd("unspec", "Fixes Camera", function(Args)
-    workspace.CurrentCamera.CameraSubject = lp.Character.Humanoid
+    workspace.CurrentCamera.CameraSubject = lp.Character:FindFirstChildOfClass('Humanoid')
+	workspace.CurrentCamera.CameraType = "Custom"
+	lp.CameraMinZoomDistance = 0.05
+	lp.CameraMaxZoomDistance = 400
+	lp.CameraMode = "Classic"
 end)
 cmdBar.FocusLost:Connect(function()
     cmdBar.Position = UDim2.new(0,99999,0,99999)
@@ -454,24 +456,30 @@ lp.CharacterAdded:Connect(function()
     cadd()
     brem()
 end)
+game.Players.PlayerRemoving:Connect(function(PlayerRemoving)
+    if game.CoreGui:FindFirstChild(PlayerRemoving.Name) then
+        game.CoreGui:FindFirstChild(PlayerRemoving.Name):Destroy()
+    end
+end)
 rservice.Stepped:Connect(function()
     pcall(function()
         --credits synapse discord dev for fps cap
         setfpscap(1e6)
+        for _,z in pairs(game.CoreGui:GetChildren()) do
+            if z:IsA'BoxHandleAdornment' then
+                for _,v in pairs(game.Players:GetPlayers()) do
+                    if z.Name == v.Name then
+                        z.Adornee = v.Character.Head
+                    end
+                end
+            end
+        end
         if noClip == true then
             for _,z in pairs(lp.Character:GetChildren()) do
                 if z:IsA'Part' or z:IsA'MeshPart' then
                     z.CanCollide = false 
                 end
             end
-        end
-        if cam == true then
-            lp.CameraMinZoomDistance = math.huge - math.huge
-            lp.CameraMaxZoomDistance = math.huge - math.huge 
-        end
-        if cam == false then
-            lp.CameraMinZoomDistance = 0.05
-            lp.CameraMaxZoomDistance = math.huge
         end
         if smute then
             for _,z in pairs(game.Players:GetPlayers()) do
