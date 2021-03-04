@@ -12,8 +12,8 @@ local Commands = {}
 local Prefix = ";"
 warn("Prefix is", Prefix)
 
-local sg = Instance.new("ScreenGui",game.CoreGui)
-local cmdBar = Instance.new("TextBox",sg)
+local sg = Instance.new("ScreenGui", game.CoreGui)
+local cmdBar = Instance.new("TextBox", sg)
 cmdBar.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 cmdBar.BorderSizePixel = 0
 cmdBar.Position = UDim2.new(0, 99999, 0, 99999)
@@ -30,10 +30,10 @@ function r6()
     end
 end
 function notif(text)
-    local screengui = Instance.new("ScreenGui",game.CoreGui)
-    local NOTIF = Instance.new("TextLabel",screengui)
-    NOTIF.Position = UDim2.new(0,-9999,0,mouse.ViewSizeY / 2)
-    NOTIF:TweenPosition(UDim2.new(0,0,0,mouse.ViewSizeY / 2 - 20),"Out","Linear",1,false)
+    local screengui = Instance.new("ScreenGui", game.CoreGui)
+    local NOTIF = Instance.new("TextLabel", screengui)
+    NOTIF.Position = UDim2.new(0, -9999, 0, mouse.ViewSizeY / 2)
+    NOTIF:TweenPosition(UDim2.new(0, 0, 0, mouse.ViewSizeY / 2 - 20), "Out", "Linear", 1, false)
     NOTIF.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     NOTIF.BorderColor3 = Color3.fromRGB(255, 255, 255)
     NOTIF.Size = UDim2.new(0, mouse.ViewSizeX, 0, 40)
@@ -41,17 +41,17 @@ function notif(text)
     NOTIF.Text = text
     NOTIF.TextColor3 = Color3.fromRGB(255, 255, 255)
     NOTIF.TextSize = 25
-    game.Debris:AddItem(screengui,2)
+    game.Debris:AddItem(screengui, 2)
 end
 function say(t)
     game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(t, "All")
 end
 function selp(player)
-    local sb = Instance.new("BoxHandleAdornment",game.CoreGui)
+    local sb = Instance.new("BoxHandleAdornment", game.CoreGui)
     sb.Name = player.Name
-    sb.CFrame = cfn(0,-1.5,0)
-    sb.Size = v3n(2,2,1)
-    sb.Color3 = Color3.fromRGB(255,0,0)
+    sb.CFrame = cfn(0, -1.5, 0)
+    sb.Size = v3n(2, 2, 1)
+    sb.Color3 = Color3.fromRGB(255, 0, 0)
     sb.ZIndex = 1
     sb.AlwaysOnTop = true
     sb.Transparency = 0.5
@@ -62,26 +62,24 @@ function clone(tf)
         chum.Parent = lp.Character
         lp.Character:FindFirstChildOfClass("Humanoid"):Destroy()
         if tf then
-            for _,z in pairs(lp.Backpack:GetChildren()) do
-                if z:IsA'Tool' then
-                    if ac then
-                        z.Name = "nilthisplease"
-                    end
-                    z.Parent = lp.Character 
+            for _, z in next, lp.Backpack:GetChildren() do
+                if z:IsA "Tool" then
+                    z.Name = "nillingprocessD"
+                    z.Parent = lp.Character
                 end
             end
         end
     end
 end
-function addpt(name,anchored,cancollide,size,cf)
-    local variable = Instance.new("Part",workspace)
+function addpt(name, anchored, cancollide, size, cf)
+    local variable = Instance.new("Part", workspace)
     variable.Name = name
     variable.Anchored = anchored
     variable.CanCollide = cancollide
     if size == nil then
-        variable.Size = v3n(4,1)
-    else 
-        variable.Size = v3n(size,size,size)
+        variable.Size = v3n(4, 1)
+    else
+        variable.Size = v3n(size, size, size)
     end
     variable.CFrame = cf
 end
@@ -93,29 +91,29 @@ end
 --credits to Zells for the cmd handler
 local function AddCmd(CmdName, Desc, Func)
     Commands[#Commands + 1] = {
-        ["Name"] = CmdName, 
-        ["Description"] = Desc, 
+        ["Name"] = CmdName,
+        ["Description"] = Desc,
         ["Function"] = Func
     }
 end
 
 local function Search(CmdName)
-    for _, v in pairs(Commands) do 
-        if v.Name == CmdName then 
-            return v.Function 
+    for _, v in next, Commands do
+        if v.Name == CmdName then
+            return v.Function
         end
     end
 end
 
 local function Help()
-    for _, v in pairs(Commands) do 
+    for _, v in next, Commands do
         warn(v.Name, v.Description)
     end
 end
- 
+
 local function CheckCmd(Cmd)
     Cmd = string.lower(Cmd)
-    if Cmd:sub(1, #Prefix) == Prefix then 
+    if Cmd:sub(1, #Prefix) == Prefix then
         local Args = string.split(Cmd:sub(#Prefix + 1), " ")
         local CmdName = Search(table.remove(Args, 1))
         if CmdName and Args then
@@ -124,383 +122,559 @@ local function CheckCmd(Cmd)
     end
 end
 
-mouse.KeyDown:Connect(function(key)
-    if key == Prefix then
-        cmdBar.Position = UDim2.new(0,mouse.ViewSizeX - 230,0,mouse.ViewSizeY)
-        cmdBar:CaptureFocus()
+mouse.KeyDown:Connect(
+    function(key)
+        if key == Prefix then
+            cmdBar.Position = UDim2.new(0, mouse.ViewSizeX - 230, 0, mouse.ViewSizeY)
+            cmdBar:CaptureFocus()
+        end
     end
-end)
+)
 
-AddCmd("prefix", "-Changes Prefix", function(Args)
-    if Args[1] and Args[1] ~= "" and Args[1] ~= " " and Args[1] ~= "/" then
-        Prefix = Args[1]
-    else
-        notif("Need Second Argument, Cannot Put / As Your Prefix D:")
+AddCmd(
+    "prefix",
+    "-Changes Prefix",
+    function(Args)
+        if Args[1] and Args[1] ~= "" and Args[1] ~= " " and Args[1] ~= "/" then
+            Prefix = Args[1]
+        else
+            notif("Need Second Argument, Cannot Put / As Your Prefix D:")
+        end
     end
-end)
-AddCmd("ws", "-WalkSpeed Changer", function(Args)
-    if Args[1] and Args[1] ~= "" and Args[1] ~= " " and tonumber(Args[1]) then
-        lp.Character.Humanoid.WalkSpeed = tonumber(Args[1])
-        notif("WalkSpeed Set To" .. " " .. tonumber(Args[1]))
-    else
-        notif("Need Second Argument, Need Number")
+)
+AddCmd(
+    "ws",
+    "-WalkSpeed Changer",
+    function(Args)
+        if Args[1] and Args[1] ~= "" and Args[1] ~= " " and tonumber(Args[1]) then
+            lp.Character.Humanoid.WalkSpeed = tonumber(Args[1])
+            notif("WalkSpeed Set To" .. " " .. tonumber(Args[1]))
+        else
+            notif("Need Second Argument, Need Number")
+        end
     end
-end)
-AddCmd("jp", "-JumpPower Changer", function(Args)
-    if Args[1] and Args[1] ~= "" and Args[1] ~= " " and tonumber(Args[1]) then
-        lp.Character.Humanoid.JumpPower = tonumber(Args[1])
-        notif("JumpPower Set To" .. " " .. tonumber(Args[1]))
-    else
-        notif("Need Second Argument, Need Number")
+)
+AddCmd(
+    "jp",
+    "-JumpPower Changer",
+    function(Args)
+        if Args[1] and Args[1] ~= "" and Args[1] ~= " " and tonumber(Args[1]) then
+            lp.Character.Humanoid.JumpPower = tonumber(Args[1])
+            notif("JumpPower Set To" .. " " .. tonumber(Args[1]))
+        else
+            notif("Need Second Argument, Need Number")
+        end
     end
-end)
-AddCmd("info", "-Checks Name/Age/Checks Friends Sends To Workspace", function(Args)
-    if Args[1] and Args[1] ~= "" and Args[1] ~= " " then
-        for _,v in pairs(game.Players:GetPlayers()) do
-            if v.Name:lower():sub(1,#Args[1]) == Args[1]:lower() then
-                writefile("Playerss/".. v.Name .. ".txt","Name: " .. v.Name .. " | Age: " .. v.AccountAge .. " | Roblox Profile: https://www.roblox.com/users/" .. v.UserId .. "/profile")
-                for _,f in pairs(game.Players:GetPlayers()) do
-                    if f:IsFriendsWith(v.UserId) then
-                        writefile("Playerss/".. v.Name .. " Friend.txt","Name: " .. f.Name .. " | Age: " .. f.AccountAge .. " | Roblox Profile: https://www.roblox.com/users/" .. f.UserId .. "/profile")
+)
+AddCmd(
+    "info",
+    "-Checks Name/Age/Checks Friends Sends To Workspace",
+    function(Args)
+        if Args[1] and Args[1] ~= "" and Args[1] ~= " " then
+            for _, v in next, game.Players:GetPlayers() do
+                if v.Name:lower():sub(1, #Args[1]) == Args[1]:lower() then
+                    writefile(
+                        "Playerss/" .. v.Name .. ".txt",
+                        "Name: " ..
+                            v.Name ..
+                                " | Age: " ..
+                                    v.AccountAge ..
+                                        " | Roblox Profile: https://www.roblox.com/users/" .. v.UserId .. "/profile"
+                    )
+                    for _, f in next, game.Players:GetPlayers() do
+                        if f:IsFriendsWith(v.UserId) then
+                            writefile(
+                                "Playerss/" .. v.Name .. " Friend.txt",
+                                "Name: " ..
+                                    f.Name ..
+                                        " | Age: " ..
+                                            f.AccountAge ..
+                                                " | Roblox Profile: https://www.roblox.com/users/" ..
+                                                    f.UserId .. "/profile"
+                            )
+                        end
                     end
                 end
             end
+            notif("Info In Workspace/Playerss")
+        else
+            notif("Need Second Argument")
         end
-        notif("Info In Workspace/Playerss")
-    else
-        notif("Need Second Argument")
     end
-end)
-AddCmd("rj", "-Rejoins", function(Args)
-    notif("Rejoining...")
-    game:GetService("TeleportService"):Teleport(game.PlaceId,lp)
-end)
-AddCmd("goto", "-Tps To Player", function(Args)
-    if Args[1] and Args[1] ~= "" and Args[1] ~= " " then
-        for _,v in pairs(game.Players:GetPlayers()) do
-            if v.Name:lower():sub(1,#Args[1]) == Args[1]:lower() then
-                if v and lp and v.Character and lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") and v.Character:FindFirstChild("Head") then
-                    lp.Character.HumanoidRootPart.CFrame = v.Character.Head.CFrame
-                else
-                    notif("Cannot TP To Person No Character")
+)
+AddCmd(
+    "rj",
+    "-Rejoins",
+    function(Args)
+        notif("Rejoining...")
+        game:GetService("TeleportService"):Teleport(game.PlaceId, lp)
+    end
+)
+AddCmd(
+    "goto",
+    "-Tps To Player",
+    function(Args)
+        if Args[1] and Args[1] ~= "" and Args[1] ~= " " then
+            for _, v in next, game.Players:GetPlayers() do
+                if v.Name:lower():sub(1, #Args[1]) == Args[1]:lower() then
+                    if
+                        v and lp and v.Character and lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") and
+                            v.Character:FindFirstChild("Head")
+                     then
+                        lp.Character.HumanoidRootPart.CFrame = v.Character.Head.CFrame
+                    else
+                        notif("Cannot TP To Person No Character")
+                    end
                 end
             end
+        else
+            notif("Need Second Argument")
         end
-    else
-        notif("Need Second Argument")
     end
-end)
-AddCmd("esp", "-ESP's Player", function(Args)
-    if Args[1] and Args[1] ~= "" and Args[1] ~= " " then
-        for _,v in pairs(game.Players:GetPlayers()) do
-            if v.Name:lower():sub(1,#Args[1]) == Args[1]:lower() then
-                if v and v.Character and v.Character:FindFirstChild("Head") then
-                    selp(v)
-                    notif("Esp'd" .. " " .. v.Name)
-                else
-                    notif("Cant Esp" .. " " .. v.Name)
+)
+AddCmd(
+    "esp",
+    "-ESP's Player",
+    function(Args)
+        if Args[1] and Args[1] ~= "" and Args[1] ~= " " then
+            for _, v in next, game.Players:GetPlayers() do
+                if v.Name:lower():sub(1, #Args[1]) == Args[1]:lower() then
+                    if v and v.Character and v.Character:FindFirstChild("Head") then
+                        selp(v)
+                        notif("Esp'd" .. " " .. v.Name)
+                    else
+                        notif("Cant Esp" .. " " .. v.Name)
+                    end
                 end
             end
+        else
+            notif("Need Second Argument")
         end
-    else
-        notif("Need Second Argument")
     end
-end)
-AddCmd("unesp", "-UnESP's Player", function(Args)
-    if Args[1] and Args[1] ~= "" and Args[1] ~= " " then
-        for _,v in pairs(game.Players:GetPlayers()) do
-            if v.Name:lower():sub(1,#Args[1]) == Args[1]:lower() then
-                if game.CoreGui:FindFirstChild(v.Name) then
-                    game.CoreGui:FindFirstChild(v.Name):Destroy()
-                    notif("UnEsp'd" .. " " .. v.Name)
-                else
-                    notif("Cant UnEsp" .. " " .. v.Name)
+)
+AddCmd(
+    "unesp",
+    "-UnESP's Player",
+    function(Args)
+        if Args[1] and Args[1] ~= "" and Args[1] ~= " " then
+            for _, v in next, game.Players:GetPlayers() do
+                if v.Name:lower():sub(1, #Args[1]) == Args[1]:lower() then
+                    if game.CoreGui:FindFirstChild(v.Name) then
+                        game.CoreGui:FindFirstChild(v.Name):Destroy()
+                        notif("UnEsp'd" .. " " .. v.Name)
+                    else
+                        notif("Cant UnEsp" .. " " .. v.Name)
+                    end
                 end
             end
+        else
+            notif("Need Second Argument")
         end
-    else
-        notif("Need Second Argument")
     end
-end)
-AddCmd("cl", "-Claims Player [[ToolsNeeded]]", function(Args)
-    if Args[1] and Args[1] ~= "" and Args[1] ~= " " then
-        for _,v in pairs(game.Players:GetPlayers()) do
-            if v.Name:lower():sub(1,#Args[1]) == Args[1]:lower() then
-                if lp and lp.Character and v and v.Character then else notif("Cannot Kill") end
-                clone(true)
-                local num = 0
-                repeat wait()
-                    pcall(function()
-                        lp.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame
-                        num = num + 1
-                    end)
-                until num == 15
-                lp.Character.HumanoidRootPart.CFrame = cfn(0,workspace.FallenPartsDestroyHeight + 5,0)
+)
+AddCmd(
+    "cl",
+    "-Claims Player [[ToolsNeeded]]",
+    function(Args)
+        if Args[1] and Args[1] ~= "" and Args[1] ~= " " then
+            for _, v in next, game.Players:GetPlayers() do
+                if v.Name:lower():sub(1, #Args[1]) == Args[1]:lower() then
+                    if lp and lp.Character and v and v.Character then
+                    else
+                        notif("Cannot Kill")
+                    end
+                    clone(true)
+                    local num = 0
+                    repeat
+                        wait()
+                        pcall(
+                            function()
+                                lp.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame
+                                num = num + 1
+                            end
+                        )
+                    until num == 15
+                    lp.Character.HumanoidRootPart.CFrame = cfn(0, workspace.FallenPartsDestroyHeight + 5, 0)
+                end
             end
+            notif("Killed Player")
+        else
+            notif("Need Second Argument")
         end
-        notif("Killed Player")
-    else
-        notif("Need Second Argument")
     end
-end)
-AddCmd("bring", "-Brings Player [[ToolsNeeded]]", function(Args)
-    if Args[1] and Args[1] ~= "" and Args[1] ~= " " then
-        for _,v in pairs(game.Players:GetPlayers()) do
-            if v.Name:lower():sub(1,#Args[1]) == Args[1]:lower() then
-                if lp and lp.Character and v and v.Character then else notif("Cannot Bring") end
-                addpt('ndswdasasdsaddsaasdq123w',true,false,nil,lp.Character.HumanoidRootPart.CFrame)
-                clone(true)
-                local num = 0
-                repeat wait()
-                    pcall(function()
-                        lp.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame
-                        num = num + 1
-                    end)
-                until num == 20
-                lp.Character.HumanoidRootPart.CFrame = workspace['ndsww'].CFrame
-                workspace['ndswdasasdsaddsaasdq123w']:Destroy()
+)
+AddCmd(
+    "bring",
+    "-Brings Player [[ToolsNeeded]]",
+    function(Args)
+        if Args[1] and Args[1] ~= "" and Args[1] ~= " " then
+            for _, v in next, game.Players:GetPlayers() do
+                if v.Name:lower():sub(1, #Args[1]) == Args[1]:lower() then
+                    if lp and lp.Character and v and v.Character then
+                    else
+                        notif("Cannot Bring")
+                    end
+                    addpt("ndswdasasdsaddsaasdq123w", true, false, nil, lp.Character.HumanoidRootPart.CFrame)
+                    clone(true)
+                    local num = 0
+                    repeat
+                        wait()
+                        pcall(
+                            function()
+                                lp.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame
+                                num = num + 1
+                            end
+                        )
+                    until num == 20
+                    lp.Character.HumanoidRootPart.CFrame = workspace["ndsww"].CFrame
+                    workspace["ndswdasasdsaddsaasdq123w"]:Destroy()
+                end
             end
+            notif("Brung Player")
+        else
+            notif("Need Second Argument")
         end
-        notif("Brung Player")
-    else
-        notif("Need Second Argument")
     end
-end)
+)
 ac = false
-AddCmd("ac", "-Anti-Claim", function(Args)
-    ac = true
-    notif("Anti-Claim On")
-end)
-AddCmd("unac", "-Un Anti-Claim", function(Args)
-    ac = false
-    notif("Anti-Claim Off")
-end)
-AddCmd("re", "-Resets Player", function(Args)
-    if lp and lp.Character then
-        lp.Character:BreakJoints()
-        notif("Reseted")
-    else
-        notif("Cannot Reset No Character")
+AddCmd(
+    "ac",
+    "-Anti-Claim",
+    function(Args)
+        ac = true
+        notif("Anti-Claim On")
     end
-end)
+)
+AddCmd(
+    "unac",
+    "-Un Anti-Claim",
+    function(Args)
+        ac = false
+        notif("Anti-Claim Off")
+    end
+)
+AddCmd(
+    "re",
+    "-Resets Player",
+    function(Args)
+        if lp and lp.Character then
+            lp.Character:BreakJoints()
+            notif("Reseted")
+        else
+            notif("Cannot Reset No Character")
+        end
+    end
+)
 --cmdx serverhopper creds to that
-AddCmd("sh", "-Server Hops", function(Args)
-    notif("ServerHopping Wait")
-    if syn.queue_on_teleport then
-        syn.queue_on_teleport('game:GetService("ReplicatedFirst"):RemoveDefaultLoadingScreen()')
-    end
-    local GUIDs = {}
-    local maxPlayers = 0
-    local pagesToSearch = 100
-    local Http = game:GetService("HttpService"):JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Asc&limit=100&cursor="))
-    for i = 1,pagesToSearch do
-        for i,v in pairs(Http.data) do
-            if v.playing ~= v.maxPlayers and v.id ~= game.JobId then
-                maxPlayers = v.maxPlayers
-                table.insert(GUIDs, {id = v.id, users = v.playing})
+AddCmd(
+    "sh",
+    "-Server Hops",
+    function(Args)
+        notif("ServerHopping Wait")
+        if syn.queue_on_teleport then
+            syn.queue_on_teleport('game:GetService("ReplicatedFirst"):RemoveDefaultLoadingScreen()')
+        end
+        local GUIDs = {}
+        local maxPlayers = 0
+        local pagesToSearch = 100
+        local Http =
+            game:GetService("HttpService"):JSONDecode(
+            game:HttpGet(
+                "https://games.roblox.com/v1/games/" ..
+                    game.PlaceId .. "/servers/Public?sortOrder=Asc&limit=100&cursor="
+            )
+        )
+        for i = 1, pagesToSearch do
+            for i, v in next, Http.data do
+                if v.playing ~= v.maxPlayers and v.id ~= game.JobId then
+                    maxPlayers = v.maxPlayers
+                    table.insert(GUIDs, {id = v.id, users = v.playing})
+                end
+            end
+            if Http.nextPageCursor ~= null then
+                Http =
+                    game:GetService("HttpService"):JSONDecode(
+                    game:HttpGet(
+                        "https://games.roblox.com/v1/games/" ..
+                            game.PlaceId .. "/servers/Public?sortOrder=Asc&limit=100&cursor=" .. Http.nextPageCursor
+                    )
+                )
+            else
+                break
             end
         end
-        if Http.nextPageCursor ~= null then 
-            Http = game:GetService("HttpService"):JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Asc&limit=100&cursor="..Http.nextPageCursor)) 
-        else 
-            break 
-        end
+        game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, GUIDs[math.random(1, #GUIDs)].id, lp)
     end
-    game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, GUIDs[math.random(1,#GUIDs)].id, lp)
-end)
+)
 local stopit = false
-AddCmd("ungtools", "-Stops GrabTools", function(Args)
-    stopit = false
-    notif("Grab Tools Off")
-end)
-AddCmd("gtools", "-Grabs Tools", function(Args)
-    stopit = true
-    notif("Grab Tools On")
-end)
-AddCmd("etools", "-Equips Tools", function(Args)
-    for _,z in pairs(lp.Backpack:GetChildren()) do
-        if z:IsA'Tool' then
-            z.Parent = lp.Character
+AddCmd(
+    "ungtools",
+    "-Stops GrabTools",
+    function(Args)
+        stopit = false
+        notif("Grab Tools Off")
+    end
+)
+AddCmd(
+    "gtools",
+    "-Grabs Tools",
+    function(Args)
+        stopit = true
+        notif("Grab Tools On")
+    end
+)
+AddCmd(
+    "etools",
+    "-Equips Tools",
+    function(Args)
+        for _, z in next, lp.Backpack:GetChildren() do
+            if z:IsA "Tool" then
+                z.Parent = lp.Character
+            end
+        end
+        notif("Equip Tools")
+    end
+)
+AddCmd(
+    "fov",
+    "-Field Of View Changer",
+    function(Args)
+        if Args[1] and Args[1] ~= "" and Args[1] ~= " " and tonumber(Args[1]) <= 120 then
+            workspace.Camera.FieldOfView = Args[1]
+            notif("FOV Changed To " .. Args[1])
+        else
+            notif("Need Second Argument, Need Lower Number")
         end
     end
-    notif("Equip Tools")
-end)
-AddCmd("fov", "-Field Of View Changer", function(Args)
-    if Args[1] and Args[1] ~= "" and Args[1] ~= " " and tonumber(Args[1]) <= 120 then
-        workspace.Camera.FieldOfView = Args[1]
-        notif("FOV Changed To " .. Args[1])
-    else
-        notif("Need Second Argument, Need Lower Number")
+)
+AddCmd(
+    "noclip",
+    "-Noclips Character",
+    function(Args)
+        noClip = true
+        notif("Noclip On")
     end
-end)
-AddCmd("noclip", "-Noclips Character", function(Args)
-    noClip = true
-    notif("Noclip On")
-end)
-AddCmd("clip", "-Unclips Character", function(Args)
-    noClip = false
-    notif("Noclip Off")
-end)
+)
+AddCmd(
+    "clip",
+    "-Unclips Character",
+    function(Args)
+        noClip = false
+        notif("Noclip Off")
+    end
+)
 --credits to infinite yield ; noclip cam
-AddCmd("cam", "-Noclips Camera", function(Args)
-    lp.CameraMinZoomDistance = math.huge - math.huge
-    lp.CameraMaxZoomDistance = math.huge - math.huge 
-    notif("Camera Noclip On")
-end)
-AddCmd("uncam", "-Clips Camera", function(Args)
-    lp.CameraMinZoomDistance = 0.05
-	lp.CameraMaxZoomDistance = 400
-    notif("Camera Noclip Off")
-end)
-AddCmd("anims", "-Changes Anim Speed", function(Args)
-    if tonumber(Args[1]) and tonumber(Args[1]) ~= "" and tonumber(Args[1]) ~= " " then
-    	local Hum = lp.Character:FindFirstChild("Humanoid") or lp.Character:FindFirstChildOfClass("AnimationController")
-    	notif("Animation Speed Changed To " .. tonumber(Args[1]))
-    	for _,z in next, Hum:GetPlayingAnimationTracks() do
-    		z:AdjustSpeed(tonumber(Args[1] or 1))
-    	end
-    else
-    	notif("Need Second Argument, Need Number")
+AddCmd(
+    "infcam",
+    "-Max's The Cameras View Limit",
+    function(Args)
+        lp.CameraMinZoomDistance = 0.05
+        lp.CameraMaxZoomDistance = math.huge
+        notif("Infinite Camera")
     end
-end)
-AddCmd("smute", "-Server Mutes Boombox's", function(Args)
-    smute = true
-    notif("Server mute On")
-end)
-AddCmd("unsmute", "-UnServer Mutes Boombox's", function(Args)
-    smute = false
-    notif("Server mute Off")
-end)
-AddCmd("tpa", "-Changes TimePos", function(Args)
-    if tonumber(Args[1]) and tonumber(Args[1]) ~= "" and tonumber(Args[1]) ~= " " then
-        for _,z in pairs(game:GetDescendants()) do
-            if z:IsA'Sound' then
-                z.TimePosition = Args[1]
+)
+AddCmd(
+    "anims",
+    "-Changes Anim Speed",
+    function(Args)
+        if tonumber(Args[1]) and tonumber(Args[1]) ~= "" and tonumber(Args[1]) ~= " " then
+            local Hum =
+                lp.Character:FindFirstChild("Humanoid") or lp.Character:FindFirstChildOfClass("AnimationController")
+            notif("Animation Speed Changed To " .. tonumber(Args[1]))
+            for _, z in next, Hum:GetPlayingAnimationTracks() do
+                z:AdjustSpeed(tonumber(Args[1] or 1))
             end
-        end
-        notif("TimePos Changed")
-    else
-        notif("Need Second Argument, Need Number")
-    end
-end)
-AddCmd("freeze", "-Freeze's Character", function(Args)
-    for _,z in pairs(lp.Character:GetDescendants()) do
-        if z:IsA'Part' or z:IsA'MeshPart' then
-            if z.Name ~= "Handle" then
-                z.Anchored = true 
-            end
+        else
+            notif("Need Second Argument, Need Number")
         end
     end
-    notif("Froze Character")
-end)
-AddCmd("unfreeze", "-UnFreeze's Character", function(Args)
-    for _,z in pairs(lp.Character:GetDescendants()) do
-        if z:IsA'Part' or z:IsA'MeshPart' then
-            if z.Name ~= "Handle" then
-                z.Anchored = false 
+)
+AddCmd(
+    "smute",
+    "-Server Mutes Boombox's",
+    function(Args)
+        smute = true
+        notif("Server mute On")
+    end
+)
+AddCmd(
+    "unsmute",
+    "-UnServer Mutes Boombox's",
+    function(Args)
+        smute = false
+        notif("Server mute Off")
+    end
+)
+AddCmd(
+    "tpa",
+    "-Changes TimePos",
+    function(Args)
+        if tonumber(Args[1]) and tonumber(Args[1]) ~= "" and tonumber(Args[1]) ~= " " then
+            for _, z in next, game:GetDescendants() do
+                if z:IsA "Sound" then
+                    z.TimePosition = Args[1]
+                end
             end
+            notif("TimePos Changed")
+        else
+            notif("Need Second Argument, Need Number")
         end
     end
-    notif("UnFroze Character")
-end)
-AddCmd("spec", "-Spectates Player", function(Args)
-    if Args[1] and Args[1] ~= "" and Args[1] ~= " " then
-        for _,v in pairs(game.Players:GetPlayers()) do
-            if v.Name:lower():sub(1,#Args[1]) == Args[1]:lower() then
-                if v and v.Character then else notif("Cannot Spectate",1) end
-                workspace.CurrentCamera.CameraSubject = v.Character.Head
-                v.Character:FindFirstChildOfClass("Humanoid").Died:Connect(function()
-                    workspace.CurrentCamera.CameraSubject = lp.Character.Humanoid
-                end)
-            end
-        end
-        notif("Spectating Player")
-    else
-        notif("Need Second Argument")
-    end
-end)
-AddCmd("unspec", "Fixes Camera", function(Args)
-    workspace.CurrentCamera.CameraSubject = lp.Character:FindFirstChildOfClass('Humanoid')
-	workspace.CurrentCamera.CameraType = "Custom"
-	lp.CameraMinZoomDistance = 0.05
-	lp.CameraMaxZoomDistance = 400
-	lp.CameraMode = "Classic"
-end)
-cmdBar.FocusLost:Connect(function()
-    cmdBar.Position = UDim2.new(0,99999,0,99999)
-    CheckCmd(cmdBar.Text)
-end)
-Help()
-local tneams = {}
-function cadd()
-    lp.Character.ChildAdded:Connect(function(thing)
-        if ac then
-            for _,z in pairs(tneams) do
-                if thing ~= z then
-                    thing:Destroy()
+)
+AddCmd(
+    "freeze",
+    "-Freeze's Character",
+    function(Args)
+        for _, z in next, lp.Character:GetDescendants() do
+            if z:IsA "Part" or z:IsA "MeshPart" then
+                if z.Name ~= "Handle" then
+                    z.Anchored = true
                 end
             end
         end
-    end)
-end
-function brem()
-    lp.Backpack.ChildRemoved:Connect(function(instance)
-        table.insert(tneams,instance)
-        wait(0.01)
-        table.remove(tneams,1)
-    end)
-end
-cadd()
-brem()
-lp.CharacterAdded:Connect(function()
-    cadd()
-    brem()
-end)
-game.Players.PlayerRemoving:Connect(function(PlayerRemoving)
-    if game.CoreGui:FindFirstChild(PlayerRemoving.Name) then
-        game.CoreGui:FindFirstChild(PlayerRemoving.Name):Destroy()
+        notif("Froze Character")
     end
-end)
-rservice.Stepped:Connect(function()
-    pcall(function()
-        --credits synapse discord dev for fps cap
-        setfpscap(1e6)
-        for _,z in pairs(game.CoreGui:GetChildren()) do
-            if z:IsA'BoxHandleAdornment' then
-                for _,v in pairs(game.Players:GetPlayers()) do
-                    if z.Name == v.Name then
-                        z.Adornee = v.Character.Head
+)
+AddCmd(
+    "unfreeze",
+    "-UnFreeze's Character",
+    function(Args)
+        for _, z in next, lp.Character:GetDescendants() do
+            if z:IsA "Part" or z:IsA "MeshPart" then
+                if z.Name ~= "Handle" then
+                    z.Anchored = false
+                end
+            end
+        end
+        notif("UnFroze Character")
+    end
+)
+AddCmd(
+    "spec",
+    "-Spectates Player",
+    function(Args)
+        if Args[1] and Args[1] ~= "" and Args[1] ~= " " then
+            for _, v in next, game.Players:GetPlayers() do
+                if v.Name:lower():sub(1, #Args[1]) == Args[1]:lower() then
+                    if v and v.Character then
+                    else
+                        notif("Cannot Spectate", 1)
                     end
+                    workspace.CurrentCamera.CameraSubject = v.Character.Head
+                    v.Character:FindFirstChildOfClass("Humanoid").Died:Connect(
+                        function()
+                            workspace.CurrentCamera.CameraSubject = lp.Character.Humanoid
+                        end
+                    )
                 end
             end
+            notif("Spectating Player")
+        else
+            notif("Need Second Argument")
         end
-        if noClip == true then
-            for _,z in pairs(lp.Character:GetChildren()) do
-                if z:IsA'Part' or z:IsA'MeshPart' then
-                    z.CanCollide = false 
-                end
-            end
-        end
-        if smute then
-            for _,z in pairs(game.Players:GetPlayers()) do
-                if z.Name ~= lp.Name then
-                    for _,v in pairs(z.Character:GetDescendants()) do
-                        if v:IsA'Sound' then
-                            v.Playing = false 
+    end
+)
+AddCmd(
+    "unspec",
+    "Unspectates / Fixes Camera",
+    function(Args)
+        workspace.CurrentCamera.CameraSubject = lp.Character:FindFirstChildOfClass("Humanoid")
+        workspace.CurrentCamera.CameraType = "Custom"
+        lp.CameraMinZoomDistance = 0.05
+        lp.CameraMaxZoomDistance = 400
+        lp.CameraMode = "Classic"
+    end
+)
+cmdBar.FocusLost:Connect(
+    function()
+        cmdBar.Position = UDim2.new(0, 99999, 0, 99999)
+        CheckCmd(cmdBar.Text)
+    end
+)
+Help()
+local tablefortools = {}
+function cadd()
+    lp.Character.ChildAdded:Connect(
+        function(thing)
+            if ac then
+                if thing:IsA "Tool" then
+                    for _, z in next, tablefortools do
+                        if thing ~= z then
+                            thing.Parent = lp.Backpack
+                            wait()
+                            thing.Parent = lp.Backpack
                         end
                     end
                 end
             end
         end
-        if stopit then
-            for _,z in pairs(workspace:GetChildren()) do
-                if z:IsA'Tool' then
-                    pcall(function()
-                        z.Handle.CFrame = lp.Character.HumanoidRootPart.CFrame
-                    end)
-                end
+    )
+end
+cadd()
+lp.CharacterAdded:Connect(
+    function()
+        tablefortools = {}
+        cadd()
+        for _, z in next, lp.Backpack:GetChildren() do
+            if z:IsA "Tool" then
+                table.insert(tablefortools, z)
             end
         end
-    end)
-end)
+    end
+)
+game.Players.PlayerRemoving:Connect(
+    function(PlayerRemoving)
+        if game.CoreGui:FindFirstChild(PlayerRemoving.Name) then
+            game.CoreGui:FindFirstChild(PlayerRemoving.Name):Destroy()
+        end
+    end
+)
+rservice.Stepped:Connect(
+    function()
+        pcall(
+            function()
+                --credits synapse discord dev for fps cap
+                setfpscap(1e6)
+                for _, z in next, game.CoreGui:GetChildren() do
+                    if z:IsA "BoxHandleAdornment" then
+                        for _, v in next, game.Players:GetPlayers() do
+                            if z.Name == v.Name then
+                                z.Adornee = v.Character.Head
+                            end
+                        end
+                    end
+                end
+                if noClip == true then
+                    for _, z in next, lp.Character:GetChildren() do
+                        if z:IsA "Part" or z:IsA "MeshPart" then
+                            z.CanCollide = false
+                        end
+                    end
+                end
+                if smute then
+                    for _, z in next, game.Players:GetPlayers() do
+                        if z.Name ~= lp.Name then
+                            for _, v in next, z.Character:GetDescendants() do
+                                if v:IsA "Sound" then
+                                    v.Playing = false
+                                end
+                            end
+                        end
+                    end
+                end
+                if stopit then
+                    for _, z in next, workspace:GetChildren() do
+                        if z:IsA "Tool" then
+                            pcall(
+                                function()
+                                    z.Handle.CFrame = lp.Character.HumanoidRootPart.CFrame
+                                end
+                            )
+                        end
+                    end
+                end
+            end
+        )
+    end
+)
 notif("Feens#7908 :D")
