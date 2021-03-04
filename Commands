@@ -463,7 +463,6 @@ AddCmd(
         notif("Noclip Off")
     end
 )
---credits to infinite yield ; noclip cam
 AddCmd(
     "infcam",
     "-Max's The Cameras View Limit",
