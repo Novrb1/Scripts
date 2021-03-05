@@ -596,14 +596,10 @@ function cadd()
     lp.Character.ChildAdded:Connect(
         function(thing)
             if ac then
-                if thing:IsA "Tool" then
-                    for _, z in next, tablefortools do
-                        if thing ~= z then
-                            thing.Parent = lp.Backpack
-                            wait()
-                            thing.Parent = lp.Backpack
-                        end
-                    end
+                if thing:IsA "Tool" and thing ~= "nillingprocessD" then
+                    thing.Parent = lp.Backpack
+                    wait()
+                    thing.Parent = lp.Backpack
                 end
             end
         end
@@ -612,13 +608,7 @@ end
 cadd()
 lp.CharacterAdded:Connect(
     function()
-        tablefortools = {}
         cadd()
-        for _, z in next, lp.Backpack:GetChildren() do
-            if z:IsA "Tool" then
-                table.insert(tablefortools, z)
-            end
-        end
     end
 )
 game.Players.PlayerRemoving:Connect(
