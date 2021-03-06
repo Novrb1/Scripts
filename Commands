@@ -217,10 +217,12 @@ AddCmd(
         if Args[1] and Args[1] ~= "" and Args[1] ~= " " then
             for _, v in next, game.Players:GetPlayers() do
                 if v.Name:lower():sub(1, #Args[1]) == Args[1]:lower() then
-                    if
-                        v and lp and v.Character and lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") and
-                            v.Character:FindFirstChild("Head")
-                     then
+                    if v and lp and v.Character and lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") and v.Character:FindFirstChild("Head") then
+                        for _,z in pairs(lp.Character:GetChildren()) do
+                            if z:IsA'BasePart' then
+                                z.Velocity = v3n(0,0,0)
+                            end
+                        end
                         lp.Character.HumanoidRootPart.CFrame = v.Character.Head.CFrame
                     else
                         notif("Cannot TP To Person No Character")
