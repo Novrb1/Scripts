@@ -612,12 +612,11 @@ cmdBar.FocusLost:Connect(
     end
 )
 Help()
-local tablefortools = {}
 function cadd()
     lp.Character.ChildAdded:Connect(
         function(thing)
             if ac then
-                if thing:IsA "Tool" and thing ~= "nillingprocessD" then
+                if thing:IsA "Tool" and thing.Name ~= "nillingprocessD" then
                     thing.Parent = lp.Backpack
                     wait()
                     thing.Parent = lp.Backpack
