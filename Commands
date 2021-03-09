@@ -12,14 +12,26 @@ local Commands = {}
 local Prefix = ";"
 warn("Prefix is", Prefix)
 
-local sg = Instance.new("ScreenGui", game.CoreGui)
-local cmdBar = Instance.new("TextBox", sg)
-cmdBar.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-cmdBar.BorderSizePixel = 0
-cmdBar.Position = UDim2.new(0, 99999, 0, 99999)
-cmdBar.Size = UDim2.new(0, 230, 0, 30)
+function zigzag(X)
+	return math.acos(math.cos(X*math.pi))/math.pi 
+end
+local num = 1
+
+local screengui = Instance.new("ScreenGui",game.CoreGui)
+local frame = Instance.new("Frame",screengui)
+local cmdBar = Instance.new("TextBox",frame)
+frame.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+rservice.Stepped:Connect(function()
+    frame.BorderColor3 = Color3.new(zigzag(num), zigzag(num), zigzag(num))
+    num = num + 0.01
+end)
+frame.BorderSizePixel = 2
+frame.Position = UDim2.new(0, -1000, 0, mouse.ViewSizeY / 2)
+frame.Size = UDim2.new(0, 200, 0, 20)
+cmdBar.BackgroundTransparency = 1.000
+cmdBar.Size = UDim2.new(0, 200, 0, 20)
 cmdBar.TextColor3 = Color3.fromRGB(255, 255, 255)
-cmdBar.TextSize = 25
+cmdBar.TextSize = 16
 cmdBar.TextXAlignment = Enum.TextXAlignment.Left
 
 function r6()
@@ -125,8 +137,8 @@ end
 mouse.KeyDown:Connect(
     function(key)
         if key == Prefix then
-            cmdBar.Position = UDim2.new(0, mouse.ViewSizeX - 230, 0, mouse.ViewSizeY)
-            cmdBar:CaptureFocus()
+            frame:TweenPosition(UDim2.new(0, -0, 0, mouse.ViewSizeY / 2), 1, 0, 0.3, 1)
+		    cmdBar:CaptureFocus()
         end
     end
 )
@@ -607,7 +619,7 @@ AddCmd(
 )
 cmdBar.FocusLost:Connect(
     function()
-        cmdBar.Position = UDim2.new(0, 99999, 0, 99999)
+        frame:TweenPosition(UDim2.new(0, -400, 0, mouse.ViewSizeY / 2), 1, 0, 1, 1)
         CheckCmd(cmdBar.Text)
     end
 )
