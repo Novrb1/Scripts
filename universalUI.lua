@@ -490,7 +490,7 @@ rservice.Stepped:Connect(function()
 end)
 
 FOV.FocusLost:Connect(function()
-    if tonumber(FOV.Text) and tonumber(FOV.Text) >= 120 then
+    if tonumber(FOV.Text) and tonumber(FOV.Text) <= 120 then
         
     else
         FOV.Text = "70"
