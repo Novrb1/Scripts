@@ -416,24 +416,28 @@ pt.Parent = game.Workspace
 pt.Anchored = true
 pt.CanCollide = true
 
-uis.InputBegan:connect(function(key)
-	if key.KeyCode == Enum.KeyCode.Space then
-		space = true
-	end
-	if key.KeyCode == Enum.KeyCode.LeftShift then
-		shift = true
-	end
-	if key.KeyCode == Enum.KeyCode.Insert then
-	    frame.Visible = not frame.Visible
+uis.InputBegan:connect(function(key, Typing)
+    if not Typing then
+    	if key.KeyCode == Enum.KeyCode.Space then
+    		space = true
+    	end
+    	if key.KeyCode == Enum.KeyCode.LeftShift then
+    		shift = true
+    	end
+    	if key.KeyCode == Enum.KeyCode.Insert then
+    	    frame.Visible = not frame.Visible
+    	end
 	end
 end)
 
-uis.InputEnded:connect(function(key)
-	if key.KeyCode == Enum.KeyCode.Space then
-		space = false
-	end
-	if key.KeyCode == Enum.KeyCode.LeftShift then
-		shift = false
+uis.InputEnded:connect(function(key, Typing)
+    if not Typing then
+    	if key.KeyCode == Enum.KeyCode.Space then
+    		space = false
+    	end
+    	if key.KeyCode == Enum.KeyCode.LeftShift then
+    		shift = false
+    	end
 	end
 end)
 
@@ -458,6 +462,7 @@ partfloat.MouseButton1Click:Connect(function()
 		partfloat.Text = "X"
 	else
 		partfloat.Text = ""
+		wait()
 		pt.CFrame = pt.CFrame + Vector3.new(0,math.huge,0)
 	end
 end)
@@ -465,24 +470,35 @@ end)
 rservice.Stepped:Connect(function()
     if space then
         if infjump.Text == "X" then
-            repeat h:Wait() until lp and lp.Character and lp.Character:FindFirstChild("HumanoidRootPart")
-            lp.Character.Humanoid:ChangeState("Jumping") 
+            if lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") then
+                lp.Character.Humanoid:ChangeState("Jumping") 
+            end
         end
     end
     if shift then
         if speed.Text == "X" then
-            repeat h:Wait() until lp and lp.Character and lp.Character:FindFirstChild("HumanoidRootPart")
-            lp.Character.HumanoidRootPart.CFrame = lp.Character.HumanoidRootPart.CFrame + lp.Character.HumanoidRootPart.CFrame.lookVector * 0.5
+            if lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") then
+                lp.Character.HumanoidRootPart.CFrame = lp.Character.HumanoidRootPart.CFrame + lp.Character.HumanoidRootPart.CFrame.lookVector * 0.5
+            end
         end
     end
     if partfloat.Text == "X" then
-        repeat h:Wait() until lp and lp.Character and lp.Character:FindFirstChild("HumanoidRootPart")
-		pt.CFrame = lp.Character.HumanoidRootPart.CFrame + Vector3.new(0,-3.7,0)
+        if lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") then
+		    pt.CFrame = lp.Character.HumanoidRootPart.CFrame + Vector3.new(0,-3.7,0)
+		end
 	end
 end)
 
+FOV.FocusLost:Connect(function()
+    if tonumber(FOV.Text) and tonumber(FOV.Text) >= 120 then
+        
+    else
+        FOV.Text = "70"
+    end
+end)
+
 field.MouseButton1Click:Connect(function()
-	game.Workspace.Camera.FieldOfView = FOV.text
+	game.Workspace.Camera.FieldOfView = tonumber(FOV.text)
 end)
 
 misc.MouseButton1Click:Connect(function()
@@ -533,9 +549,8 @@ while h:Wait() do
 	if lol then
 		if enable.Text == "X" then
 			if m.Target and plrs:FindFirstChild(m.Target.Parent.Name) then
-				local HitPlayer = plrs:FindFirstChild(m.Target.Parent.Name)
-				if HitPlayer.Team ~= lp.Team or not teamcheck then
-					mouse1press(); wait(spray.Text); mouse1release()
+				if plrs:FindFirstChild(m.Target.Parent.Name).Team ~= lp.Team or not teamcheck then
+					mouse1press(); wait(tonumber(spray.Text)); mouse1release()
 				end
 			end
 		end
