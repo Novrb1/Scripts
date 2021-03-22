@@ -32,7 +32,6 @@ local FOV = Instance.new("TextBox")
 local topthingy = Instance.new("Frame")
 local heeee = Instance.new("Frame")
 local infou = Instance.new("TextLabel")
-infou.Text = "GameID: " .. game.PlaceId .. " Thanks For Using " .. game.Players.LocalPlayer.Name
 
 screengui.Name = "screengui"
 screengui.Parent = game.CoreGui
@@ -411,21 +410,20 @@ local h = rservice.Heartbeat
 local space = false
 local shift = false
 local teamcheck = false
-local pt = Instance.new("Part")
-pt.Parent = game.Workspace
+local pt = Instance.new("Part",workspace)
 pt.Anchored = true
 pt.CanCollide = true
 
 uis.InputBegan:connect(function(key, Typing)
+    if key.KeyCode == Enum.KeyCode.Insert then
+        frame.Visible = not frame.Visible
+    end
     if not Typing then
     	if key.KeyCode == Enum.KeyCode.Space then
     		space = true
     	end
     	if key.KeyCode == Enum.KeyCode.LeftShift then
     		shift = true
-    	end
-    	if key.KeyCode == Enum.KeyCode.Insert then
-    	    frame.Visible = not frame.Visible
     	end
 	end
 end)
