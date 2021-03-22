@@ -1,26 +1,25 @@
 local lp = game.Players.LocalPlayer
-local hrp = lp.Character.HumanoidRootPart
 local mouse = lp:GetMouse()
-local TS = game:GetService('TweenService')
-local UIS = game:GetService('UserInputService')
-local CtrlDown = false
-UIS.InputBegan:connect(function(key)
+local ts = game:GetService('TweenService')
+local uis = game:GetService('UserInputService')
+
+local cd = false
+uis.InputBegan:connect(function(key)
     if key.KeyCode == Enum.KeyCode.LeftControl then
-        CtrlDown = true
+        cd = true
     end
 end)
-UIS.InputEnded:connect(function(key)
+
+uis.InputEnded:connect(function(key)
     if key.KeyCode == Enum.KeyCode.LeftControl then
-        CtrlDown = false
+        cd = false
     end
 end)
+
 mouse.Button1Down:connect(function()
-    if CtrlDown then
-        local MT = mouse.Hit
-        local TInfo = TweenInfo.new(0.1) -- 0.1 means itll take 0.1 second to the space
-        local Finish = {}
-        Finish.CFrame = MT
-        local T = TS:Create(hrp,TInfo,Finish)
+    if cd then
+        local Position = {CFrame = mouse.Hit}
+        local T = ts:Create(lp.Character.HumanoidRootPart, TweenInfo.new(0.1), Position)
         T:Play()
     end
 end)
