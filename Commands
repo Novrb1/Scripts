@@ -147,10 +147,10 @@ AddCmd(
     "prefix",
     "-Changes Prefix",
     function(Args)
-        if Args[1] and Args[1] ~= "" and Args[1] ~= " " and Args[1] ~= "/" then
+        if Args[1] and Args[1] ~= "" and Args[1] ~= " " and Args[1] ~= "/" and #Args[1] <= 1 then
             Prefix = Args[1]
         else
-            notif("Need Second Argument, Cannot Put / As Your Prefix D:")
+            notif("Need Second Argument, Cannot Put / As Your Prefix '/', Need A 1 Character Prefix")
         end
     end
 )
