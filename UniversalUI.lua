@@ -59,36 +59,6 @@ if game.PlaceId == 301549746 then
     end)
 end
 
-function func123()
-    lp.Character.ChildAdded:Connect(function(instance)
-        if instance:IsA'Tool' and instance:FindFirstChild("ConfigMods") and instance:FindFirstChild("ConfigMods"):FindFirstChild("CConfig") then
-            wait(1)
-            if autogunmods then
-                local aa = require(instance.ConfigMods.CConfig)
-                aa.Ammo = 9e9
-                aa.StoredAmmo = 9e9
-                aa.CanSelectFire = true
-                aa.Firerate = 0.01
-                aa.CamShakeMin = 0
-                aa.CamShakeMax = 0
-                aa.AimCanShakeMin = 0
-                aa.AimCamShakeMax = 0
-                aa.gunRecoilMin = 0
-                aa.gunRecoilMax = 0
-                aa.AimGunRecoilMin = 0
-                aa.AimGunRecoilMax = 0
-                aa.SideKickMin = 0
-                aa.SideKickMax = 0
-                aa.KickbackMin = 0
-                aa.KickbackMax = 0
-                aa.AimKickbackMax = 0
-                aa.AimKickbackMin = 0
-            end
-        end
-    end)
-end
-func123()
-
 function infstam()
     wait(0.5)
     if game.PlaceId == 455366377 or game.PlaceId == 4669040 then
@@ -222,6 +192,35 @@ if game.PlaceId == 4805760032 then
         pt1:Destroy()
         pt2:Destroy()
     end)
+    function func123()
+        lp.Character.ChildAdded:Connect(function(instance)
+            if instance:IsA'Tool' and instance:FindFirstChild("ConfigMods") and instance:FindFirstChild("ConfigMods"):FindFirstChild("CConfig") then
+                wait(1)
+                if autogunmods then
+                    local aa = require(instance.ConfigMods.CConfig)
+                    aa.Ammo = 9e9
+                    aa.StoredAmmo = 9e9
+                    aa.CanSelectFire = true
+                    aa.Firerate = 0.01
+                    aa.CamShakeMin = 0
+                    aa.CamShakeMax = 0
+                    aa.AimCanShakeMin = 0
+                    aa.AimCamShakeMax = 0
+                    aa.gunRecoilMin = 0
+                    aa.gunRecoilMax = 0
+                    aa.AimGunRecoilMin = 0
+                    aa.AimGunRecoilMax = 0
+                    aa.SideKickMin = 0
+                    aa.SideKickMax = 0
+                    aa.KickbackMin = 0
+                    aa.KickbackMax = 0
+                    aa.AimKickbackMax = 0
+                    aa.AimKickbackMin = 0
+                end
+            end
+        end)
+    end
+    func123()
 end
 
 yee:Box("Field Of View", function(object, focus)
