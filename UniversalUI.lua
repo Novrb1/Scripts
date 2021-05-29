@@ -41,7 +41,7 @@ local ptas = Instance.new("Part", workspace)
 ptas.Anchored = true
 ptas.CanCollide = false
 ptas.Size = Vector3.new(1,1,1)
-ptas.CFrame = CFrame.new(99999,99999,99999)
+ptas.CFrame = CFrame.new(999999999,0,999999999)
 
 local yee = library:CreateWindow("General")
 
@@ -383,12 +383,6 @@ mouse.Button2Up:Connect(function()
     end
 end)
 
-
---[[
-nametagss
-headesp
-torsoesp
-]]
 function selp(player)
     if player.Name ~= lp.Name then
     	local bbg = Instance.new("BillboardGui",game.CoreGui)
@@ -453,7 +447,7 @@ rservice.Stepped:Connect(function()
 end)
 
 rservice.Stepped:Connect(function()
-    --pcall(function()
+    pcall(function()
         if game.PlaceId == 301549746 and infmon then
             lp:FindFirstChild("Cash").Value = 9e9
         end
@@ -561,5 +555,5 @@ rservice.Stepped:Connect(function()
                 end
             end
         end
-   -- end)
+    end)
 end)
