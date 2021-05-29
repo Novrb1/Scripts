@@ -446,7 +446,7 @@ rservice.Stepped:Connect(function()
 	end
 end)
 
-rservice.Stepped:Connect(function()
+rservice.RenderStepped:Connect(function()
     pcall(function()
         if game.PlaceId == 301549746 and infmon then
             lp:FindFirstChild("Cash").Value = 9e9
