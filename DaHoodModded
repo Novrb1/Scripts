@@ -254,6 +254,8 @@ rservice.RenderStepped:Connect(function()
             if z.Name == v.Name then
                 if z.Character and z.Character:FindFirstChildOfClass("Humanoid") and z.Character:FindFirstChild("Head") then
                     v.Adornee = z.Character:FindFirstChild("Head")
+		else
+		    v.Adornee = nil
                 end
             end
         end
