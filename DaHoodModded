@@ -86,10 +86,11 @@ local rs = 21
 local shiftdown = false
 local recording = false
 local as = false
+local ar = false
 
 local sg = Instance.new("ScreenGui",game.CoreGui)
 local button = Instance.new("TextButton",sg)
-button.Position = UDim2.new(1,-200,0.5,0)
+button.Position = UDim2.new(1,-200,0.5,-25)
 button.Text = tostring(akey)
 button.Size = UDim2.new(0,200,0,50)
 
@@ -136,25 +137,25 @@ end)
 
 lp.Chatted:Connect(function(msg)
     local args = string.split(msg, " ")
-    if args[1] == ";silent" then
+    if args[1] == ";s" or args[1] == ";silent" or args[1] == ";silentaim" then
         silentaim = true
         camlock = false
     end
-    if args[1] == ";cam" then
+    if args[1] == ";c" or args[1] == ";cam" or args[1] == ";camlock" then
         silentaim = false
         camlock = true
     end
-    if args[1] == ";av" then
+    if args[1] == ";av" or args[1] == ";aimvelocity" then
         if args[2] and tonumber(args[2]) and tonumber(args[2]) <= 10 and tonumber(args[2]) >= 1 then
             prediction = tonumber(args[2])
         end
     end
-    if args[1] == ";ws" then
+    if args[1] == ";ws" or args[1] == ";walkspeed" then
         if args[2] and tonumber(args[2]) then
             ws = tonumber(args[2])
         end
     end
-    if args[1] == ";rs" then
+    if args[1] == ";rs" or args[1] == ";runspeed" then
         if args[2] and tonumber(args[2]) then
             rs = tonumber(args[2])
         end
@@ -202,8 +203,11 @@ lp.Chatted:Connect(function(msg)
             cam.FieldOfView = 70
         end
     end
-    if args[1] == ";astomp" then
+    if args[1] == ";as" or args[1] == ";astomp" then
         as = not as
+    end
+    if args[1] == ";ar" or args[1] == ";areset" then
+        ar = not ar
     end
 end)
 
@@ -237,14 +241,19 @@ rservice.RenderStepped:Connect(function()
         if as then
             game.ReplicatedStorage.MainRemote:FireServer("Stomp")
         end
+        if ar then
+            if lp.Character and lp.Character:FindFirstChild("I_LOADED_I") and lp.Character:FindFirstChild("I_LOADED_I")['K.O'].Value == true then
+                if lp.Character then
+                    lp.Character:Destroy()
+                end
+            end
+        end
     end
     for _,z in pairs(game.Players:GetPlayers()) do
         for _,v in pairs(game.CoreGui:GetChildren()) do
             if z.Name == v.Name then
-                if z.Character and z.Character:FindFirstChild("HumanoidRootPart") and z.Character:FindFirstChild("Head") then
+                if z.Character and z.Character:FindFirstChildOfClass("Humanoid") and z.Character:FindFirstChild("Head") then
                     v.Adornee = z.Character:FindFirstChild("Head")
-                else
-                    v.Adornee = nil
                 end
             end
         end
