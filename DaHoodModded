@@ -1,6 +1,7 @@
 print([[
 
 
+;prefix - Changes prefix
 ;s, ;silent, ;silentaim - silentaim Uses mousemoveabs() from synapse library
 ;c, ;cam, ;camlock - camlock Uses Camera.CFrame -- use this instead of silent aim if you dont have synapse
 ;av, ;aimvelocity - AimVelocity depends on your ping (lower ping 40-70 = av 6, 7 | higher ping 80-100 and over = av 4, 5)
@@ -32,7 +33,6 @@ local uis = game:GetService("UserInputService")
 local rservice = game:GetService("RunService")
 local cam = workspace.CurrentCamera
 local NormalGravity = game.Workspace.Gravity
-
 
 local Raw = getrawmetatable(game)
 local Caller = checkcaller or is_protosmasher_caller or Cer.isCerus
@@ -103,6 +103,36 @@ function selp(player)
     tlabel.TextColor3 = Color3.new(255,255,255)
 end
 
+local Prefix = ";"
+
+local screengui = Instance.new("ScreenGui",game.CoreGui)
+local frame = Instance.new("Frame",screengui)
+local cmdBar = Instance.new("TextBox",frame)
+frame.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+frame.BorderSizePixel = 2
+frame.Position = UDim2.new(0, -1000, 0, mouse.ViewSizeY / 2)
+frame.Size = UDim2.new(0, 200, 0, 20)
+cmdBar.BackgroundTransparency = 1.000
+cmdBar.Size = UDim2.new(0, 200, 0, 20)
+cmdBar.TextColor3 = Color3.fromRGB(255, 255, 255)
+cmdBar.TextSize = 16
+cmdBar.TextXAlignment = Enum.TextXAlignment.Left
+
+function notify(text)
+    local screengui = Instance.new("ScreenGui", game.CoreGui)
+    local NOTIF = Instance.new("TextLabel", screengui)
+    NOTIF.Position = UDim2.new(0, -500, 0.5, 0)
+    NOTIF:TweenPosition(UDim2.new(0, 0, 0.5, 0), "Out", "Linear", 0.5, false)
+    NOTIF.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    NOTIF.BorderColor3 = Color3.fromRGB(255, 255, 255)
+    NOTIF.Size = UDim2.new(1, 0, 0, 40)
+    NOTIF.Font = Enum.Font.SourceSans
+    NOTIF.Text = text
+    NOTIF.TextColor3 = Color3.fromRGB(255, 255, 255)
+    NOTIF.TextSize = 25
+    game.Debris:AddItem(screengui, 4)
+end
+
 local akey = Enum.KeyCode.Q
 local keyss = false
 local silentaim = true
@@ -160,34 +190,46 @@ mouse.KeyDown:Connect(function(key)
             lp.Character:Destroy()
         end
     end
+    if key == Prefix then
+        frame:TweenPosition(UDim2.new(0, 0, 0.5, 0), 1, 0, 0.3, 1)
+    	cmdBar:CaptureFocus()
+    end
 end)
 
-lp.Chatted:Connect(function(msg)
-    local args = string.split(msg, " ")
-    if args[1] == ";s" or args[1] == ";silent" or args[1] == ";silentaim" then
+cmdBar.FocusLost:Connect(function()
+    frame:TweenPosition(UDim2.new(0, -500, 0.5, 0), 1, 0, 1, 1)
+    local args = string.split(cmdBar.Text, " ")
+    if args[1] == Prefix .. "prefix" then
+        if args[2] and args[2] ~= "" and args[2] ~= " " and #args[2] == 1 and args[2] ~= "/" or args[2] ~= "." then
+            Prefix = args[2]
+        else
+            notify("Need Second Argument, Cannot Put '/', '.' As Prefix")
+        end
+    end
+    if args[1] == Prefix .. "s" or args[1] == Prefix .. "silent" or args[1] == Prefix .. "silentaim" then
         silentaim = true
         camlock = false
     end
-    if args[1] == ";c" or args[1] == ";cam" or args[1] == ";camlock" then
+    if args[1] == Prefix .. "c" or args[1] == Prefix .. "cam" or args[1] == Prefix .. "camlock" then
         silentaim = false
         camlock = true
     end
-    if args[1] == ";av" or args[1] == ";aimvelocity" then
+    if args[1] == Prefix .. "av" or args[1] == Prefix .. "aimvelocity" then
         if args[2] and tonumber(args[2]) and tonumber(args[2]) <= 10 and tonumber(args[2]) >= 1 then
             prediction = tonumber(args[2])
         end
     end
-    if args[1] == ";ws" or args[1] == ";walkspeed" then
+    if args[1] == Prefix .. "ws" or args[1] == Prefix .. "walkspeed" then
         if args[2] and tonumber(args[2]) then
             ws = tonumber(args[2])
         end
     end
-    if args[1] == ";rs" or args[1] == ";runspeed" then
+    if args[1] == Prefix .. "rs" or args[1] == Prefix .. "runspeed" then
         if args[2] and tonumber(args[2]) then
             rs = tonumber(args[2])
         end
     end
-    if args[1] == ";esp" then
+    if args[1] == Prefix .. "esp" then
         if args[2] and args[2] ~= "" and args[2] ~= " " then
             if args[2] == "all" then
                 for _, v in next, game.Players:GetPlayers() do
@@ -204,7 +246,7 @@ lp.Chatted:Connect(function(msg)
             end
         end
     end
-    if args[1] == ";unesp" then
+    if args[1] == Prefix .. "unesp" then
         if args[2] and args[2] ~= "" and args[2] ~= " " then
             if args[2] == "all" then
                 for _, v in next, game.CoreGui:GetChildren() do
@@ -223,21 +265,21 @@ lp.Chatted:Connect(function(msg)
             end
         end
     end
-    if args[1] == ";fov" then
+    if args[1] == Prefix .. "fov" then
         if args[2] and tonumber(args[2]) and tonumber(args[2]) <= 120 and tonumber(args[2]) >= 10 then
             cam.FieldOfView = tonumber(args[2])
         else
             cam.FieldOfView = 70
         end
     end
-    if args[1] == ";as" or args[1] == ";astomp" then
+    if args[1] == Prefix .. "as" or args[1] == Prefix .. "astomp" then
         as = not as
     end
-    if args[1] == ";ar" or args[1] == ";areset" then
+    if args[1] == Prefix .. "ar" or args[1] == Prefix .. "areset" then
         ar = not ar
     end
     
-    if args[1] == ";tp" or args[1] == ";to" then
+    if args[1] == Prefix .. "tp" or args[1] == Prefix .. "to" then
         if args[2] == "1" or args[2] == "f" or args[2] == "food" then
             local part = Instance.new("Part", workspace)
             part.Anchored = true
@@ -355,10 +397,10 @@ rservice.RenderStepped:Connect(function()
             if z.Name == v.Name then
                 if z.Character and z.Character:FindFirstChildOfClass("Humanoid") and z.Character:FindFirstChild("Head") then
                     v.Adornee = z.Character:FindFirstChild("Head")
-		else
-		    v.Adornee = nil
+		        else
+		            v.Adornee = nil
                 end
             end
         end
     end
-end) 
+end)
