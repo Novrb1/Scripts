@@ -113,7 +113,7 @@ local frame = Instance.new("Frame",screengui)
 local cmdBar = Instance.new("TextBox",frame)
 frame.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
 frame.BorderSizePixel = 2
-frame.Position = UDim2.new(0, -1000, 0, mouse.ViewSizeY / 2)
+frame.Position = UDim2.new(0, -4000, 0, mouse.ViewSizeY / 2)
 frame.Size = UDim2.new(0, 200, 0, 20)
 cmdBar.BackgroundTransparency = 1.000
 cmdBar.Size = UDim2.new(0, 200, 0, 20)
@@ -125,7 +125,7 @@ function notify(text)
     local screengui = Instance.new("ScreenGui", game.CoreGui)
     local NOTIF = Instance.new("TextLabel", screengui)
     NOTIF.Position = UDim2.new(0, -500, 0.5, 0)
-    NOTIF:TweenPosition(UDim2.new(0, 0, 0.5, 0), "Out", "Linear", 0.5, false)
+    NOTIF:TweenPosition(UDim2.new(0, 0, 0.5, 0), "Out", "Linear", 0.2, false)
     NOTIF.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     NOTIF.BorderColor3 = Color3.fromRGB(255, 255, 255)
     NOTIF.Size = UDim2.new(1, 0, 0, 40)
@@ -133,7 +133,7 @@ function notify(text)
     NOTIF.Text = text
     NOTIF.TextColor3 = Color3.fromRGB(255, 255, 255)
     NOTIF.TextSize = 25
-    game.Debris:AddItem(screengui, 4)
+    game.Debris:AddItem(screengui, 2.3)
 end
 
 local akey = Enum.KeyCode.Q
@@ -205,34 +205,41 @@ cmdBar.FocusLost:Connect(function()
     if args[1] == Prefix .. "prefix" then
         if args[2] and args[2] ~= "" and args[2] ~= " " and #args[2] == 1 and args[2] ~= "/" or args[2] ~= "." then
             Prefix = args[2]
+            notify("Prefix " .. args[2])
         else
             notify("Need Second Argument, Cannot Put '/', '.' As Prefix")
         end
     end
     if args[1] == Prefix .. "cmds" or args[1] == Prefix .. "commands" then
         cmds()
+        notify("Printed CMDS In Console")
     end
     if args[1] == Prefix .. "s" or args[1] == Prefix .. "silent" or args[1] == Prefix .. "silentaim" then
         silentaim = true
         camlock = false
+        notify("SilentAim true")
     end
     if args[1] == Prefix .. "c" or args[1] == Prefix .. "cam" or args[1] == Prefix .. "camlock" then
         silentaim = false
         camlock = true
+        notify("Camlock true")
     end
     if args[1] == Prefix .. "av" or args[1] == Prefix .. "aimvelocity" then
         if args[2] and tonumber(args[2]) and tonumber(args[2]) <= 10 and tonumber(args[2]) >= 1 then
             prediction = tonumber(args[2])
+            notify("AimVelocity " .. tonumber(args[2]))
         end
     end
     if args[1] == Prefix .. "ws" or args[1] == Prefix .. "walkspeed" then
         if args[2] and tonumber(args[2]) then
             ws = tonumber(args[2])
+            notify("WalkSpeed " .. tonumber(args[2]))
         end
     end
     if args[1] == Prefix .. "rs" or args[1] == Prefix .. "runspeed" then
         if args[2] and tonumber(args[2]) then
             rs = tonumber(args[2])
+            notify("RunSpeed " .. tonumber(args[2]))
         end
     end
     if args[1] == Prefix .. "esp" then
@@ -247,6 +254,7 @@ cmdBar.FocusLost:Connect(function()
                 for _, v in next, game.Players:GetPlayers() do
                     if v.Name:lower():sub(1, #args[2]) == args[2]:lower() then
                         selp(v)
+                        notify("Esp'd " .. v.Name)
                     end
                 end
             end
@@ -266,6 +274,7 @@ cmdBar.FocusLost:Connect(function()
                 for _, v in next, game.CoreGui:GetChildren() do
                     if v.Name:lower():sub(1, #args[2]) == args[2]:lower() then
                         v:Destroy()
+                        notify("Unesp'd " .. v.Name)
                     end
                 end
             end
@@ -273,18 +282,21 @@ cmdBar.FocusLost:Connect(function()
     end
     if args[1] == Prefix .. "fov" then
         if args[2] and tonumber(args[2]) and tonumber(args[2]) <= 120 and tonumber(args[2]) >= 10 then
+            notify("FieldOfView " .. tonumber(args[2]))
             cam.FieldOfView = tonumber(args[2])
         else
+            notify("FieldOfView 70")
             cam.FieldOfView = 70
         end
     end
     if args[1] == Prefix .. "as" or args[1] == Prefix .. "astomp" then
         as = not as
+        notify("Auto-Stomp " .. tostring(as))
     end
     if args[1] == Prefix .. "ar" or args[1] == Prefix .. "areset" then
         ar = not ar
+        notify("Auto-Reset " .. tostring(ar))
     end
-    
     if args[1] == Prefix .. "tp" or args[1] == Prefix .. "to" then
         if args[2] == "1" or args[2] == "f" or args[2] == "food" then
             local part = Instance.new("Part", workspace)
