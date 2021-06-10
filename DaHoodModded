@@ -1,30 +1,33 @@
-print([[
-
-
-;prefix - Changes prefix
-;s, ;silent, ;silentaim - silentaim Uses mousemoveabs() from synapse library
-;c, ;cam, ;camlock - camlock Uses Camera.CFrame -- use this instead of silent aim if you dont have synapse
-;av, ;aimvelocity - AimVelocity depends on your ping (lower ping 40-70 = av 6, 7 | higher ping 80-100 and over = av 4, 5)
-;ws, ;walkspeed - changes walkspeed
-;rs, ;runspeed - changes runspeed
-;esp, ;unesp
-;fov - changes Field Of View
-;as, ;astomp - auto stomp people
-;ar, ;areset - auto reset when knocked
-
-;to, ;tp - Tp's to a certain location
-{
-    1, f, food
-    2, gs, gunstore
-    3, b, bank
-    4, rpg
-    5, ft, flamethrower
-}
-
-the button on the side is a keybind to change your aimlock key
-
-
-]])
+function cmds()
+    print([[
+    
+    
+    ;prefix - Changes prefix
+    ;s, ;silent, ;silentaim - silentaim Uses mousemoveabs() from synapse library
+    ;c, ;cam, ;camlock - camlock Uses Camera.CFrame -- use this instead of silent aim if you dont have synapse
+    ;av, ;aimvelocity - AimVelocity depends on your ping (lower ping 40-70 = av 6, 7 | higher ping 80-100 and over = av 4, 5)
+    ;ws, ;walkspeed - changes walkspeed
+    ;rs, ;runspeed - changes runspeed
+    ;esp, ;unesp
+    ;fov - changes Field Of View
+    ;as, ;astomp - auto stomp people
+    ;ar, ;areset - auto reset when knocked
+    
+    ;to, ;tp - Tp's to a certain location
+    {
+        1, f, food
+        2, gs, gunstore
+        3, b, bank
+        4, rpg
+        5, ft, flamethrower
+    }
+    
+    the button on the side is a keybind to change your aimlock key
+    
+    
+    ]])
+end
+cmds()
 
 local Players = game:GetService("Players")
 local lp = Players.LocalPlayer
@@ -205,6 +208,9 @@ cmdBar.FocusLost:Connect(function()
         else
             notify("Need Second Argument, Cannot Put '/', '.' As Prefix")
         end
+    end
+    if args[1] == Prefix .. "cmds" or args[1] == Prefix .. "commands" then
+        cmds()
     end
     if args[1] == Prefix .. "s" or args[1] == Prefix .. "silent" or args[1] == Prefix .. "silentaim" then
         silentaim = true
