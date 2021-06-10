@@ -11,6 +11,15 @@ print([[
 ;as, ;astomp - auto stomp people
 ;ar, ;areset - auto reset when knocked
 
+;to, ;tp - Tp's to a certain location
+{
+    1, f, food
+    2, gs, gunstore
+    3, b, bank
+    4, rpg
+    5, ft, flamethrower
+}
+
 the button on the side is a keybind to change your aimlock key
 
 
@@ -226,6 +235,80 @@ lp.Chatted:Connect(function(msg)
     end
     if args[1] == ";ar" or args[1] == ";areset" then
         ar = not ar
+    end
+    
+    if args[1] == ";tp" or args[1] == ";to" then
+        if args[2] == "1" or args[2] == "f" or args[2] == "food" then
+            local part = Instance.new("Part", workspace)
+            part.Anchored = true
+            part.CanCollide = false
+            part.CFrame = CFrame.new(-2256.73486, 404.5466, -954.518616)
+            part.Transparency = 1
+            game.Debris:AddItem(part, 3)
+            
+            local weld = Instance.new("Weld", part)
+            weld.Part0 = part
+            
+            weld.Part1 = lp.Character.HumanoidRootPart
+            wait(0.1)
+            weld.Part1 = nil
+        elseif args[2] == "2" or args[2] == "gs" or args[2] == "gunstore" then
+            local part = Instance.new("Part", workspace)
+            part.Anchored = true
+            part.CanCollide = false
+            part.CFrame = CFrame.new(-2489.80322, 388.863983, -1396.18481)
+            part.Transparency = 1
+            game.Debris:AddItem(part, 3)
+            
+            local weld = Instance.new("Weld", part)
+            weld.Part0 = part
+            
+            weld.Part1 = lp.Character.HumanoidRootPart
+            wait(0.1)
+            weld.Part1 = nil
+        elseif args[2] == "3" or args[2] == "b" or args[2] == "bank" then
+            local part = Instance.new("Part", workspace)
+            part.Anchored = true
+            part.CanCollide = false
+            part.CFrame = CFrame.new(-2334.15527, 402.614258, -946.768127)
+            part.Transparency = 1
+            game.Debris:AddItem(part, 3)
+            
+            local weld = Instance.new("Weld", part)
+            weld.Part0 = part
+            
+            weld.Part1 = lp.Character.HumanoidRootPart
+            wait(0.1)
+            weld.Part1 = nil
+        elseif args[2] == "4" or args[2] == "rpg" then
+            local part = Instance.new("Part", workspace)
+            part.Anchored = true
+            part.CanCollide = false
+            part.CFrame = CFrame.new(-1820.03491, 354.114227, -935.422668)
+            part.Transparency = 1
+            game.Debris:AddItem(part, 3)
+            
+            local weld = Instance.new("Weld", part)
+            weld.Part0 = part
+            
+            weld.Part1 = lp.Character.HumanoidRootPart
+            wait(0.1)
+            weld.Part1 = nil
+        elseif args[2] == "5" or args[2] == "ft" or args[2] == "flamethrower" then
+            local part = Instance.new("Part", workspace)
+            part.Anchored = true
+            part.CanCollide = false
+            part.CFrame = CFrame.new(-2077.3833, 434.674774, -747.421631)
+            part.Transparency = 1
+            game.Debris:AddItem(part, 3)
+            
+            local weld = Instance.new("Weld", part)
+            weld.Part0 = part
+            
+            weld.Part1 = lp.Character.HumanoidRootPart
+            wait(0.1)
+            weld.Part1 = nil
+        end
     end
 end)
 
