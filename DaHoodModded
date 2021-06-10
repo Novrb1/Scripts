@@ -1,3 +1,21 @@
+print([[
+
+
+;s, ;silent, ;silentaim - silentaim Uses mousemoveabs() from synapse library
+;c, ;cam, ;camlock - camlock Uses Camera.CFrame -- use this instead of silent aim if you dont have synapse
+;av, ;aimvelocity - AimVelocity depends on your ping (lower ping 40-70 = av 6, 7 | higher ping 80-100 and over = av 4, 5)
+;ws, ;walkspeed - changes walkspeed
+;rs, ;runspeed - changes runspeed
+;esp, ;unesp
+;fov - changes Field Of View
+;as, ;astomp - auto stomp people
+;ar, ;areset - auto reset when knocked
+
+the button on the side is a keybind to change your aimlock key
+
+
+]])
+
 local Players = game:GetService("Players")
 local lp = Players.LocalPlayer
 local mouse = lp:GetMouse()
