@@ -8,10 +8,11 @@ function cmds()
     ;av, ;aimvelocity - AimVelocity depends on your ping (lower ping 40-70 = av 6, 7 | higher ping 80-100 and over = av 4, 5)
     ;ws, ;walkspeed - changes walkspeed
     ;rs, ;runspeed - changes runspeed
-    ;esp, ;unesp
     ;fov - changes Field Of View
     ;as, ;astomp - auto stomp people
     ;ar, ;areset - auto reset when knocked
+    ;esp, ;unesp
+    ;day, ;night
     
     ;to, ;tp - Tp's to a certain location
     {
@@ -147,6 +148,8 @@ local shiftdown = false
 local recording = false
 local as = false
 local ar = false
+local day = false
+local night = false
 
 local sg = Instance.new("ScreenGui",game.CoreGui)
 local button = Instance.new("TextButton",sg)
@@ -297,6 +300,14 @@ cmdBar.FocusLost:Connect(function()
         ar = not ar
         notify("Auto-Reset " .. tostring(ar))
     end
+    if args[1] == Prefix .. "day" then
+        day = true
+        night = false
+    end
+    if args[1] == Prefix .. "night" then
+        day = false
+        night = true
+    end
     if args[1] == Prefix .. "tp" or args[1] == Prefix .. "to" then
         if args[2] == "1" or args[2] == "f" or args[2] == "food" then
             local part = Instance.new("Part", workspace)
@@ -422,3 +433,18 @@ rservice.RenderStepped:Connect(function()
         end
     end
 end)
+
+game:GetService("Lighting").Changed:Connect(function()
+    if day then
+        game:GetService("Lighting").ClockTime = 14
+    elseif night then
+        game:GetService("Lighting").ClockTime = 0
+    end
+end)
+game:GetService("Lighting").GlobalShadows = false
+game:GetService("Lighting").ShadowSoftness = 0
+game:GetService("Lighting").Brightness = 1
+game:GetService("Lighting").FogEnd = 9e9
+game:GetService("Lighting").FogStart = 9e9
+lp.PlayerGui.Chat.Frame.ChatChannelParentFrame.Visible = true
+lp.PlayerGui.Chat.Frame.ChatBarParentFrame.Position = lp.PlayerGui.Chat.Frame.ChatChannelParentFrame.Position + UDim2.new(UDim.new(), lp.PlayerGui.Chat.Frame.ChatChannelParentFrame.Size.Y)
