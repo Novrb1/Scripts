@@ -241,12 +241,12 @@ end)
 
 rservice.Stepped:Connect(function()
     if silentaim then
-        local vector, onScreen = cam:WorldToViewportPoint(plr.Character:FindFirstChild("LowerTorso").Position + getClosestToMouse().Character:FindFirstChild("UpperTorso").Velocity / prediction)
+        local vector, onScreen = cam:WorldToViewportPoint(plr.Character:FindFirstChild("LowerTorso").Position + plr.Character:FindFirstChild("LowerTorso").Velocity / prediction)
         if keyss and onScreen and isrbxactive() and plr ~= nil then
             mma(vector.X, vector.Y)
         end
     elseif camlock then
-        cam.CFrame = CFrame.new(cam.CFrame.p, plr.Character:FindFirstChild("LowerTorso").Position + getClosestToMouse().Character:FindFirstChild("UpperTorso").Velocity / prediction)
+        cam.CFrame = CFrame.new(cam.CFrame.p, plr.Character:FindFirstChild("LowerTorso").Position + plr.Character:FindFirstChild("LowerTorso").Velocity / prediction)
     end
 end)
 rservice.RenderStepped:Connect(function()
