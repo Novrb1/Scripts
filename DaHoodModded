@@ -11,9 +11,14 @@ function cmds()
     ;fov - changes Field Of View
     ;as, ;astomp - auto stomp people
     ;ar, ;areset - auto reset when knocked
-    ;goto - Goes to a player
     ;esp, ;unesp
     ;day, ;night
+    
+    ;goto - Goes to a player
+    {
+        display then player name(ex. goto display 1234)
+        -- searches for display name instead of UserName
+    }
     
     ;to, ;tp - Tp's to a certain location
     {
@@ -108,11 +113,19 @@ function selp(player)
     tlabel.TextColor3 = Color3.new(255,255,255)
 end
 
-function findplayer(args)
+function findplayer(args, tf)
     local Targoot
-    for _,v in next, game.Players:GetPlayers() do
-        if v.Name:lower():sub(1,#args) == args:lower() then
-            Targoot = v
+    if tf then
+        for _,v in next, game.Players:GetPlayers() do
+            if v.DisplayName:lower():sub(1,#args) == args:lower() then
+                Targoot = v
+            end
+        end
+    else
+        for _,v in next, game.Players:GetPlayers() do
+            if v.Name:lower():sub(1,#args) == args:lower() then
+                Targoot = v
+            end
         end
     end
     return Targoot
@@ -321,17 +334,32 @@ cmdBar.FocusLost:Connect(function()
     end
     if args[1] == Prefix .. "goto" then
         if args[2] and args[2] ~= "" and args[2] ~= " " then
-            local plr = findplayer(args[2])
-            if lp.Character and lp.Character:FindFirstChildOfClass("Humanoid") and plr.Character and plr.Character:FindFirstChildOfClass("Humanoid") then
-                local pt = Instance.new("Part", workspace)
-                game.Debris:AddItem(pt, 0.5)
-                pt.Transparency = 1
-                pt.CanCollide = false
-                pt.Anchored = true
-                pt.CFrame = plr.Character:FindFirstChild("HumanoidRootPart").CFrame
-                local ww = Instance.new("Weld", pt)
-                ww.Part0 = pt
-                ww.Part1 = lp.Character:FindFirstChild("HumanoidRootPart")
+            if args[2] == "display" and args[3] and args[3] ~= "" and args[3] ~= " " then
+                local plr = findplayer(args[3], true)
+                if lp.Character and lp.Character:FindFirstChildOfClass("Humanoid") and plr.Character and plr.Character:FindFirstChildOfClass("Humanoid") then
+                    local pt = Instance.new("Part", workspace)
+                    game.Debris:AddItem(pt, 0.5)
+                    pt.Transparency = 1
+                    pt.CanCollide = false
+                    pt.Anchored = true
+                    pt.CFrame = plr.Character:FindFirstChild("HumanoidRootPart").CFrame
+                    local ww = Instance.new("Weld", pt)
+                    ww.Part0 = pt
+                    ww.Part1 = lp.Character:FindFirstChild("HumanoidRootPart")
+                end
+            else
+                local plr = findplayer(args[2], false)
+                if lp.Character and lp.Character:FindFirstChildOfClass("Humanoid") and plr.Character and plr.Character:FindFirstChildOfClass("Humanoid") then
+                    local pt = Instance.new("Part", workspace)
+                    game.Debris:AddItem(pt, 0.5)
+                    pt.Transparency = 1
+                    pt.CanCollide = false
+                    pt.Anchored = true
+                    pt.CFrame = plr.Character:FindFirstChild("HumanoidRootPart").CFrame
+                    local ww = Instance.new("Weld", pt)
+                    ww.Part0 = pt
+                    ww.Part1 = lp.Character:FindFirstChild("HumanoidRootPart")
+                end
             end
         end
     end
