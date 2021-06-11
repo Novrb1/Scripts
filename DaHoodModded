@@ -107,6 +107,16 @@ function selp(player)
     tlabel.TextColor3 = Color3.new(255,255,255)
 end
 
+function findplayer(args)
+    local Targoot
+    for _,v in next, game.Players:GetPlayers() do
+        if v.Name:lower():sub(1,#args) == args:lower() then
+            Targoot = v
+        end
+    end
+    return Targoot
+end
+
 local Prefix = ";"
 
 local screengui = Instance.new("ScreenGui",game.CoreGui)
@@ -307,6 +317,22 @@ cmdBar.FocusLost:Connect(function()
     if args[1] == Prefix .. "night" then
         day = false
         night = true
+    end
+    if args[1] == Prefix .. "goto" then
+        if args[2] and args[2] ~= "" and args[2] ~= " " then
+            local plr = findplayer(args[2])
+            if lp.Character and lp.Character:FindFirstChildOfClass("Humanoid") and plr.Character and plr.Character:FindFirstChildOfClass("Humanoid") then
+                local pt = Instance.new("Part", workspace)
+                game.Debris:AddItem(pt, 0.5)
+                pt.Transparency = 1
+                pt.CanCollide = false
+                pt.Anchored = true
+                pt.CFrame = plr.Character:FindFirstChild("HumanoidRootPart").CFrame
+                local ww = Instance.new("Weld", pt)
+                ww.Part0 = pt
+                ww.Part1 = lp.Character:FindFirstChild("HumanoidRootPart")
+            end
+        end
     end
     if args[1] == Prefix .. "tp" or args[1] == Prefix .. "to" then
         if args[2] == "1" or args[2] == "f" or args[2] == "food" then
