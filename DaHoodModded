@@ -11,6 +11,7 @@ function cmds()
     ;fov - changes Field Of View
     ;as, ;astomp - auto stomp people
     ;ar, ;areset - auto reset when knocked
+    ;goto - Goes to a player
     ;esp, ;unesp
     ;day, ;night
     
