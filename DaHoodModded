@@ -8,10 +8,9 @@ function cmds()
     ;av, ;aimvelocity - AimVelocity depends on your ping (lower ping 40-70 = av 6, 7 | higher ping 80-100 and over = av 4, 5)
     ;ws, ;walkspeed - changes walkspeed
     ;rs, ;runspeed - changes runspeed
+    ;fov - changes Field Of View
     ;as, ;astomp - auto stomp people
     ;ar, ;areset - auto reset when knocked
-    ;ns, ;noslow - Makes you not lose speed doing anything
-    ;fov - changes Field Of View
     ;esp, ;unesp
     ;day, ;night
     
@@ -44,6 +43,42 @@ local uis = game:GetService("UserInputService")
 local rservice = game:GetService("RunService")
 local cam = workspace.CurrentCamera
 local NormalGravity = game.Workspace.Gravity
+
+local Raw = getrawmetatable(game)
+local Caller = checkcaller or is_protosmasher_caller or Cer.isCerus
+local CallingScript = getcallingscript or get_calling_script
+local Closure = newcclosure or read_me or function(Func) return Func end
+local CallingMethod = getnamecallmethod or get_namecall_method
+setreadonly(Raw,false)
+local NewIndex = Raw.__newindex;
+Raw.__newindex = Closure(function(self,Property,Value)
+	if Caller() then return NewIndex(self,Property,Value) end
+	if Property == "WalkSpeed" then return 16 end
+	if Property == "JumpPower" then return 37.5 end 
+	if Property == "HipHeight" then return 0 end 
+	if self == workspace and Property == "Gravity" then return NormalGravity end
+	if Property == "CFrame" and self:IsDescendantOf(lp.Character) then return end 
+	return NewIndex(self,Property,Value)
+end)
+local Namecall = Raw.__namecall;
+Raw.__namecall = Closure(function(self,...)
+local Args = {...}
+	if Caller() then 
+		if CallingMethod() == "FindFirstChild" and Args[1] == "HumanoidRootPart" then 
+			Args[1] = "HumanoidRootPart" 
+			return Namecall(self,unpack(Args))
+		end
+		return Namecall(self,...) 
+	end 
+	if CallingMethod() == "Destroy" or CallingMethod() == "Kick" then 
+		if self == lp then return wait(9e9) end
+		if tostring(self) == 'BodyGyro' or tostring(self) == 'BodyVelocity' then return wait(9e9) end 
+	end
+	if CallingMethod() == "BreakJoints" and self == lp.Character then return wait(9e9) end
+	return Namecall(self,...)
+end)
+setreadonly(Raw,true)
+
 
 function mma(x, y)
     mousemoveabs(x, y)
@@ -139,7 +174,6 @@ local as = false
 local ar = false
 local day = false
 local night = false
-local ns = false
 
 local sg = Instance.new("ScreenGui",game.CoreGui)
 local button = Instance.new("TextButton",sg)
@@ -293,16 +327,10 @@ cmdBar.FocusLost:Connect(function()
     if args[1] == Prefix .. "day" then
         day = true
         night = false
-        notify("Turned Day")
     end
     if args[1] == Prefix .. "night" then
         day = false
         night = true
-        notify("Turned Night")
-    end
-    if args[1] == Prefix .. "ns" or args[1] == "noslow" then
-        ns = not ns
-        notify("NoSlow " .. tostring(ns))
     end
     if args[1] == Prefix .. "goto" then
         if args[2] and args[2] ~= "" and args[2] ~= " " then
@@ -419,37 +447,6 @@ game.Players.PlayerRemoving:Connect(function(plrr)
         end
     end
 end)
-
-
-local Raw = getrawmetatable(game)
-local Caller = checkcaller or is_protosmasher_caller or Cer.isCerus
-local CallingScript = getcallingscript or get_calling_script
-local Closure = newcclosure or read_me or function(Func) return Func end
-local CallingMethod = getnamecallmethod or get_namecall_method
-setreadonly(Raw,false)
-local NewIndex = Raw.__newindex;
-Raw.__newindex = Closure(function(self,Property,Value)
-	if Caller() then return NewIndex(self,Property,Value) end
-	if ns then
-	    if Property == "WalkSpeed" then return 16 end
-	end
-	if Property == "JumpPower" then return 37.5 end 
-	if Property == "HipHeight" then return 0 end 
-	if self == workspace and Property == "Gravity" then return NormalGravity end
-	return NewIndex(self,Property,Value)
-end)
-local Namecall = Raw.__namecall;
-Raw.__namecall = Closure(function(self,...)
-local Args = {...}
-	if CallingMethod() == "Destroy" or CallingMethod() == "Kick" then 
-		if self == lp then 
-		    return wait(9e9) 
-		end
-	end
-	return Namecall(self,...)
-end)
-setreadonly(Raw,true)
-
 
 rservice.Stepped:Connect(function()
     if silentaim then
