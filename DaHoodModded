@@ -8,9 +8,10 @@ function cmds()
     ;av, ;aimvelocity - AimVelocity depends on your ping (lower ping 40-70 = av 6, 7 | higher ping 80-100 and over = av 4, 5)
     ;ws, ;walkspeed - changes walkspeed
     ;rs, ;runspeed - changes runspeed
-    ;fov - changes Field Of View
     ;as, ;astomp - auto stomp people
     ;ar, ;areset - auto reset when knocked
+    ;ns, ;noslow - Makes you not lose speed doing anything
+    ;fov - changes Field Of View
     ;esp, ;unesp
     ;day, ;night
     
