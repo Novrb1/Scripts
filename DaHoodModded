@@ -5,12 +5,19 @@ function cmds()
     ;prefix - Changes prefix
     ;s, ;silent, ;silentaim - silentaim Uses mousemoveabs() from synapse library
     ;c, ;cam, ;camlock - camlock Uses Camera.CFrame -- use this instead of silent aim if you dont have synapse
-    ;av, ;aimvelocity - AimVelocity depends on your ping (lower ping 40-70 = av 6, 7 | higher ping 80-100 and over = av 4, 5)
+    ;av, ;aimvelocity - AimVelocity depends on your ping 
+    (Sets your aim velocity 1-10)(The higher your ping is the higher this should be)
+    
+    ;l, ;lock - Locks Player Instead Of Using GetClosestToMouse()
+    ;ul, ;unlock - Unlocks Player
+    
     ;ws, ;walkspeed - changes walkspeed
     ;rs, ;runspeed - changes runspeed
-    ;fov - changes Field Of View
+    
     ;as, ;astomp - auto stomp people
     ;ar, ;areset - auto reset when knocked
+    
+    ;fov - changes Field Of View
     ;esp, ;unesp
     ;day, ;night
     
@@ -241,6 +248,20 @@ cmdBar.FocusLost:Connect(function()
         cmds()
         notify("Printed CMDS In Console")
     end
+    
+    if args[1] == Prefix .. "l" or args[1] == Prefix .. "lock" then
+        if args[2] and args[2] ~= "" and args[2] ~= " " then
+            if args[2] == "display" and args[3] and args[3] ~= "" and args[3] ~= " " then
+                lockedplr = findplayer(args[3], true)
+            else
+                lockedplr = findplayer(args[2], false)
+            end
+        end
+    end
+    if args[1] == Prefix .. "ul" or args[1] == "unlock" then
+        lockedplr = nil
+    end
+    
     if args[1] == Prefix .. "s" or args[1] == Prefix .. "silent" or args[1] == Prefix .. "silentaim" then
         silentaim = true
         camlock = false
@@ -449,13 +470,24 @@ game.Players.PlayerRemoving:Connect(function(plrr)
 end)
 
 rservice.Stepped:Connect(function()
-    if silentaim then
-        local vector, onScreen = cam:WorldToViewportPoint(plr.Character:FindFirstChild("LowerTorso").Position + plr.Character:FindFirstChild("LowerTorso").Velocity / prediction)
-        if keyss and onScreen and isrbxactive() and plr ~= nil then
-            mma(vector.X, vector.Y)
+    if lockedplr and game.Players:FindFirstChild(lockedplr.Name) then
+        if silentaim then
+            local vector, onScreen = cam:WorldToViewportPoint(lockedplr.Character:FindFirstChild("LowerTorso").Position + lockedplr.Character:FindFirstChild("LowerTorso").Velocity / prediction)
+            if keyss and onScreen and isrbxactive() and plr ~= nil then
+                mma(vector.X, vector.Y)
+            end
+        elseif keyss and camlock then
+            cam.CFrame = CFrame.new(cam.CFrame.p, lockedplr.Character:FindFirstChild("LowerTorso").Position + lockedplr.Character:FindFirstChild("LowerTorso").Velocity / prediction)
         end
-    elseif camlock then
-        cam.CFrame = CFrame.new(cam.CFrame.p, plr.Character:FindFirstChild("LowerTorso").Position + plr.Character:FindFirstChild("LowerTorso").Velocity / prediction)
+    else
+        if silentaim then
+            local vector, onScreen = cam:WorldToViewportPoint(plr.Character:FindFirstChild("LowerTorso").Position + plr.Character:FindFirstChild("LowerTorso").Velocity / prediction)
+            if keyss and onScreen and isrbxactive() and plr ~= nil then
+                mma(vector.X, vector.Y)
+            end
+        elseif keyss and camlock then
+            cam.CFrame = CFrame.new(cam.CFrame.p, plr.Character:FindFirstChild("LowerTorso").Position + plr.Character:FindFirstChild("LowerTorso").Velocity / prediction)
+        end
     end
 end)
 rservice.RenderStepped:Connect(function()
