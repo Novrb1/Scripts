@@ -6,7 +6,8 @@ function cmds()
     ;s, ;silent, ;silentaim - silentaim Uses mousemoveabs() from synapse library
     ;c, ;cam, ;camlock - camlock Uses Camera.CFrame -- use this instead of silent aim if you dont have synapse
     ;av, ;aimvelocity - AimVelocity depends on your ping 
-    (Sets your aim velocity 1-10)(The higher your ping is the higher this should be)
+    (The higher your ping is the lower this should be)
+    (The lower your ping is the higher this should be)
     
     ;l, ;lock - Locks Player Instead Of Using GetClosestToMouse()
     ;ul, ;unlock - Unlocks Player
