@@ -45,7 +45,7 @@ main:Toggle("Aimlock Toggle", function(bool)
     masterenabled = bool
 end)
 main:Bind("Aimlock Bind", Enum.KeyCode.Q, true, function(bind)
-    akey = bool
+    akey = bind
 end)
 main:Toggle("Prediction Toggle", function(bool)
     predictionenabled = bool
@@ -95,28 +95,30 @@ uis.InputEnded:Connect(function(key)
     end
 end)
 
-rservice.Stepped:Connect(function()
-    if masterenabled then
-        if plr ~= nil and game.Players:FindFirstChild(plr.Name) then
-            PlayerLockedTo:Refresh("Locked Onto: " .. plr.Name)
-        else
-            PlayerLockedTo:Refresh("Not Locked On Anyone")
-        end
-        if silentaim and keyss and plr ~= nil then
-            if predictionenabled then
-                local vector, onScreen = cam:WorldToViewportPoint(plr.Character:FindFirstChild("Head").Position + Vector3.new(0,offset,0) + plr.Character:FindFirstChild("Head").Velocity / preidicion)
+rservice.Heartbeat:Connect(function()
+    pcall(function()
+        if masterenabled then
+            if plr ~= nil and game.Players:FindFirstChild(plr.Name) then
+                PlayerLockedTo:Refresh("Locked Onto: " .. plr.Name)
             else
-                local vector, onScreen = cam:WorldToViewportPoint(plr.Character:FindFirstChild("Head").Position + Vector3.new(0,offset,0))
+                PlayerLockedTo:Refresh("Not Locked On Anyone")
             end
-            if keyss and onScreen and isrbxactive() then
-                mousemoveabs(vector.X, vector.Y)
-            end
-        elseif camlock and keyss and plr ~= nil then
-            if predictionenabled then
-                cam.CFrame = CFrame.new(cam.CFrame.p, plr.Character:FindFirstChild("Head").Position + Vector3.new(0,offset,0) + plr.Character:FindFirstChild("Head").Velocity / preidicion)
-            else
-                cam.CFrame = CFrame.new(cam.CFrame.p, plr.Character:FindFirstChild("Head").Position + Vector3.new(0,offset,0))
+            if silentaim and keyss and plr ~= nil then
+                if predictionenabled then
+                    local vector, onScreen = cam:WorldToViewportPoint(plr.Character:FindFirstChild("Head").Position + Vector3.new(0,offset,0) + plr.Character:FindFirstChild("Head").Velocity / preidicion)
+                else
+                    local vector, onScreen = cam:WorldToViewportPoint(plr.Character:FindFirstChild("Head").Position + Vector3.new(0,offset,0))
+                end
+                if keyss and onScreen and isrbxactive() then
+                    mousemoveabs(vector.X, vector.Y)
+                end
+            elseif camlock and keyss and plr ~= nil then
+                if predictionenabled then
+                    cam.CFrame = CFrame.new(cam.CFrame.p, plr.Character:FindFirstChild("Head").Position + Vector3.new(0,offset,0) + plr.Character:FindFirstChild("Head").Velocity / preidicion)
+                else
+                    cam.CFrame = CFrame.new(cam.CFrame.p, plr.Character:FindFirstChild("Head").Position + Vector3.new(0,offset,0))
+                end
             end
         end
-    end
+    end)
 end)
