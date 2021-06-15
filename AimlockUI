@@ -13,6 +13,7 @@ local rservice = game:GetService("RunService")
 local tween = game:GetService("TweenService")
 local cam = workspace.CurrentCamera
 
+local tc = false
 local masterenabled = false
 local akey = Enum.KeyCode.Q
 local predictionenabled = false
@@ -25,9 +26,16 @@ function getClosestToMouse()
 	local closestdis = math.huge
 	local closestplr
 	for i,v in pairs(Players:GetPlayers()) do
-		if v:DistanceFromCharacter(mouse.Hit.p) < closestdis and v ~= lp and v.Character and v.Character:FindFirstChild("UpperTorso") then
-			closestplr = v
-			closestdis = v:DistanceFromCharacter(mouse.Hit.p)
+	    if tc then
+	        if v:DistanceFromCharacter(mouse.Hit.p) < closestdis and v ~= lp and v.Team ~= lp.Team and v.Character and v.Character:FindFirstChild("UpperTorso") then
+    			closestplr = v
+    			closestdis = v:DistanceFromCharacter(mouse.Hit.p)
+    		end
+	    else
+    		if v:DistanceFromCharacter(mouse.Hit.p) < closestdis and v ~= lp and v.Character and v.Character:FindFirstChild("UpperTorso") then
+    			closestplr = v
+    			closestdis = v:DistanceFromCharacter(mouse.Hit.p)
+    		end
 		end
 	end
 	if not closestplr then return lp end
@@ -43,6 +51,9 @@ settings:Bind("Toggle UI", Enum.KeyCode.Z, true, function(bind)
 end)
 main:Toggle("Aimlock Toggle", function(bool)
     masterenabled = bool
+end)
+main:Toggle("Teamcheck Toggle", function(bool)
+    tc = bool
 end)
 main:Bind("Aimlock Bind", Enum.KeyCode.Q, true, function(bind)
     akey = bind
