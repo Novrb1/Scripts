@@ -59,9 +59,13 @@ main:Slider("Aimlock Offset", 0, -4, function(num)
 end)
 
 local Type = main:Text("Current Type: Camlock")
+main:Text([[
+c, cl, cam, camlock = Camlock Aimbot
+s, sa, silent, silentaim = Silent Aimbot
+]])
 main:Box("Aimlock Type",function(string)
     if string ~= nil and string ~= "" and string ~= " " then
-        if string == string.lower("c") or string == string.lower("ca") or string == string.lower("cam") or string == string.lower("camlock") then
+        if string == string.lower("c") or string == string.lower("cl") or string == string.lower("cam") or string == string.lower("camlock") then
             camlock = true
             silent = false
             Type:Refresh("Current Type: Camlock")
