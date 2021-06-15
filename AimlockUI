@@ -1,0 +1,118 @@
+if not game:IsLoaded() then
+    game.Loaded:Wait()
+end
+
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Novrb1/Scripts/master/UILIB-not-mine"))()
+library:SetBind(Enum.KeyCode.Z)
+
+local Players = game:GetService("Players")
+local lp = Players.LocalPlayer
+local mouse = lp:GetMouse()
+local uis = game:GetService("UserInputService")
+local rservice = game:GetService("RunService")
+local tween = game:GetService("TweenService")
+local cam = workspace.CurrentCamera
+
+local masterenabled = false
+local akey = Enum.KeyCode.Q
+local predictionenabled = false
+local preidicion = 1
+local silent = false
+local camlock = true
+local offset = -1.5
+
+function getClosestToMouse()
+	local closestdis = math.huge
+	local closestplr
+	for i,v in pairs(Players:GetPlayers()) do
+		if v:DistanceFromCharacter(mouse.Hit.p) < closestdis and v ~= lp and v.Character and v.Character:FindFirstChild("UpperTorso") then
+			closestplr = v
+			closestdis = v:DistanceFromCharacter(mouse.Hit.p)
+		end
+	end
+	if not closestplr then return lp end
+	return closestplr
+end
+
+local BIGFRAME = library:NewWindow("Aimbot", "UI")
+
+local main = BIGFRAME:NewSection("Main")
+local settings = BIGFRAME:NewSection("Settings")
+settings:Bind("Toggle UI", Enum.KeyCode.Z, true, function(bind)
+    library:SetBind(bind)
+end)
+main:Toggle("Aimlock Toggle", function(bool)
+    masterenabled = bool
+end)
+main:Bind("Aimlock Bind", Enum.KeyCode.Q, true, function(bind)
+    akey = bool
+end)
+main:Toggle("Prediction Toggle", function(bool)
+    predictionenabled = bool
+end)
+main:Slider("Prediction Velocity", 1, 10, function(num)
+    preidicion = math.floor(num)
+end)
+
+main:Slider("Aimlock Offset", 0, -4, function(num)
+    offset = num
+end)
+
+local Type = main:Text("Current Type: Camlock")
+main:Box("Aimlock Type",function(string)
+    if string ~= nil and string ~= "" and string ~= " " then
+        if string == string.lower("c") or string == string.lower("ca") or string == string.lower("cam") or string == string.lower("camlock") then
+            camlock = true
+            silent = false
+            Type:Refresh("Current Type: Camlock")
+        elseif string == string.lower("s") or string == string.lower("sa") or string == string.lower("silent") or string == string.lower("silentaim") then
+            camlock = false
+            silent = true
+            Type:Refresh("Current Type: Silent")
+        end
+    else
+        local Type = main:Text("Current Type: Camlock")
+        camlock = true
+        silent = false
+    end
+end)
+local PlayerLockedTo = main:Text("Not Locked On Anyone")
+
+uis.InputBegan:Connect(function(key)
+    if key.KeyCode == akey then
+        keyss = true
+        plr = getClosestToMouse()
+    end
+end)
+uis.InputEnded:Connect(function(key)
+    if key.KeyCode == akey then
+        keyss = false
+        plr = nil
+    end
+end)
+
+rservice.Stepped:Connect(function()
+    if masterenabled then
+        if plr ~= nil and game.Players:FindFirstChild(plr.Name) then
+            PlayerLockedTo:Refresh("Locked Onto: " .. plr.Name)
+        else
+            PlayerLockedTo:Refresh("Not Locked On Anyone")
+        end
+        if silentaim and keyss and plr ~= nil then
+            if predictionenabled then
+                local vector, onScreen = cam:WorldToViewportPoint(plr.Character:FindFirstChild("Head").Position + Vector3.new(0,offset,0) + plr.Character:FindFirstChild("Head").Velocity / preidicion)
+            else
+                local vector, onScreen = cam:WorldToViewportPoint(plr.Character:FindFirstChild("Head").Position + Vector3.new(0,offset,0))
+            end
+            if keyss and onScreen and isrbxactive() then
+                mousemoveabs(vector.X, vector.Y)
+            end
+        elseif camlock and keyss and plr ~= nil then
+            if predictionenabled then
+                cam.CFrame = CFrame.new(cam.CFrame.p, plr.Character:FindFirstChild("Head").Position + Vector3.new(0,offset,0) + plr.Character:FindFirstChild("Head").Velocity / preidicion)
+            else
+                cam.CFrame = CFrame.new(cam.CFrame.p, plr.Character:FindFirstChild("Head").Position + Vector3.new(0,offset,0))
+            end
+        end
+    end
+end)
