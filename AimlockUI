@@ -106,14 +106,16 @@ uis.InputEnded:Connect(function(key)
     end
 end)
 
+rservice.Stepped:Connect(function()
+    if plr ~= nil and game.Players:FindFirstChild(plr.Name) then
+        PlayerLockedTo:Refresh("Locked Onto: " .. plr.Name)
+    else
+        PlayerLockedTo:Refresh("Not Locked On Anyone")
+    end
+end)
 rservice.Heartbeat:Connect(function()
     pcall(function()
         if masterenabled then
-            if plr ~= nil and game.Players:FindFirstChild(plr.Name) then
-                PlayerLockedTo:Refresh("Locked Onto: " .. plr.Name)
-            else
-                PlayerLockedTo:Refresh("Not Locked On Anyone")
-            end
             if silentaim and keyss and plr ~= nil then
                 if predictionenabled then
                     local vector, onScreen = cam:WorldToViewportPoint(plr.Character:FindFirstChild("Head").Position + Vector3.new(0,offset,0) + plr.Character:FindFirstChild("Head").Velocity / preidicion)
