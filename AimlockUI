@@ -27,18 +27,17 @@ function getClosestToMouse()
 	local closestplr
 	for i,v in pairs(Players:GetPlayers()) do
 	    if tc then
-	        if v:DistanceFromCharacter(mouse.Hit.p) < closestdis and v ~= lp and v.Team ~= lp.Team and v.Character and v.Character:FindFirstChild("UpperTorso") then
+	        if v:DistanceFromCharacter(mouse.Hit.p) < closestdis and v ~= lp and v.Team ~= lp.Team and v.Character and v.Character:FindFirstChild("Head") then
     			closestplr = v
     			closestdis = v:DistanceFromCharacter(mouse.Hit.p)
     		end
 	    else
-    		if v:DistanceFromCharacter(mouse.Hit.p) < closestdis and v ~= lp and v.Character and v.Character:FindFirstChild("UpperTorso") then
+    		if v:DistanceFromCharacter(mouse.Hit.p) < closestdis and v ~= lp and v.Character and v.Character:FindFirstChild("Head") then
     			closestplr = v
     			closestdis = v:DistanceFromCharacter(mouse.Hit.p)
     		end
 		end
 	end
-	if not closestplr then return lp end
 	return closestplr
 end
 
