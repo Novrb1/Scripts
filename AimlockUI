@@ -115,14 +115,17 @@ end)
 rservice.Heartbeat:Connect(function()
     pcall(function()
         if masterenabled then
-            if silentaim and keyss and plr ~= nil then
+            if silent and keyss and plr ~= nil then
                 if predictionenabled then
                     local vector, onScreen = cam:WorldToViewportPoint(plr.Character:FindFirstChild("Head").Position + Vector3.new(0,offset,0) + plr.Character:FindFirstChild("Head").Velocity / preidicion)
+                    if keyss and onScreen and isrbxactive() then
+                        mousemoveabs(vector.X, vector.Y)
+                    end
                 else
                     local vector, onScreen = cam:WorldToViewportPoint(plr.Character:FindFirstChild("Head").Position + Vector3.new(0,offset,0))
-                end
-                if keyss and onScreen and isrbxactive() then
-                    mousemoveabs(vector.X, vector.Y)
+                    if keyss and onScreen and isrbxactive() then
+                        mousemoveabs(vector.X, vector.Y)
+                    end
                 end
             elseif camlock and keyss and plr ~= nil then
                 if predictionenabled then
