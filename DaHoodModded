@@ -534,6 +534,15 @@ game.Players.PlayerRemoving:Connect(function(plrr)
     end
 end)
 
+lp.CharacterAdded:Connect(function()
+    if workspace:FindFirstChild("asd") then
+        workspace:FindFirstChild("asd"):Destroy()
+    end
+    if Con then
+		Con:Disconnect()
+	end
+end)
+
 rservice.Stepped:Connect(function()
     if lockedplr and game.Players:FindFirstChild(lockedplr.Name) then
         if silentaim then
