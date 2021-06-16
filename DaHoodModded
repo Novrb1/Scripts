@@ -298,10 +298,10 @@ cmdBar.FocusLost:Connect(function()
         	end
         end)
         
-        repeat rservice.Heartbeat:Wait()
+        repeat rservice.Stepped:Wait()
             if workspace["asd"] then
                 workspace["asd"].weld.Part1 = nil
-                wait()
+                rservice.Stepped:Wait()
                 workspace["asd"].weld.Part1 = lp.Character.HumanoidRootPart
             end
         until not workspace["asd"]
