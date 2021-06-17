@@ -20,7 +20,7 @@ local predictionenabled = false
 local preidicion = 1
 local silent = false
 local camlock = true
-local offset = -1.5
+local offset = 0
 
 function getClosestToMouse()
 	local closestdis = math.huge
