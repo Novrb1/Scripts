@@ -99,7 +99,7 @@ function getClosestToMouse()
 	local closestdis = math.huge
 	local closestplr
 	for i,v in pairs(Players:GetPlayers()) do
-		if v:DistanceFromCharacter(mouse.Hit.p) < closestdis --[[and not isSameTeam(lp, v)]] and v ~= lp and v.Character and v.Character:FindFirstChild("UpperTorso") then
+		if v:DistanceFromCharacter(mouse.Hit.p) < closestdis --[[and not isSameTeam(lp, v)]] and v ~= lp and v.Character and v.Character:FindFirstChild("Head") then
 			closestplr = v
 			closestdis = v:DistanceFromCharacter(mouse.Hit.p)
 		end
@@ -543,24 +543,24 @@ lp.CharacterAdded:Connect(function()
 	end
 end)
 
-rservice.Stepped:Connect(function()
+rservice.Heartbeat:Connect(function()
     if lockedplr and game.Players:FindFirstChild(lockedplr.Name) then
         if silentaim then
-            local vector, onScreen = cam:WorldToViewportPoint(lockedplr.Character:FindFirstChild("LowerTorso").Position + lockedplr.Character:FindFirstChild("LowerTorso").Velocity / prediction)
+            local vector, onScreen = cam:WorldToViewportPoint(lockedplr.Character:FindFirstChild("Head").Position + lockedplr.Character:FindFirstChild("Head").Velocity / prediction + lockedplr.Character:FindFirstChild("Head").RotVelocity / 5)
             if keyss and onScreen and isrbxactive() and plr ~= nil then
                 mma(vector.X, vector.Y)
             end
         elseif keyss and camlock then
-            cam.CFrame = CFrame.new(cam.CFrame.p, lockedplr.Character:FindFirstChild("LowerTorso").Position + lockedplr.Character:FindFirstChild("LowerTorso").Velocity / prediction)
+            cam.CFrame = CFrame.new(cam.CFrame.p, lockedplr.Character:FindFirstChild("Head").Position + lockedplr.Character:FindFirstChild("Head").Velocity / prediction + lockedplr.Character:FindFirstChild("Head").RotVelocity / 5)
         end
     else
         if silentaim then
-            local vector, onScreen = cam:WorldToViewportPoint(plr.Character:FindFirstChild("LowerTorso").Position + plr.Character:FindFirstChild("LowerTorso").Velocity / prediction)
+            local vector, onScreen = cam:WorldToViewportPoint(plr.Character:FindFirstChild("Head").Position + plr.Character:FindFirstChild("Head").Velocity / prediction + plr.Character:FindFirstChild("Head").RotVelocity / 5)
             if keyss and onScreen and isrbxactive() and plr ~= nil then
                 mma(vector.X, vector.Y)
             end
         elseif keyss and camlock then
-            cam.CFrame = CFrame.new(cam.CFrame.p, plr.Character:FindFirstChild("LowerTorso").Position + plr.Character:FindFirstChild("LowerTorso").Velocity / prediction)
+            cam.CFrame = CFrame.new(cam.CFrame.p, plr.Character:FindFirstChild("Head").Position + plr.Character:FindFirstChild("Head").Velocity / prediction + plr.Character:FindFirstChild("Head").RotVelocity / 5)
         end
     end
 end)
