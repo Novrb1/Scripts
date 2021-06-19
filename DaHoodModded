@@ -119,7 +119,7 @@ function selp(player)
     tlabel.BackgroundTransparency = 1
     tlabel.Size = UDim2.new(1,0,1,0)
     tlabel.Text = player.Name
-    tlabel.TextColor3 = Color3.new(255,255,255)
+    tlabel.TextColor3 = Color3.new(255,125,0)
 end
 
 function findplayer(args, tf)
