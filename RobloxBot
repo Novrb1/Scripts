@@ -58,19 +58,23 @@ spawn(function()
     while wait(1) do
         pcall(function()
             for _,z in pairs(game.Players:GetPlayers()) do
-                if lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") and z and z.Character and z.Character:FindFirstChild("Head") and z.Character:FindFirstChildOfClass("Humanoid").FloorMaterial ~= Enum.Material.Air then
-                    if lp.Character.HumanoidRootPart:FindFirstChildOfClass("BodyAngularVelocity") then
-                        lp.Character.HumanoidRootPart:FindFirstChildOfClass("BodyAngularVelocity").AngularVelocity = Vector3.new(0,333333,0)
-                    end
-                    lp.Character.HumanoidRootPart.CFrame = z.Character.HumanoidRootPart.CFrame
-                    game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("/w " .. z.Name .. " " .. _G.thingtosay,"All")
-                    wait(1.5)
-                    if lp.Character:FindFirstChild("HumanoidRootPart") then
+                if z ~= lp then
+                    if lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") and z and z.Character and z.Character:FindFirstChild("Head") and z.Character:FindFirstChildOfClass("Humanoid").FloorMaterial ~= Enum.Material.Air then
                         if lp.Character.HumanoidRootPart:FindFirstChildOfClass("BodyAngularVelocity") then
-                            lp.Character.HumanoidRootPart:FindFirstChildOfClass("BodyAngularVelocity").AngularVelocity = Vector3.new(0,0,0)
+                            lp.Character.HumanoidRootPart:FindFirstChildOfClass("BodyAngularVelocity").AngularVelocity = Vector3.new(0,333333,0)
                         end
+                        lp.Character.HumanoidRootPart.CFrame = z.Character.HumanoidRootPart.CFrame
+                        game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("/w " .. z.Name .. " " .. _G.thingtosay,"All")
+                        wait(1.5)
+                        if lp.Character:FindFirstChild("HumanoidRootPart") then
+                            if lp.Character.HumanoidRootPart:FindFirstChildOfClass("BodyAngularVelocity") then
+                                lp.Character.HumanoidRootPart:FindFirstChildOfClass("BodyAngularVelocity").AngularVelocity = Vector3.new(0,0,0)
+                            end
+                        end
+                        wait(0.5)
+                    else
+                        game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("/w " .. z.Name .. " " .. _G.thingtosay,"All")
                     end
-                    wait(0.5)
                 end
             end
         end)
