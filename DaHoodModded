@@ -92,14 +92,11 @@ setreadonly(Raw,true)
 function mma(x, y)
     mousemoveabs(x, y)
 end
-function isSameTeam(Player, Player2)
-	return Player.TeamColor == Player2.TeamColor and true or false
-end
 function getClosestToMouse()
 	local closestdis = math.huge
 	local closestplr
 	for i,v in pairs(Players:GetPlayers()) do
-		if v:DistanceFromCharacter(mouse.Hit.p) < closestdis --[[and not isSameTeam(lp, v)]] and v ~= lp and v.Character and v.Character:FindFirstChild("Head") then
+		if v:DistanceFromCharacter(mouse.Hit.p) < closestdis and v ~= lp and v.Character and v.Character:FindFirstChild("Head") then
 			closestplr = v
 			closestdis = v:DistanceFromCharacter(mouse.Hit.p)
 		end
@@ -185,19 +182,19 @@ end
 
 local akey = Enum.KeyCode.Q
 local keyss = false
-local silentaim = true
-local camlock = false
-local prediction = 8
+local silentaim = false
+local camlock = true
+local prediction = 5
 local ws = 16
 local rs = 21
 local shiftdown = false
 local recording = false
 local as = false
-local ar = false
+local ar = true
 local day = false
 local night = false
 local Con
-local SPI = 1
+local SPI = 1.5
 
 local sg = Instance.new("ScreenGui",game.CoreGui)
 local button = Instance.new("TextButton",sg)
