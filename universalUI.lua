@@ -89,6 +89,65 @@ if game.PlaceId == 4913331862 or game.PlaceId == 4953295718 or game.PlaceId == 4
             lp.PlayerScripts.Shockwave.net:Fire("TakeIt", gun)
         end
     end)
+    local Attachmentss = Mains:NewSection("Attachments")
+    
+    for _,z in next, game:GetService("ReplicatedStorage").Attachments:GetChildren() do
+        Attachmentss:Text(z.Name)
+    end
+    
+    General:Text("Check Attachments")
+    local att1
+    local att2
+    General:Box("Att1", function(string)
+        for _,v in next, game:GetService("ReplicatedStorage").Attachments:GetChildren() do
+            if v.Name:lower():sub(1,#string) == string:lower() then
+                att1 = v.Name
+            end
+        end
+    end)
+    General:Box("Att2", function(string)
+        for _,v in next, game:GetService("ReplicatedStorage").Attachments:GetChildren() do
+            if v.Name:lower():sub(1,#string) == string:lower() then
+                att2 = v.Name
+            end
+        end
+    end)
+    General:Button("Upgrade1", function()
+        local args = string.split(lp.Character:FindFirstChild("Using").Value, "=")[2]
+        lp.PlayerScripts.Shockwave.net:Fire(
+            "TakeIt",
+            args,
+            {"Upgrade1",
+                "PaP1",
+                att1,
+                att2
+            }
+        )
+    end)
+    General:Button("Upgrade2", function()
+        local args = string.split(lp.Character:FindFirstChild("Using").Value, "=")[2]
+        lp.PlayerScripts.Shockwave.net:Fire(
+            "TakeIt",
+            args,
+            {"Upgrade2",
+                "PaP2",
+                att1,
+                att2
+            }
+        )
+    end)
+    General:Button("Upgrade3", function()
+        local args = string.split(lp.Character:FindFirstChild("Using").Value, "=")[2]
+        lp.PlayerScripts.Shockwave.net:Fire(
+            "TakeIt",
+            args,
+            {"Upgrade3",
+                "PaP3",
+                att1,
+                att2
+            }
+        )
+    end)
 end
 
 if game.PlaceId == 286090429 then
