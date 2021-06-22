@@ -429,7 +429,7 @@ cmdBar.FocusLost:Connect(function()
                 local plr = findplayer(args[3], true)
                 if lp.Character and lp.Character:FindFirstChildOfClass("Humanoid") and plr.Character and plr.Character:FindFirstChildOfClass("Humanoid") then
                     local pt = Instance.new("Part", workspace)
-                    game.Debris:AddItem(pt, 0.5)
+                    game.Debris:AddItem(pt, 0.1)
                     pt.Transparency = 1
                     pt.CanCollide = false
                     pt.Anchored = true
@@ -442,7 +442,7 @@ cmdBar.FocusLost:Connect(function()
                 local plr = findplayer(args[2], false)
                 if lp.Character and lp.Character:FindFirstChildOfClass("Humanoid") and plr.Character and plr.Character:FindFirstChildOfClass("Humanoid") then
                     local pt = Instance.new("Part", workspace)
-                    game.Debris:AddItem(pt, 0.5)
+                    game.Debris:AddItem(pt, 0.1)
                     pt.Transparency = 1
                     pt.CanCollide = false
                     pt.Anchored = true
@@ -461,7 +461,7 @@ cmdBar.FocusLost:Connect(function()
             part.CanCollide = false
             part.CFrame = CFrame.new(-2256.73486, 404.5466, -954.518616)
             part.Transparency = 1
-            game.Debris:AddItem(part, 3)
+            game.Debris:AddItem(part, 1)
             
             local weld = Instance.new("Weld", part)
             weld.Part0 = part
@@ -475,7 +475,7 @@ cmdBar.FocusLost:Connect(function()
             part.CanCollide = false
             part.CFrame = CFrame.new(-2489.80322, 388.863983, -1396.18481)
             part.Transparency = 1
-            game.Debris:AddItem(part, 3)
+            game.Debris:AddItem(part, 1)
             
             local weld = Instance.new("Weld", part)
             weld.Part0 = part
@@ -489,7 +489,7 @@ cmdBar.FocusLost:Connect(function()
             part.CanCollide = false
             part.CFrame = CFrame.new(-2334.15527, 402.614258, -946.768127)
             part.Transparency = 1
-            game.Debris:AddItem(part, 3)
+            game.Debris:AddItem(part, 1)
             
             local weld = Instance.new("Weld", part)
             weld.Part0 = part
@@ -503,7 +503,7 @@ cmdBar.FocusLost:Connect(function()
             part.CanCollide = false
             part.CFrame = CFrame.new(-1820.03491, 354.114227, -935.422668)
             part.Transparency = 1
-            game.Debris:AddItem(part, 3)
+            game.Debris:AddItem(part, 1)
             
             local weld = Instance.new("Weld", part)
             weld.Part0 = part
@@ -517,7 +517,7 @@ cmdBar.FocusLost:Connect(function()
             part.CanCollide = false
             part.CFrame = CFrame.new(-2077.3833, 434.674774, -747.421631)
             part.Transparency = 1
-            game.Debris:AddItem(part, 3)
+            game.Debris:AddItem(part, 1)
             
             local weld = Instance.new("Weld", part)
             weld.Part0 = part
