@@ -2,8 +2,8 @@ function cmds()
     print([[
     
     ;prefix - Changes prefix
-    ;s, ;silent, ;silentaim - silentaim Uses mousemoveabs() from synapse library
-    ;c, ;cam, ;camlock - camlock Uses cam.CFrame -- use this instead of silent aim if you dont have synapse
+    ;s, ;silent, ;silentaim - silentaim
+    ;c, ;cam, ;camlock - camlock Uses cam.CFrame
     ;av, ;aimvelocity - AimVelocity depends on your ping 
     (The higher your ping is the lower this should be)
     (The lower your ping is the higher this should be)
@@ -90,9 +90,6 @@ end)
 setreadonly(Raw,true)
 
 
-function mma(x, y)
-    mousemoveabs(x, y)
-end
 function getClosestToMouse()
 	local closestdis = math.huge
 	local closestplr
@@ -550,20 +547,14 @@ end)
 
 rservice.Heartbeat:Connect(function()
     if lockedplr and game.Players:FindFirstChild(lockedplr.Name) then
-        if silentaim then
-            local vector, onScreen = cam:WorldToViewportPoint(lockedplr.Character:FindFirstChild("Head").Position + lockedplr.Character:FindFirstChild("Head").Velocity / prediction + lockedplr.Character:FindFirstChild("Head").RotVelocity / 5)
-            if keyss and onScreen and isrbxactive() and plr ~= nil then
-                mma(vector.X, vector.Y)
-            end
+        if keyss and silentaim then
+            game.ReplicatedStorage.MainRemote:FireServer("MousePos", plr.Character:FindFirstChild("Head").Position + plr.Character:FindFirstChild("Head").Velocity / prediction + plr.Character:FindFirstChild("Head").RotVelocity / 5, "P")
         elseif keyss and camlock then
             cam.CFrame = CFrame.new(cam.CFrame.p, lockedplr.Character:FindFirstChild("Head").Position + lockedplr.Character:FindFirstChild("Head").Velocity / prediction + lockedplr.Character:FindFirstChild("Head").RotVelocity / 5)
         end
     else
-        if silentaim then
-            local vector, onScreen = cam:WorldToViewportPoint(plr.Character:FindFirstChild("Head").Position + plr.Character:FindFirstChild("Head").Velocity / prediction + plr.Character:FindFirstChild("Head").RotVelocity / 5)
-            if keyss and onScreen and isrbxactive() and plr ~= nil then
-                mma(vector.X, vector.Y)
-            end
+        if keyss and silentaim then
+            game.ReplicatedStorage.MainRemote:FireServer("MousePos", plr.Character:FindFirstChild("Head").Position + plr.Character:FindFirstChild("Head").Velocity / prediction + plr.Character:FindFirstChild("Head").RotVelocity / 5, "P")
         elseif keyss and camlock then
             cam.CFrame = CFrame.new(cam.CFrame.p, plr.Character:FindFirstChild("Head").Position + plr.Character:FindFirstChild("Head").Velocity / prediction + plr.Character:FindFirstChild("Head").RotVelocity / 5)
         end
