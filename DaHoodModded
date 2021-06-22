@@ -63,7 +63,7 @@ local NewIndex = Raw.__newindex;
 Raw.__newindex = Closure(function(self,Property,Value)
 	if Caller() then return NewIndex(self,Property,Value) end
 	if Property == "WalkSpeed" then return 16 end
-	if Property == "JumpPower" then return 37.5 end 
+	if Property == "JumpPower" then return 50 end 
 	if Property == "HipHeight" then return 0 end 
 	if self == workspace and Property == "Gravity" then return NormalGravity end
 	if Property == "CFrame" and self:IsDescendantOf(lp.Character) then return end 
@@ -187,6 +187,7 @@ local camlock = true
 local prediction = 5
 local ws = 16
 local rs = 21
+local jp = 50
 local shiftdown = false
 local recording = false
 local as = false
@@ -344,6 +345,12 @@ cmdBar.FocusLost:Connect(function()
         if args[2] and tonumber(args[2]) then
             ws = tonumber(args[2])
             notify("WalkSpeed " .. tonumber(args[2]))
+        end
+    end
+    if args[1] == Prefix .. "jp" or args[1] == Prefix .. "jumppower" then
+        if args[2] and tonumber(args[2]) then
+            jp = tonumber(args[2])
+            notify("JumpPower " .. tonumber(args[2]))
         end
     end
     if args[1] == Prefix .. "rs" or args[1] == Prefix .. "runspeed" then
@@ -571,6 +578,7 @@ rservice.RenderStepped:Connect(function()
         if as then
             game.ReplicatedStorage.MainRemote:FireServer("Stomp")
         end
+        lp.Character:FindFirstChildOfClass("Humanoid").JumpPower = jp
         if ar then
             if lp.Character and lp.Character:FindFirstChild("I_LOADED_I") and lp.Character:FindFirstChild("I_LOADED_I")['K.O'].Value == true then
                 if lp.Character then
