@@ -2,6 +2,9 @@ if not game:IsLoaded() then
     game.Loaded:Wait()
 end
 
+--https://www.roblox.com/games/286090429/Arsenal
+--https://www.roblox.com/games/4913331862/ZOMBIES-RECOIL
+
 local Players = game:GetService("Players")
 local lp = Players.LocalPlayer
 local mouse = lp:GetMouse()
