@@ -101,11 +101,19 @@ if game.PlaceId == 286090429 then
         local num = math.floor(num)
         scaling = num
     end)
+    local Client
+    for i,v in pairs(getgc(true)) do
+    	if type(v) == "table" and rawget(v, "mode") then
+    		Client = v;
+    	end
+    end
+    local wkspc = Client.wkspc
+    
     rservice.Stepped:Connect(function()
         if hitboxexa then
             for _,v in next, Players:GetPlayers() do
-                if v.Name ~= lp.Name then
-                    if v.Team ~= lp.Team then
+                if v ~= lp then
+                    if wkspc.FFA.Value then 
                         if v.Character then
                             v.Character.HeadHB.CanCollide = false
                             v.Character.HeadHB.Transparency = 1
@@ -116,14 +124,26 @@ if game.PlaceId == 286090429 then
                             v.Character.HumanoidRootPart.Size = Vector3.new(scaling,scaling,scaling)
                         end
                     else
-                        v.Character.HeadHB.CanCollide = false
-                        v.Character.HeadHB.Transparency = 1
-                        v.Character.HeadHB.Size = Vector3.new(1,1,1)
+                        if v.Team ~= lp.Team then
+                            if v.Character then
+                                v.Character.HeadHB.CanCollide = false
+                                v.Character.HeadHB.Transparency = 1
+                                v.Character.HeadHB.Size = Vector3.new(scaling,scaling,scaling)
+            
+                                v.Character.HumanoidRootPart.CanCollide = false
+                                v.Character.HumanoidRootPart.Transparency = 1
+                                v.Character.HumanoidRootPart.Size = Vector3.new(scaling,scaling,scaling)
+                            end
+                        else
+                            v.Character.HeadHB.CanCollide = false
+                            v.Character.HeadHB.Transparency = 1
+                            v.Character.HeadHB.Size = Vector3.new(1,1,1)
+                        end
                     end
                 end
             end
         else
-            for _,v in next, game:GetService("Players"):GetPlayers() do
+            for _,v in next, Players:GetPlayers() do
                 if v.Name ~= lp.Name then
                     if v.Character then
                         v.Character.HeadHB.CanCollide = false
