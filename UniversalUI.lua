@@ -16,8 +16,6 @@ local esptc = false
 local diesp = false
 local zomesp = false
 local nametagss = false
-local headesp = false
-local torsoesp = false
 
 local tf = false
 local mkey = "q"
@@ -254,7 +252,7 @@ game:GetService("Lighting").Changed:Connect(function()
 end)
 
 yee:Toggle("Lighting",function(a)
-    for _, g in next, game:GetService("Lighting"):GetChildren() do
+    for _, g in next, game:GetService("Lighting"):GetDescendants() do
         if g:IsA("BlurEffect") or g:IsA("SunRaysEffect") or g:IsA("ColorCorrectionEffect") or g:IsA("BloomEffect") or g:IsA("DepthOfFieldEffect") then
            g.Enabled = not a
         end
@@ -307,16 +305,8 @@ wat:Toggle("Enable",function(a)
     espen = a
 end)
 
-wat:Toggle("Names",function(a)
+wat:Toggle("Nametags",function(a)
     nametagss = a
-end)
-
-wat:Toggle("Head",function(a)
-    headesp = a
-end)
-
-wat:Toggle("Torso",function(a)
-    torsoesp = a
 end)
 
 wat:Toggle("Distance", function(a)
@@ -396,21 +386,6 @@ function selp(player)
     	tlabel.Size = UDim2.new(1,0,1,0)
     	tlabel.Text = player.Name
     	tlabel.TextColor3 = Color3.new(255,255,255)
-    	local head = Instance.new("BoxHandleAdornment", game.CoreGui)
-        head.Name = player.Name .. " h"
-        head.Size = Vector3.new(1,1,1)
-        head.ZIndex = 1
-        head.AlwaysOnTop = true
-        head.Transparency = 0
-        head.Color3 = Color3.new(0,0,255)
-        local hrp = Instance.new("BoxHandleAdornment", game.CoreGui)
-        hrp.Name = player.Name .. " t"
-        hrp.CFrame = CFrame.new(0,-1.5,0)
-        hrp.Size = Vector3.new(2,2,1)
-        hrp.ZIndex = 1
-        hrp.AlwaysOnTop = true
-        hrp.Transparency = 0
-        hrp.Color3 = Color3.new(0,0,255)
 	end 
 end
 for _,z in pairs(Players:GetPlayers()) do
@@ -424,7 +399,7 @@ end)
 Players.PlayerRemoving:Connect(function(plrr)
     for _,z in pairs(game.CoreGui:GetChildren()) do
         if z:IsA'BillboardGui' then
-            if z.Name == plrr.Name .. " h" or z.Name == plrr.Name .. " t" or z.Name == plrr.Name == " n" then
+            if z.Name == plrr.Name == " n" then
                 z:Destroy()
             end
         end
@@ -457,100 +432,56 @@ rservice.RenderStepped:Connect(function()
                     if z and z:FindFirstChild("Head") then
                         z:FindFirstChild("Head").Size = Vector3.new(10,10,10)
                         z:FindFirstChild("Head").CanCollide = false
-                    end
-                end
-            end
-            for _,z in next, workspace.ClientZambies:GetChildren() do
-                if z and z:FindFirstChild("Head") then
-                    if zomesp then
-                        z:FindFirstChild("Head"):FindFirstChildOfClass("BoxHandleAdornment").Transparency = 0.5
-                    else
-                        z:FindFirstChild("Head"):FindFirstChildOfClass("BoxHandleAdornment").Transparency = 1
+                        if zomesp then
+                            z:FindFirstChild("Head"):FindFirstChildOfClass("BoxHandleAdornment").Transparency = 0.5
+                        else
+                            z:FindFirstChild("Head"):FindFirstChildOfClass("BoxHandleAdornment").Transparency = 1
+                        end
                     end
                 end
             end
         end
         for _,z in pairs(Players:GetPlayers()) do
             for _,v in pairs(game.CoreGui:GetChildren()) do
-                if lp then
-                    if v:IsA'BillboardGui' or v:IsA'BoxHandleAdornment' then
-                        if espen then
-                            if esptc then
-                                if z.Character and z.Character.HumanoidRootPart and z.Character.Head and z.Team ~= lp.Team then
-                                    if v.Name == z.Name .. " n" then
-                                        if nametagss then
-                                            v.Adornee = z.Character.Head
-                                            if diesp then
-                                                local cabe = game.Players.LocalPlayer:DistanceFromCharacter(z.Character.Head.Position)
-                                                cabe = math.floor(cabe)
-                                                v.TextLabel.Text = z.Name .. " | " .. tonumber(cabe)
-                                            else
-                                                v.TextLabel.Text = z.Name
-                                            end
+                if v:IsA'BillboardGui' or v:IsA'BoxHandleAdornment' then
+                    if espen then
+                        if esptc then
+                            if z.Character and z.Character.HumanoidRootPart and z.Character.Head and z.Team ~= lp.Team then
+                                if v.Name == z.Name .. " n" then
+                                    if nametagss then
+                                        v.Adornee = z.Character.Head
+                                        if diesp then
+                                            v.TextLabel.Text = z.Name .. " | " .. math.floor(game.Players.LocalPlayer:DistanceFromCharacter(z.Character.Head.Position))
                                         else
-                                            v.Adornee = ptas
+                                            v.TextLabel.Text = z.Name
                                         end
-                                    end
-                                    if v.Name == z.Name .." h" then
-                                        if headesp then
-                                            v.Adornee = z.Character.Head
-                                        else
-                                            v.Adornee = ptas
-                                        end
-                                    end
-                                    if v.Name == z.Name .." t" then
-                                        if torsoesp then
-                                            v.Adornee = z.Character.Head
-                                        else
-                                            v.Adornee = ptas
-                                        end
-                                    end
-                                elseif z.Team == lp.Team then
-                                    if v.Name == z.Name .. " n" then
-                                        v.Adornee = ptas
-                                    end
-                                    if v.Name == z.Name .." h" then
-                                        v.Adornee = ptas
-                                    end
-                                    if v.Name == z.Name .." t" then
+                                    else
                                         v.Adornee = ptas
                                     end
                                 end
-                            else
-                                if z.Character and z.Character.HumanoidRootPart and z.Character.Head then
-                                    if v.Name == z.Name .." n" then
-                                        if nametagss then
-                                            v.Adornee = z.Character.Head
-                                            if diesp then
-                                                local cabe = game.Players.LocalPlayer:DistanceFromCharacter(z.Character.Head.Position)
-                                                cabe = math.floor(cabe)
-                                                v.TextLabel.Text = z.Name .. " | " .. tonumber(cabe)
-                                            else
-                                                v.TextLabel.Text = z.Name
-                                            end
-                                        else
-                                            v.Adornee = ptas
-                                        end
-                                    end
-                                    if v.Name == z.Name .." h" then
-                                        if headesp then
-                                            v.Adornee = z.Character.Head
-                                        else
-                                            v.Adornee = ptas
-                                        end
-                                    end
-                                    if v.Name == z.Name .." t" then
-                                        if torsoesp then
-                                            v.Adornee = z.Character.Head
-                                        else
-                                            v.Adornee = ptas
-                                        end
-                                    end
+                            elseif z.Team == lp.Team then
+                                if v.Name == z.Name .. " n" then
+                                    v.Adornee = ptas
                                 end
                             end
                         else
-                            v.Adornee = ptas
+                            if z.Character and z.Character.HumanoidRootPart and z.Character.Head then
+                                if v.Name == z.Name .. " n" then
+                                    if nametagss then
+                                        v.Adornee = z.Character.Head
+                                        if diesp then
+                                            v.TextLabel.Text = z.Name .. " | " .. math.floor(game.Players.LocalPlayer:DistanceFromCharacter(z.Character.Head.Position))
+                                        else
+                                            v.TextLabel.Text = z.Name
+                                        end
+                                    else
+                                        v.Adornee = ptas
+                                    end
+                                end
+                            end
                         end
+                    else
+                        v.Adornee = ptas
                     end
                 end
             end
