@@ -1676,12 +1676,6 @@ end)
 
 return library
 --[[
---
--- THIS DOCUMENTATION MIGHT HAVE A FEW MISSING THINGS, just look at the source if you can't get something to work
---
-
---First define the library
-local Library = loadstring(game:HttpGet("https://pastebin.com/raw/edJT9EGX", true))()
 --To close/open the UI (after it's been initialized) use Library:Close() to toggle it, use the keybind option to quickly make a toggle for it without hassle (there is an example below)
 
 --Making a window
@@ -1692,10 +1686,8 @@ local Window = Library:CreateWindow"Window"
 Window:AddFolder"Folder"
 --Folders can be used exactly like windows, they can hold all the options, you can even put folders inside of folders inside of folders.. and so on
 
---[[
-	Adding otpions
-	All options will by default have their flag names set to whatever the text is, unless the flag is set
-]]
+--Adding otpions
+--All options will by default have their flag names set to whatever the text is, unless the flag is set
 
 --Label
 Window:AddLabel({text = "Label"})
