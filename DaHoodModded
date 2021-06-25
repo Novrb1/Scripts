@@ -14,9 +14,11 @@ function cmds()
     ;ws, ;walkspeed - changes walkspeed
     ;rs, ;runspeed - changes runspeed
     ;jp, ;jumppower - changes jumppower
+    
     ;fly
     ;unfly
     ;fs, ;fspeed, ;flyspeed
+    
     ;as, ;astomp - auto stomp people
     ;ar, ;areset - auto reset when knocked
     
@@ -204,6 +206,11 @@ button.Size = UDim2.new(0,200,0,50)
 uis.InputBegan:Connect(function(key)
     if key.KeyCode == Enum.KeyCode.LeftShift then
         shiftdown = true
+    end
+    if key.KeyCode == Enum.KeyCode.R then
+        if lp.Character and lp.Character:FindFirstChildOfClass("Tool") then
+            game.ReplicatedStorage.MainRemote:FireServer("Reload")
+        end
     end
     if recording == false and key ~= nil then
         if key.KeyCode == akey then
@@ -545,20 +552,22 @@ lp.CharacterAdded:Connect(function()
 	end
 end)
 
-rservice.Heartbeat:Connect(function()
-    if lockedplr and game.Players:FindFirstChild(lockedplr.Name) then
-        if keyss and silentaim then
-            game.ReplicatedStorage.MainRemote:FireServer("MousePos", lockedplr.Character:FindFirstChild("Head").Position + lockedplr.Character:FindFirstChild("Head").Velocity / prediction + lockedplr.Character:FindFirstChild("Head").RotVelocity / 5, "P")
-        elseif keyss and camlock then
-            cam.CFrame = CFrame.new(cam.CFrame.p, lockedplr.Character:FindFirstChild("Head").Position + lockedplr.Character:FindFirstChild("Head").Velocity / prediction + lockedplr.Character:FindFirstChild("Head").RotVelocity / 5)
+spawn(function()
+    rservice.Stepped:Connect(function()
+        if lockedplr and game.Players:FindFirstChild(lockedplr.Name) then
+            if keyss and silentaim then
+                game.ReplicatedStorage.MainRemote:FireServer("MousePos", lockedplr.Character:FindFirstChild("Head").Position + lockedplr.Character:FindFirstChild("Head").Velocity / prediction + lockedplr.Character:FindFirstChild("Head").RotVelocity / 5, "P")
+            elseif keyss and camlock then
+                cam.CFrame = CFrame.new(cam.CFrame.p, lockedplr.Character:FindFirstChild("Head").Position + lockedplr.Character:FindFirstChild("Head").Velocity / prediction + lockedplr.Character:FindFirstChild("Head").RotVelocity / 5)
+            end
+        else
+            if keyss and silentaim then
+                game.ReplicatedStorage.MainRemote:FireServer("MousePos", plr.Character:FindFirstChild("Head").Position + plr.Character:FindFirstChild("Head").Velocity / prediction + plr.Character:FindFirstChild("Head").RotVelocity / 5, "P")
+            elseif keyss and camlock then
+                cam.CFrame = CFrame.new(cam.CFrame.p, plr.Character:FindFirstChild("Head").Position + plr.Character:FindFirstChild("Head").Velocity / prediction + plr.Character:FindFirstChild("Head").RotVelocity / 5)
+            end
         end
-    else
-        if keyss and silentaim then
-            game.ReplicatedStorage.MainRemote:FireServer("MousePos", plr.Character:FindFirstChild("Head").Position + plr.Character:FindFirstChild("Head").Velocity / prediction + plr.Character:FindFirstChild("Head").RotVelocity / 5, "P")
-        elseif keyss and camlock then
-            cam.CFrame = CFrame.new(cam.CFrame.p, plr.Character:FindFirstChild("Head").Position + plr.Character:FindFirstChild("Head").Velocity / prediction + plr.Character:FindFirstChild("Head").RotVelocity / 5)
-        end
-    end
+    end)
 end)
 rservice.RenderStepped:Connect(function()
     if lp.Character and lp.Character:FindFirstChildOfClass("Humanoid") then
