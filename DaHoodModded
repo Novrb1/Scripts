@@ -271,24 +271,6 @@ cmdBar.FocusLost:Connect(function()
             notify("AimVelocity " .. tonumber(args[2]))
         end
     end
-    if args[1] == Prefix .. "ws" or args[1] == Prefix .. "walkspeed" then
-        if args[2] and tonumber(args[2]) then
-            ws = tonumber(args[2])
-            notify("WalkSpeed " .. tonumber(args[2]))
-        end
-    end
-    if args[1] == Prefix .. "jp" or args[1] == Prefix .. "jumppower" then
-        if args[2] and tonumber(args[2]) then
-            jp = tonumber(args[2])
-            notify("JumpPower " .. tonumber(args[2]))
-        end
-    end
-    if args[1] == Prefix .. "rs" or args[1] == Prefix .. "runspeed" then
-        if args[2] and tonumber(args[2]) then
-            rs = tonumber(args[2])
-            notify("RunSpeed " .. tonumber(args[2]))
-        end
-    end
     if args[1] == Prefix .. "esp" then
         if args[2] and args[2] ~= "" and args[2] ~= " " then
             if args[2] == "all" then
@@ -487,15 +469,6 @@ spawn(function()
 end)
 rservice.RenderStepped:Connect(function()
     if lp.Character and lp.Character:FindFirstChildOfClass("Humanoid") then
-        if shiftdown then
-            lp.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = rs
-        else
-            lp.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = ws
-        end
-        if as then
-            game.ReplicatedStorage.MainRemote:FireServer("Stomp")
-        end
-        lp.Character:FindFirstChildOfClass("Humanoid").JumpPower = jp
         if ar then
             if lp.Character and lp.Character:FindFirstChild("I_LOADED_I") and lp.Character:FindFirstChild("I_LOADED_I")['K.O'].Value == true then
                 if lp.Character then
