@@ -208,7 +208,7 @@ uis.InputEnded:Connect(function(key)
         shiftdown = false
     end
     if key.KeyCode == Enum.KeyCode.LeftAlt then
-        altering = true
+        altering = false
     end
     if recording == false and key ~= nil then
         if key.KeyCode == akey then
