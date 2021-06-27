@@ -11,14 +11,6 @@ function cmds()
     ;l, ;lock - Locks Player Instead Of Using GetClosestToMouse()
     ;ul, ;unlock - Unlocks Player
     
-    ;ws, ;walkspeed - changes walkspeed
-    ;rs, ;runspeed - changes runspeed
-    ;jp, ;jumppower - changes jumppower
-    
-    ;fly
-    ;unfly
-    ;fs, ;fspeed, ;flyspeed
-    
     ;as, ;astomp - auto stomp people
     ;ar, ;areset - auto reset when knocked
     
@@ -137,19 +129,6 @@ function findplayer(args, tf)
     return Targoot
 end
 
-function fly()
-    local pt = Instance.new("Part", workspace)
-    pt.Name = "asd"
-    pt.Anchored = true
-    pt.CanCollide = false
-    pt.Transparency = 1
-    pt.CFrame = lp.Character:FindFirstChild("HumanoidRootPart").CFrame
-    local weld = Instance.new("Weld", pt)
-    weld.Name = "weld"
-    weld.Part0 = pt
-    FLYING = true
-end
-
 local Prefix = ";"
 
 local screengui = Instance.new("ScreenGui",game.CoreGui)
@@ -185,17 +164,12 @@ local keyss = false
 local silentaim = false
 local camlock = true
 local prediction = 5
-local ws = 16
-local rs = 21
-local jp = 50
 local shiftdown = false
 local recording = false
 local as = false
 local ar = true
 local day = false
 local night = false
-local Con
-local SPI = 1.5
 
 local sg = Instance.new("ScreenGui",game.CoreGui)
 local button = Instance.new("TextButton",sg)
@@ -267,55 +241,6 @@ cmdBar.FocusLost:Connect(function()
     if args[1] == Prefix .. "cmds" or args[1] == Prefix .. "commands" then
         cmds()
         notify("Printed CMDS In Console")
-    end
-    if args[1] == Prefix .. "fs" or args[1] == Prefix .. "flyspeed" or args[1] == Prefix .. "fspeed" then
-        if args[2] and tonumber(args[2]) then
-            SPI = args[2]
-        end
-    end
-    if args[1] == Prefix .. "fly" then
-        fly()
-        local Keys = Enum.KeyCode
-        Con = rservice.Heartbeat:Connect(function()
-        	local Cache = {}
-        	local Cache = {}
-        	local Cons = {game.ItemChanged, lp.Character:FindFirstChildOfClass("Humanoid").StateChanged, lp.Character:FindFirstChildOfClass("Humanoid").Changed, lp.Character.Changed}
-        	for _, v in ipairs(lp.Character:GetChildren()) do
-        		if v:IsA('BasePart') then
-        			Cons[#Cons + 1] = v.Changed
-        			Cons[#Cons + 1] = v:GetPropertyChangedSignal('CFrame')
-        		end
-        	end
-        	for _, v in ipairs(Cons) do
-        		for _, v1 in ipairs(getconnections(v)) do
-        			if not rawget(v1, '__OBJECT_ENABLED') then
-        				Cache[#Cache + 1] = v1
-        				v1:Disable()
-        			end
-        		end
-        	end
-        	lp.Character:FindFirstChildOfClass("Humanoid"):ChangeState(11)
-        	workspace['asd'].CFrame = CFrame.new(workspace['asd'].Position, workspace['asd'].Position + cam.CFrame.LookVector) * (uis:GetFocusedTextBox() or CFrame.new((uis:IsKeyDown(Keys.D) and SPI) or (uis:IsKeyDown(Keys.A) and -SPI) or 0, (uis:IsKeyDown(Keys.E) and SPI / 2) or (uis:IsKeyDown(Keys.Q) and -SPI / 2) or 0, (uis:IsKeyDown(Keys.S) and SPI) or (uis:IsKeyDown(Keys.W) and -SPI) or 0))
-        	for _, v in ipairs(Cache) do
-        		v:Enable()
-        	end
-        end)
-        
-        repeat rservice.Stepped:Wait()
-            if workspace["asd"] then
-                workspace["asd"].weld.Part1 = nil
-                rservice.Stepped:Wait()
-                workspace["asd"].weld.Part1 = lp.Character.HumanoidRootPart
-            end
-        until not workspace["asd"]
-    end
-    if args[1] == Prefix .. "unfly" then
-        if workspace:FindFirstChild("asd") then
-            workspace:FindFirstChild("asd"):Destroy()
-        end
-        if Con then
-    		Con:Disconnect()
-    	end
     end
     if args[1] == Prefix .. "l" or args[1] == Prefix .. "lock" then
         if args[2] and args[2] ~= "" and args[2] ~= " " then
@@ -541,15 +466,6 @@ game.Players.PlayerRemoving:Connect(function(plrr)
             end
         end
     end
-end)
-
-lp.CharacterAdded:Connect(function()
-    if workspace:FindFirstChild("asd") then
-        workspace:FindFirstChild("asd"):Destroy()
-    end
-    if Con then
-		Con:Disconnect()
-	end
 end)
 
 spawn(function()
