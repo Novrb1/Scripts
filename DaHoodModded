@@ -33,6 +33,7 @@ function cmds()
         5, ft, flamethrower
     }
     
+    Hold LeftAlt + MouseButton1Click for click-teleport
     the button on the side is a keybind to change your aimlock key
     
     
@@ -165,6 +166,7 @@ local silentaim = false
 local camlock = true
 local prediction = 5
 local shiftdown = false
+local altering = false
 local recording = false
 local as = false
 local ar = true
@@ -180,6 +182,9 @@ button.Size = UDim2.new(0,200,0,50)
 uis.InputBegan:Connect(function(key)
     if key.KeyCode == Enum.KeyCode.LeftShift then
         shiftdown = true
+    end
+    if key.KeyCode == Enum.KeyCode.LeftAlt then
+        altering = true
     end
     if key.KeyCode == Enum.KeyCode.R then
         if lp.Character and lp.Character:FindFirstChildOfClass("Tool") then
@@ -201,6 +206,9 @@ end)
 uis.InputEnded:Connect(function(key)
     if key.KeyCode == Enum.KeyCode.LeftShift then
         shiftdown = false
+    end
+    if key.KeyCode == Enum.KeyCode.LeftAlt then
+        altering = true
     end
     if recording == false and key ~= nil then
         if key.KeyCode == akey then
@@ -224,6 +232,23 @@ mouse.KeyDown:Connect(function(key)
     if key == Prefix then
         frame:TweenPosition(UDim2.new(0, 0, 0.5, 0), 1, 0, 0.3, 1)
     	cmdBar:CaptureFocus()
+    end
+end)
+
+mouse.Button1Down:Connect(function()
+    if altering then
+        if lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") then
+            local partt = Instance.new("Part", lp.Character)
+            partt.Anchored = true
+            partt.CanCollide = false
+            partt.Size = Vector3.new(2,2,1)
+            partt.Transparency = 1
+            partt.CFrame = mouse.Hit + Vector3.new(0,3.5,0)
+            game.Debris:AddItem(partt, 0.05)
+            local weld = Instance.new("Weld", partt)
+            weld.Part0 = partt
+            weld.Part1 = lp.Character:FindFirstChild("HumanoidRootPart")
+        end
     end
 end)
 
