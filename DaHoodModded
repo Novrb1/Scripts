@@ -469,6 +469,11 @@ spawn(function()
 end)
 rservice.RenderStepped:Connect(function()
     if lp.Character and lp.Character:FindFirstChildOfClass("Humanoid") then
+        if shiftdown then
+            lp.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = 21
+        else
+            lp.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = 16
+        end
         if ar then
             if lp.Character and lp.Character:FindFirstChild("I_LOADED_I") and lp.Character:FindFirstChild("I_LOADED_I")['K.O'].Value == true then
                 if lp.Character then
