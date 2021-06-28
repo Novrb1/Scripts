@@ -125,21 +125,21 @@ Library:Init()
 
 spawn(function()
     rservice.Stepped:Connect(function()
-        if masterenabled then
-            local closestLOL = getClosestMouse()
-            if silent and keyss and closestLOL ~= nil and checkfov(closestLOL, fov_value) then
+        local closestLOL = getClosestMouse()
+        if masterenabled and keyss and closestLOL ~= nil and checkfov(closestLOL, fov_value) then
+            if silent then
                 if predictionenabled then
                     local vector, onScreen = cam:WorldToViewportPoint(closestLOL.Character:FindFirstChild("Head").Position + closestLOL.Character:FindFirstChild("Head").Velocity / preidicion)
-                    if keyss and onScreen and isrbxactive() then
+                    if onScreen and iswindowactive() then
                         mousemoveabs(vector.X, vector.Y)
                     end
                 else
                     local vector, onScreen = cam:WorldToViewportPoint(closestLOL.Character:FindFirstChild("Head").Position)
-                    if keyss and onScreen and isrbxactive() then
+                    if onScreen and iswindowactive() then
                         mousemoveabs(vector.X, vector.Y)
                     end
                 end
-            elseif camlock and keyss and closestLOL ~= nil and checkfov(closestLOL, fov_value) then
+            elseif camlock then
                 if predictionenabled then
                     cam.CFrame = CFrame.new(cam.CFrame.p, closestLOL.Character:FindFirstChild("Head").Position + closestLOL.Character:FindFirstChild("Head").Velocity / preidicion)
                 else
