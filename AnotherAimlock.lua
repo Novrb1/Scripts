@@ -126,23 +126,24 @@ Library:Init()
 spawn(function()
     rservice.Stepped:Connect(function()
         if masterenabled then
-            if silent and keyss and getClosestMouse() ~= nil and checkfov(getClosestMouse(), fov_value) then
+            local closestLOL = getClosestMouse()
+            if silent and keyss and closestLOL ~= nil and checkfov(closestLOL, fov_value) then
                 if predictionenabled then
-                    local vector, onScreen = cam:WorldToViewportPoint(getClosestMouse().Character:FindFirstChild("Head").Position + getClosestMouse().Character:FindFirstChild("Head").Velocity / preidicion)
+                    local vector, onScreen = cam:WorldToViewportPoint(closestLOL.Character:FindFirstChild("Head").Position + closestLOL.Character:FindFirstChild("Head").Velocity / preidicion)
                     if keyss and onScreen and isrbxactive() then
                         mousemoveabs(vector.X, vector.Y)
                     end
                 else
-                    local vector, onScreen = cam:WorldToViewportPoint(getClosestMouse().Character:FindFirstChild("Head").Position)
+                    local vector, onScreen = cam:WorldToViewportPoint(closestLOL.Character:FindFirstChild("Head").Position)
                     if keyss and onScreen and isrbxactive() then
                         mousemoveabs(vector.X, vector.Y)
                     end
                 end
-            elseif camlock and keyss and getClosestMouse() ~= nil and checkfov(getClosestMouse(), fov_value) then
+            elseif camlock and keyss and closestLOL ~= nil and checkfov(closestLOL, fov_value) then
                 if predictionenabled then
-                    cam.CFrame = CFrame.new(cam.CFrame.p, getClosestMouse().Character:FindFirstChild("Head").Position + getClosestMouse().Character:FindFirstChild("Head").Velocity / preidicion)
+                    cam.CFrame = CFrame.new(cam.CFrame.p, closestLOL.Character:FindFirstChild("Head").Position + closestLOL.Character:FindFirstChild("Head").Velocity / preidicion)
                 else
-                    cam.CFrame = CFrame.new(cam.CFrame.p, getClosestMouse().Character:FindFirstChild("Head").Position)
+                    cam.CFrame = CFrame.new(cam.CFrame.p, closestLOL.Character:FindFirstChild("Head").Position)
                 end
             end
         end
