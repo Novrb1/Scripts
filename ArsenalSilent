@@ -1,0 +1,83 @@
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Novrb1/Scripts/master/UILIB-not-mine"))()
+local cc = game.workspace.CurrentCamera
+local mouse = game.Players.LocalPlayer:GetMouse()
+local Config = {
+    silent_aimbot = false,
+    show_fov      = false,
+    fov_value     = 200,
+}
+local a = library:NewWindow("Arsenal","UI")
+local aim_tab = a:NewSection("Aimbot")
+aim_tab:Toggle("Silent Aimbot", function()
+    Config.silent_aimbot = not Config.silent_aimbot;
+end)
+aim_tab:Toggle("Show FOV", function()
+    Config.show_fov = not Config.show_fov;
+end)
+aim_tab:Slider("Field Of View", 10, 500, function(val)
+    Config.fov_value = tonumber(val);
+end)
+local FOVCircle = Drawing.new("Circle")
+FOVCircle.Visible = true
+mouse.Move:Connect(function()
+    if Config.show_fov then
+        FOVCircle.Thickness = 3;
+        FOVCircle.Radius = Config.fov_value;
+        FOVCircle.NumSides = 100
+        FOVCircle.Color = Color3.fromRGB(30, 30, 30);
+        FOVCircle.Position = Vector2.new(mouse.X, mouse.Y + 36)
+        FOVCircle.Transparency = 1
+    else
+        FOVCircle.Transparency = 0
+    end
+end)
+function getClosestMouse(trg_part)
+    local nearest = nil
+    local last = math.huge
+    for i,v in pairs(game.Players:GetPlayers()) do
+        if v ~= game.Players.LocalPlayer and game.Players.LocalPlayer.Character and v.Character and v.Character:FindFirstChild(trg_part) and v.TeamColor ~= game.Players.LocalPlayer.TeamColor then
+            local ePos = cc:WorldToViewportPoint(v.Character[trg_part].Position)
+            local AccPos = Vector2.new(ePos.x, ePos.y)
+            local mousePos = Vector2.new(cc.ViewportSize.x / 2, cc.ViewportSize.y / 2)
+            local distance = (AccPos - mousePos).magnitude
+            if distance < last then
+                last = distance
+                nearest = v
+            end
+        end
+    end
+    if nearest ~= nil then
+        return nearest
+    end
+end
+function checkfov(plr, fov_amount)
+    local fov
+    local vector = workspace.CurrentCamera:WorldToViewportPoint(plr.Character.HumanoidRootPart.Position)
+    local magnitude = (Vector2.new(vector.X, vector.Y) - Vector2.new(mouse.X, mouse.Y)).magnitude
+    local cfov = fov_amount
+    if magnitude < cfov then
+        fov = true
+    else
+        fov = false
+    end
+    return fov
+end
+local gameMeta = getrawmetatable(game)
+setreadonly(gameMeta, false)
+local oldNamecall = gameMeta.__namecall
+gameMeta.__namecall = newcclosure(function(remote, ...)
+    local arguments = {...}
+    if tostring(remote) == 'HitPart' then
+        if Config.silent_aimbot then
+            local getclose = getClosestMouse("Head")
+            if getclose and checkfov(getclose, Config.fov_value) then
+                arguments[1] = getclose.Character.Head
+                arguments[2] = getclose.Character.Head.Position
+                return remote.FireServer(remote, unpack(arguments))
+            else
+                return remote.FireServer(remote, unpack(arguments))
+            end
+        end
+    end
+    return oldNamecall(remote, ...)
+end)
