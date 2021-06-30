@@ -67,13 +67,13 @@ spawn(function()
                         end
                         lp.Character.HumanoidRootPart.CFrame = z.Character.HumanoidRootPart.CFrame
                         game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("/w " .. z.Name .. " " .. _G.thingtosay,"All")
-                        wait(2)
+                        wait(1.65)
                         if lp.Character:FindFirstChild("HumanoidRootPart") then
                             if lp.Character.HumanoidRootPart:FindFirstChildOfClass("BodyAngularVelocity") then
                                 lp.Character.HumanoidRootPart:FindFirstChildOfClass("BodyAngularVelocity").AngularVelocity = Vector3.new(0,0,0)
                             end
                         end
-                        wait(1)
+                        wait(0.65)
                     else
                         game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("/w " .. z.Name .. " " .. _G.thingtosay,"All")
                     end
