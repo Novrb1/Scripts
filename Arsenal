@@ -4,7 +4,7 @@ local Players = game:GetService("Players")
 local lp = Players.LocalPlayer
 local cam = game.workspace.CurrentCamera
 local mouse = lp:GetMouse()
-local Config = {
+local Settings = {
     silent_aimbot = false,
     show_fov = false,
     NumSides = 4,
@@ -22,25 +22,25 @@ local aim_tab = a:NewSection("Aimbot")
 local plr_tab = a:NewSection("Players")
 local weap_tab = a:NewSection("Weapons")
 aim_tab:Toggle("Silent Aimbot", function(bool)
-    Config.silent_aimbot = bool
+    Settings.silent_aimbot = bool
 end)
 aim_tab:Toggle("Visible Only", function(bool)
-    Config.visionly = bool
+    Settings.visionly = bool
 end)
 aim_tab:Drop("Aim Part", {"Head", "UpperTorso", "LowerTorso"}, function(thing)
-    Config.aimpart = thing
+    Settings.aimpart = thing
 end)
 aim_tab:Toggle("Show FOV", function(bool)
-    Config.show_fov = bool
+    Settings.show_fov = bool
 end)
 aim_tab:Slider("Field Of View", 10, 500, function(val)
-    Config.fov_value = tonumber(val);
+    Settings.fov_value = tonumber(val);
 end)
 aim_tab:Slider("Thickness", 1, 10, function(val)
-    Config.fov_thickness = tonumber(val);
+    Settings.fov_thickness = tonumber(val);
 end)
 aim_tab:Slider("Number Of Sides", 4, 100, function(val)
-    Config.NumSides = tonumber(val);
+    Settings.NumSides = tonumber(val);
 end)
 weap_tab:Toggle('Infinite Ammo', function(bool)
     infammo = bool 
@@ -69,10 +69,10 @@ end)
 local FOVCircle = Drawing.new("Circle")
 FOVCircle.Visible = true
 mouse.Move:Connect(function()
-    if Config.show_fov then
-        FOVCircle.Thickness = Config.fov_thickness;
-        FOVCircle.Radius = Config.fov_value;
-        FOVCircle.NumSides = Config.NumSides
+    if Settings.show_fov then
+        FOVCircle.Thickness = Settings.fov_thickness;
+        FOVCircle.Radius = Settings.fov_value;
+        FOVCircle.NumSides = Settings.NumSides
         FOVCircle.Color = Color3.fromRGB(0, 125, 255);
         FOVCircle.Position = Vector2.new(mouse.X, mouse.Y + 36)
         FOVCircle.Transparency = 1
@@ -121,18 +121,18 @@ spawn(function()
     gameMeta.__namecall = newcclosure(function(remote, ...)
         local arguments = {...}
         if tostring(remote) == 'HitPart' then
-            if Config.silent_aimbot then
+            if Settings.silent_aimbot then
                 local getclose = getClosestMouse("Head")
-                if getclose and checkfov(getclose, Config.fov_value) then
-                    if Config.visionly then
+                if getclose and checkfov(getclose, Settings.fov_value) then
+                    if Settings.visionly then
                         if visible(getclose) then
-                            arguments[1] = getclose.Character:FindFirstChild(Config.aimpart)
-                            arguments[2] = getclose.Character:FindFirstChild(Config.aimpart).Position
+                            arguments[1] = getclose.Character:FindFirstChild(Settings.aimpart)
+                            arguments[2] = getclose.Character:FindFirstChild(Settings.aimpart).Position
                             return remote.FireServer(remote, unpack(arguments))
                         end
                     else
-                        arguments[1] = getclose.Character:FindFirstChild(Config.aimpart)
-                        arguments[2] = getclose.Character:FindFirstChild(Config.aimpart).Position
+                        arguments[1] = getclose.Character:FindFirstChild(Settings.aimpart)
+                        arguments[2] = getclose.Character:FindFirstChild(Settings.aimpart).Position
                         return remote.FireServer(remote, unpack(arguments))
                     end
                 else
@@ -156,17 +156,17 @@ spawn(function()
     mt.__newindex = newcclosure(function(Instance, Property, Value)
         if tostring(Instance) == 'Clip' and Instance:IsA('TextLabel') and tostring(Instance.Parent) == 'Ammo' then
             if Property == 'Text' then
-                if infammo then
+                if Settings.infammo then
                     Config.ammocount = 999
                 end
-                if norecoil then
+                if Settings.norecoil then
                     Config.recoil = 0
                 end
-                if nospread then
+                if Settings.nospread then
                     Config.spreadmodifier = 0
                     Config.currentspread = 0 
                 end
-                if auto then
+                if Settings.auto then
                     Config.mode = 'automatic'
                 end
             end
