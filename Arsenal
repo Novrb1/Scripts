@@ -1,6 +1,7 @@
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Novrb1/Scripts/master/UILIB-not-mine"))()
 library:SetBind(Enum.KeyCode.RightShift)
-local lp = game.Players.LocalPlayer
+local Players = game:GetService("Players")
+local lp = Players.LocalPlayer
 local cam = game.workspace.CurrentCamera
 local mouse = lp:GetMouse()
 local Config = {
@@ -18,6 +19,7 @@ local Config = {
 }
 local a = library:NewWindow("Arsenal","UI")
 local aim_tab = a:NewSection("Aimbot")
+local plr_tab = a:NewSection("Players")
 local weap_tab = a:NewSection("Weapons")
 aim_tab:Toggle("Silent Aimbot", function(bool)
     Config.silent_aimbot = bool
@@ -52,6 +54,18 @@ end)
 weap_tab:Toggle('Automatic Gun', function(bool)
     auto = bool 
 end)
+local hitboxexa = false
+local scaling = 1
+local hbtrans = 0
+plr_tab:Toggle("Hitbox Expander", function(bool)
+    hitboxexa = bool
+end)
+plr_tab:Slider("Hitbox Scaling", 1, 20, function(num)
+    scaling = num
+end)
+plr_tab:Slider("Hitbox Transparency", 0, 1, function(num)
+    hbtrans = num
+end)
 local FOVCircle = Drawing.new("Circle")
 FOVCircle.Visible = true
 mouse.Move:Connect(function()
@@ -69,7 +83,7 @@ end)
 function getClosestMouse(trg_part)
     local nearest = nil
     local last = math.huge
-    for i,v in pairs(game.Players:GetPlayers()) do
+    for i,v in pairs(Players:GetPlayers()) do
         if v ~= lp and lp.Character and v.Character and v.Character:FindFirstChild(trg_part) and v.TeamColor ~= lp.TeamColor then
             local ePos = cam:WorldToViewportPoint(v.Character[trg_part].Position)
             local AccPos = Vector2.new(ePos.x, ePos.y)
@@ -129,32 +143,90 @@ spawn(function()
         return oldNamecall(remote, ...)
     end)
 end)
-local Config
-for i,v in next, getgc(true) do
-    if typeof(v) == "table" and rawget(v, 'countammo') then
-        Config = v
+spawn(function()
+    local Config
+    for i,v in next, getgc(true) do
+        if typeof(v) == "table" and rawget(v, 'countammo') then
+            Config = v
+        end
     end
+    local mt = getrawmetatable(game);
+    setreadonly(mt,false)
+    local newindex = mt.__newindex
+    mt.__newindex = newcclosure(function(Instance, Property, Value)
+        if tostring(Instance) == 'Clip' and Instance:IsA('TextLabel') and tostring(Instance.Parent) == 'Ammo' then
+            if Property == 'Text' then
+                if infammo then
+                    Config.ammocount = 999
+                end
+                if norecoil then
+                    Config.recoil = 0
+                end
+                if nospread then
+                    Config.spreadmodifier = 0
+                    Config.currentspread = 0 
+                end
+                if auto then
+                    Config.mode = 'automatic'
+                end
+            end
+        end
+        return newindex(Instance, Property, Value)
+    end)
+end)
+local Client
+for i,v in pairs(getgc(true)) do
+	if type(v) == "table" and rawget(v, "mode") then
+		Client = v;
+	end
 end
-local mt = getrawmetatable(game);
-setreadonly(mt,false)
-local newindex = mt.__newindex
-mt.__newindex = newcclosure(function(Instance, Property, Value)
-    if tostring(Instance) == 'Clip' and Instance:IsA('TextLabel') and tostring(Instance.Parent) == 'Ammo' then
-        if Property == 'Text' then
-            if infammo then
-                Config.ammocount = 999
+local wkspc = Client.wkspc
+game:GetService("RunService").Stepped:Connect(function()
+    if hitboxexa then
+        for _,v in next, Players:GetPlayers() do
+            if v ~= lp then
+                if wkspc.FFA.Value then 
+                    if v.Character then
+                        v.Character.HeadHB.CanCollide = false
+                        v.Character.HeadHB.Transparency = hbtrans
+                        v.Character.HeadHB.Size = Vector3.new(scaling,scaling,scaling)
+    
+                        v.Character.HumanoidRootPart.CanCollide = false
+                        v.Character.HumanoidRootPart.Transparency = 1
+                        v.Character.HumanoidRootPart.Size = Vector3.new(scaling,scaling,scaling)
+                    end
+                else
+                    if v.Team ~= lp.Team then
+                        if v.Character then
+                            v.Character.HeadHB.CanCollide = false
+                            v.Character.HeadHB.Transparency = hbtrans
+                            v.Character.HeadHB.Size = Vector3.new(scaling,scaling,scaling)
+        
+                            v.Character.HumanoidRootPart.CanCollide = false
+                            v.Character.HumanoidRootPart.Transparency = 1
+                            v.Character.HumanoidRootPart.Size = Vector3.new(scaling,scaling,scaling)
+                        end
+                    else
+                        v.Character.HeadHB.CanCollide = false
+                        v.Character.HeadHB.Transparency = 1
+                        v.Character.HeadHB.Size = Vector3.new(1,1,1)
+                    end
+                end
             end
-            if norecoil then
-                Config.recoil = 0
-            end
-            if nospread then
-                Config.spreadmodifier = 0
-                Config.currentspread = 0 
-            end
-            if auto then
-                Config.mode = 'automatic'
+        end
+    else
+        for _,v in next, Players:GetPlayers() do
+            if v.Name ~= lp.Name then
+                if v.Character then
+                    v.Character.HeadHB.CanCollide = false
+                    v.Character.HeadHB.Transparency = 1
+                    v.Character.HeadHB.Size = Vector3.new(2,1,1)
+    
+                    v.Character.HumanoidRootPart.CanCollide = false
+                    v.Character.HumanoidRootPart.Transparency = 1
+                    v.Character.HumanoidRootPart.Size = Vector3.new(2,2,1)
+                end
             end
         end
     end
-    return newindex(Instance, Property, Value)
 end)
