@@ -1,14 +1,14 @@
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Novrb1/Scripts/master/UILIB-not-mine"))()
 library:SetBind(Enum.KeyCode.RightShift)
 local lp = game.Players.LocalPlayer
-local cc = game.workspace.CurrentCamera
+local cam = game.workspace.CurrentCamera
 local mouse = lp:GetMouse()
 local Config = {
     silent_aimbot = false,
     show_fov = false,
     NumSides = 4,
     visionly = false,
-    fov_value = 200,
+    fov_value = 10,
     fov_thickness = 1,
     aimpart = "Head",
     infammo = false,
@@ -25,7 +25,7 @@ end)
 aim_tab:Toggle("Visible Only", function(bool)
     Config.visionly = bool
 end)
-aim_tab:Drop("Aim Part", {"Head", "Torso"}, function(thing)
+aim_tab:Drop("Aim Part", {"Head", "UpperTorso", "LowerTorso"}, function(thing)
     Config.aimpart = thing
 end)
 aim_tab:Toggle("Show FOV", function(bool)
@@ -59,7 +59,7 @@ mouse.Move:Connect(function()
         FOVCircle.Thickness = Config.fov_thickness;
         FOVCircle.Radius = Config.fov_value;
         FOVCircle.NumSides = Config.NumSides
-        FOVCircle.Color = Color3.fromRGB(30, 30, 30);
+        FOVCircle.Color = Color3.fromRGB(0, 125, 255);
         FOVCircle.Position = Vector2.new(mouse.X, mouse.Y + 36)
         FOVCircle.Transparency = 1
     else
@@ -71,9 +71,9 @@ function getClosestMouse(trg_part)
     local last = math.huge
     for i,v in pairs(game.Players:GetPlayers()) do
         if v ~= lp and lp.Character and v.Character and v.Character:FindFirstChild(trg_part) and v.TeamColor ~= lp.TeamColor then
-            local ePos = cc:WorldToViewportPoint(v.Character[trg_part].Position)
+            local ePos = cam:WorldToViewportPoint(v.Character[trg_part].Position)
             local AccPos = Vector2.new(ePos.x, ePos.y)
-            local mousePos = Vector2.new(cc.ViewportSize.x / 2, cc.ViewportSize.y / 2)
+            local mousePos = Vector2.new(cam.ViewportSize.x / 2, cam.ViewportSize.y / 2)
             local distance = (AccPos - mousePos).magnitude
             if distance < last then
                 last = distance
@@ -86,7 +86,7 @@ function getClosestMouse(trg_part)
     end
 end
 function visible(person)
-    return not next(cc.GetPartsObscuringTarget(cc, {cc.CFrame.Position, person.Character:FindFirstChild("Head").Position}, {lp.Character, person.Character}));
+    return not next(cam.GetPartsObscuringTarget(cam, {cam.CFrame.Position, person.Character:FindFirstChild("Head").Position}, {lp.Character, person.Character}));
 end
 function checkfov(plr, fov_amount)
     local fov
@@ -100,33 +100,34 @@ function checkfov(plr, fov_amount)
     end
     return fov
 end
-local gameMeta = getrawmetatable(game)
-setreadonly(gameMeta, false)
-local oldNamecall = gameMeta.__namecall
-gameMeta.__namecall = newcclosure(function(remote, ...)
-    local arguments = {...}
-    if tostring(remote) == 'HitPart' then
-        if Config.silent_aimbot then
-            local getclose = getClosestMouse("Head")
-            if aimpart == "Torso" then
-                getclose = getClosestMouse("Torso")
-            end
-            if getclose and checkfov(getclose, Config.fov_value) then
-                if Config.visionly and visible(getclose) then
-                    arguments[1] = getclose.Character.Head
-                    arguments[2] = getclose.Character.Head.Position
-                    return remote.FireServer(remote, unpack(arguments))
-                elseif Config.visionly == false then
-                    arguments[1] = getclose.Character.Head
-                    arguments[2] = getclose.Character.Head.Position
+spawn(function()
+    local gameMeta = getrawmetatable(game)
+    setreadonly(gameMeta, false)
+    local oldNamecall = gameMeta.__namecall
+    gameMeta.__namecall = newcclosure(function(remote, ...)
+        local arguments = {...}
+        if tostring(remote) == 'HitPart' then
+            if Config.silent_aimbot then
+                local getclose = getClosestMouse("Head")
+                if getclose and checkfov(getclose, Config.fov_value) then
+                    if Config.visionly then
+                        if visible(getclose) then
+                            arguments[1] = getclose.Character:FindFirstChild(Config.aimpart)
+                            arguments[2] = getclose.Character:FindFirstChild(Config.aimpart).Position
+                            return remote.FireServer(remote, unpack(arguments))
+                        end
+                    else
+                        arguments[1] = getclose.Character:FindFirstChild(Config.aimpart)
+                        arguments[2] = getclose.Character:FindFirstChild(Config.aimpart).Position
+                        return remote.FireServer(remote, unpack(arguments))
+                    end
+                else
                     return remote.FireServer(remote, unpack(arguments))
                 end
-            else
-                return remote.FireServer(remote, unpack(arguments))
             end
         end
-    end
-    return oldNamecall(remote, ...)
+        return oldNamecall(remote, ...)
+    end)
 end)
 local Config
 for i,v in next, getgc(true) do
