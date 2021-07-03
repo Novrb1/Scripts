@@ -1,29 +1,63 @@
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Novrb1/Scripts/master/UILIB-not-mine"))()
+local lp = game.Players.LocalPlayer
 local cc = game.workspace.CurrentCamera
-local mouse = game.Players.LocalPlayer:GetMouse()
+local mouse = lp:GetMouse()
 local Config = {
     silent_aimbot = false,
-    show_fov      = false,
-    fov_value     = 200,
+    show_fov = false,
+    NumSides = 4,
+    visionly = false,
+    fov_value = 200,
+    fov_thickness = 1,
+    aimpart = "Head",
+    infammo = false,
+    norecoil = false,
+    nospread = false,
+    auto = false
 }
 local a = library:NewWindow("Arsenal","UI")
 local aim_tab = a:NewSection("Aimbot")
-aim_tab:Toggle("Silent Aimbot", function()
-    Config.silent_aimbot = not Config.silent_aimbot;
+local weap_tab = a:NewSection("Weapons")
+aim_tab:Toggle("Silent Aimbot", function(bool)
+    Config.silent_aimbot = bool
 end)
-aim_tab:Toggle("Show FOV", function()
-    Config.show_fov = not Config.show_fov;
+aim_tab:Toggle("Visible Only", function(bool)
+    Config.visionly = bool
+end)
+aim_tab:Drop("Aim Part", {"Head", "Torso"}, function(thing)
+    Config.aimpart = thing
+end)
+aim_tab:Toggle("Show FOV", function(bool)
+    Config.show_fov = bool
 end)
 aim_tab:Slider("Field Of View", 10, 500, function(val)
     Config.fov_value = tonumber(val);
+end)
+aim_tab:Slider("Thickness", 1, 10, function(val)
+    Config.fov_thickness = tonumber(val);
+end)
+aim_tab:Slider("Number Of Sides", 4, 100, function(val)
+    Config.NumSides = tonumber(val);
+end)
+weap_tab:Toggle('Infinite Ammo', function(bool)
+    infammo = bool 
+end)
+weap_tab:Toggle('No Recoil', function(bool)
+    norecoil = bool 
+end)
+weap_tab:Toggle('No Spread', function(bool)
+    nospread = bool 
+end)
+weap_tab:Toggle('Automatic Gun', function(bool)
+    auto = bool 
 end)
 local FOVCircle = Drawing.new("Circle")
 FOVCircle.Visible = true
 mouse.Move:Connect(function()
     if Config.show_fov then
-        FOVCircle.Thickness = 3;
+        FOVCircle.Thickness = Config.fov_thickness;
         FOVCircle.Radius = Config.fov_value;
-        FOVCircle.NumSides = 100
+        FOVCircle.NumSides = Config.NumSides
         FOVCircle.Color = Color3.fromRGB(30, 30, 30);
         FOVCircle.Position = Vector2.new(mouse.X, mouse.Y + 36)
         FOVCircle.Transparency = 1
@@ -35,7 +69,7 @@ function getClosestMouse(trg_part)
     local nearest = nil
     local last = math.huge
     for i,v in pairs(game.Players:GetPlayers()) do
-        if v ~= game.Players.LocalPlayer and game.Players.LocalPlayer.Character and v.Character and v.Character:FindFirstChild(trg_part) and v.TeamColor ~= game.Players.LocalPlayer.TeamColor then
+        if v ~= lp and lp.Character and v.Character and v.Character:FindFirstChild(trg_part) and v.TeamColor ~= lp.TeamColor then
             local ePos = cc:WorldToViewportPoint(v.Character[trg_part].Position)
             local AccPos = Vector2.new(ePos.x, ePos.y)
             local mousePos = Vector2.new(cc.ViewportSize.x / 2, cc.ViewportSize.y / 2)
@@ -49,6 +83,9 @@ function getClosestMouse(trg_part)
     if nearest ~= nil then
         return nearest
     end
+end
+function visible(person)
+    return not next(cc.GetPartsObscuringTarget(cc, {cc.CFrame.Position, person.Character:FindFirstChild("Head").Position}, {lp.Character, person.Character}));
 end
 function checkfov(plr, fov_amount)
     local fov
@@ -70,14 +107,52 @@ gameMeta.__namecall = newcclosure(function(remote, ...)
     if tostring(remote) == 'HitPart' then
         if Config.silent_aimbot then
             local getclose = getClosestMouse("Head")
+            if aimpart == "Torso" then
+                getclose = getClosestMouse("Torso")
+            end
             if getclose and checkfov(getclose, Config.fov_value) then
-                arguments[1] = getclose.Character.Head
-                arguments[2] = getclose.Character.Head.Position
-                return remote.FireServer(remote, unpack(arguments))
+                if Config.visionly and visible(getclose) then
+                    arguments[1] = getclose.Character.Head
+                    arguments[2] = getclose.Character.Head.Position
+                    return remote.FireServer(remote, unpack(arguments))
+                elseif Config.visionly == false then
+                    arguments[1] = getclose.Character.Head
+                    arguments[2] = getclose.Character.Head.Position
+                    return remote.FireServer(remote, unpack(arguments))
+                end
             else
                 return remote.FireServer(remote, unpack(arguments))
             end
         end
     end
     return oldNamecall(remote, ...)
+end)
+local Config
+for i,v in next, getgc(true) do
+    if typeof(v) == "table" and rawget(v, 'countammo') then
+        Config = v
+    end
+end
+local mt = getrawmetatable(game);
+setreadonly(mt,false)
+local newindex = mt.__newindex
+mt.__newindex = newcclosure(function(Instance, Property, Value)
+    if tostring(Instance) == 'Clip' and Instance:IsA('TextLabel') and tostring(Instance.Parent) == 'Ammo' then
+        if Property == 'Text' then
+            if infammo then
+                Config.ammocount = 999
+            end
+            if norecoil then
+                Config.recoil = 0
+            end
+            if nospread then
+                Config.spreadmodifier = 0
+                Config.currentspread = 0 
+            end
+            if auto then
+                Config.mode = 'automatic'
+            end
+        end
+    end
+    return newindex(Instance, Property, Value)
 end)
