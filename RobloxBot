@@ -50,6 +50,11 @@ rservice.Stepped:Connect(function()
                 if lp.Character.HumanoidRootPart:FindFirstChildOfClass("BodyAngularVelocity") then
                     lp.Character.HumanoidRootPart:FindFirstChildOfClass("BodyAngularVelocity").AngularVelocity = Vector3.new(0,0,0)
                 end
+                for _,z in next, lp.Character:GetChildren() do
+                    if z:IsA'MeshPart' or z:IsA'Part' then
+                        z.Velocity = Vector3.new(0,0,0)
+                    end
+                end
             end
         end
         for _, z in next, game:GetDescendants() do
@@ -65,6 +70,7 @@ spawn(function()
             for _,z in pairs(game.Players:GetPlayers()) do
                 if z ~= lp then
                     if lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") and z and z.Character and z.Character:FindFirstChild("Head") and z.Character:FindFirstChildOfClass("Humanoid").FloorMaterial ~= Enum.Material.Air then
+                        lp.Character.HumanoidRootPart.CFrame = z.Character.HumanoidRootPart.CFrame
                         if lp.Character.HumanoidRootPart:FindFirstChildOfClass("BodyAngularVelocity") then
                             lp.Character.HumanoidRootPart:FindFirstChildOfClass("BodyAngularVelocity").AngularVelocity = Vector3.new(0,333333,0)
                         end
