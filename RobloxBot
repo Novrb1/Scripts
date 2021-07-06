@@ -1,7 +1,10 @@
-if not _G.shoption and not _G.thingtosay then
-    return
+if not _G.thingtosay then
+    _G.thingtosay = "gg/wEZAWtuAeX | Feens#7 9 08 | If you want this bot join the server or add me :D"
 end
-wait(6)
+if not _G.shoption then
+    _G.shoption = "largest"
+end
+wait(5)
 if not game:IsLoaded() then
     game.Loaded:Wait()
 end
