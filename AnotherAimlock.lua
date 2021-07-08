@@ -46,7 +46,7 @@ function getClosestMouse()
                 if v.Team ~= lp.Team then
                     local ePos = cam:WorldToViewportPoint(v.Character:FindFirstChild("Head").Position)
                     local AccPos = Vector2.new(ePos.X, ePos.Y)
-                    local mousePos = Vector2.new(cam.ViewportSize.X / 2, cam.ViewportSize.Y / 2)
+                    local mousePos = Vector2.new(mouse.X, mouse.Y)
                     local distance = (AccPos - mousePos).magnitude
                     if distance < last then
                         last = distance
@@ -56,7 +56,7 @@ function getClosestMouse()
             else
                 local ePos = cam:WorldToViewportPoint(v.Character:FindFirstChild("Head").Position)
                 local AccPos = Vector2.new(ePos.X, ePos.Y)
-                local mousePos = Vector2.new(cam.ViewportSize.X / 2, cam.ViewportSize.Y / 2)
+                local mousePos = Vector2.new(mouse.X, mouse.Y)
                 local distance = (AccPos - mousePos).magnitude
                 if distance < last then
                     last = distance
