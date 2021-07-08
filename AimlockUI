@@ -3,7 +3,7 @@ if not game:IsLoaded() then
 end
 
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Novrb1/Scripts/master/UILIB-not-mine"))()
-library:SetBind(Enum.KeyCode.Z)
+library:SetBind(Enum.KeyCode.LeftAlt)
 
 local Players = game:GetService("Players")
 local lp = Players.LocalPlayer
@@ -21,31 +21,46 @@ local preidicion = 1
 local silent = false
 local camlock = true
 local offset = 0
+local closestLOL
 
-function getClosestToMouse()
-	local closestdis = math.huge
-	local closestplr
-	for i,v in pairs(Players:GetPlayers()) do
-	    if tc then
-	        if v:DistanceFromCharacter(mouse.Hit.p) < closestdis and v ~= lp and v.Team ~= lp.Team and v.Character and v.Character:FindFirstChild("Head") then
-    			closestplr = v
-    			closestdis = v:DistanceFromCharacter(mouse.Hit.p)
-    		end
-	    else
-    		if v:DistanceFromCharacter(mouse.Hit.p) < closestdis and v ~= lp and v.Character and v.Character:FindFirstChild("Head") then
-    			closestplr = v
-    			closestdis = v:DistanceFromCharacter(mouse.Hit.p)
-    		end
-		end
-	end
-	return closestplr
+function getClosestMouse()
+    local nearest = nil  
+    local last = math.huge
+    for i,v in next, game.Players:GetPlayers() do
+        if v ~= lp and lp.Character and v.Character and v.Character:FindFirstChild("Head") then
+            if tc then
+                if v.Team ~= lp.Team then
+                    local ePos = cam:WorldToViewportPoint(v.Character:FindFirstChild("Head").Position)
+                    local AccPos = Vector2.new(ePos.X, ePos.Y)
+                    local mousePos = Vector2.new(mouse.X, mouse.Y)
+                    local distance = (AccPos - mousePos).magnitude
+                    if distance < last then
+                        last = distance
+                        nearest = v
+                    end
+                end
+            else
+                local ePos = cam:WorldToViewportPoint(v.Character:FindFirstChild("Head").Position)
+                local AccPos = Vector2.new(ePos.X, ePos.Y)
+                local mousePos = Vector2.new(mouse.X, mouse.Y)
+                local distance = (AccPos - mousePos).magnitude
+                if distance < last then
+                    last = distance
+                    nearest = v
+                end
+            end
+        end
+    end
+    if nearest ~= nil then
+        return nearest
+    end
 end
 
 local BIGFRAME = library:NewWindow("Aimbot", "UI")
 
 local main = BIGFRAME:NewSection("Main")
 local settings = BIGFRAME:NewSection("Settings")
-settings:Bind("Toggle UI", Enum.KeyCode.Z, true, function(bind)
+settings:Bind("Toggle UI", Enum.KeyCode.LeftAlt, true, function(bind)
     library:SetBind(bind)
 end)
 main:Toggle("Aimlock Toggle", function(bool)
@@ -95,45 +110,43 @@ local PlayerLockedTo = main:Text("Not Locked On Anyone")
 uis.InputBegan:Connect(function(key)
     if key.KeyCode == akey then
         keyss = true
-        plr = getClosestToMouse()
+        closestLOL = getClosestMouse()
     end
 end)
 uis.InputEnded:Connect(function(key)
     if key.KeyCode == akey then
         keyss = false
-        plr = nil
+        closestLOL = nil
     end
 end)
 
 rservice.Stepped:Connect(function()
-    if plr ~= nil and game.Players:FindFirstChild(plr.Name) then
-        PlayerLockedTo:Refresh("Locked Onto: " .. plr.Name)
+    if closestLOL ~= nil and game.Players:FindFirstChild(closestLOL.Name) then
+        PlayerLockedTo:Refresh("Locked Onto: " .. closestLOL.Name)
     else
         PlayerLockedTo:Refresh("Not Locked On Anyone")
     end
 end)
-rservice.Heartbeat:Connect(function()
-    pcall(function()
-        if masterenabled then
-            if silent and keyss and plr ~= nil then
-                if predictionenabled then
-                    local vector, onScreen = cam:WorldToViewportPoint(plr.Character:FindFirstChild("Head").Position + Vector3.new(0,offset,0) + plr.Character:FindFirstChild("Head").Velocity / preidicion)
-                    if keyss and onScreen and isrbxactive() then
-                        mousemoveabs(vector.X, vector.Y)
-                    end
-                else
-                    local vector, onScreen = cam:WorldToViewportPoint(plr.Character:FindFirstChild("Head").Position + Vector3.new(0,offset,0))
-                    if keyss and onScreen and isrbxactive() then
-                        mousemoveabs(vector.X, vector.Y)
-                    end
+rservice.Stepped:Connect(function()
+    if masterenabled and keyss and closestLOL ~= nil then
+        if silent then
+            if predictionenabled then
+                local vector, onScreen = cam:WorldToViewportPoint(closestLOL.Character:FindFirstChild("Head").Position + closestLOL.Character:FindFirstChild("Head").Velocity / preidicion)
+                if onScreen and iswindowactive() then
+                    mousemoveabs(vector.X, vector.Y)
                 end
-            elseif camlock and keyss and plr ~= nil then
-                if predictionenabled then
-                    cam.CFrame = CFrame.new(cam.CFrame.p, plr.Character:FindFirstChild("Head").Position + Vector3.new(0,offset,0) + plr.Character:FindFirstChild("Head").Velocity / preidicion)
-                else
-                    cam.CFrame = CFrame.new(cam.CFrame.p, plr.Character:FindFirstChild("Head").Position + Vector3.new(0,offset,0))
+            else
+                local vector, onScreen = cam:WorldToViewportPoint(closestLOL.Character:FindFirstChild("Head").Position)
+                if onScreen and iswindowactive() then
+                    mousemoveabs(vector.X, vector.Y)
                 end
             end
+        elseif camlock then
+            if predictionenabled then
+                cam.CFrame = CFrame.new(cam.CFrame.p, closestLOL.Character:FindFirstChild("Head").Position + closestLOL.Character:FindFirstChild("Head").Velocity / preidicion)
+            else
+                cam.CFrame = CFrame.new(cam.CFrame.p, closestLOL.Character:FindFirstChild("Head").Position)
+            end
         end
-    end)
+    end
 end)
