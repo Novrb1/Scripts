@@ -1,0 +1,529 @@
+if not game:IsLoaded() then
+    game.Loaded:Wait()
+end
+
+Players = game:GetService("Players")
+LocalPlayer = Players.LocalPlayer
+Mouse = LocalPlayer:GetMouse()
+UIS = game:GetService("UserInputService")
+RunService = game:GetService("RunService")
+TweenService = game:GetService("TweenService")
+CCam = workspace.CurrentCamera
+
+local screenguys = Instance.new("ScreenGui",game.CoreGui)
+local cmdBar = Instance.new("TextBox",screenguys)
+cmdBar.Position = UDim2.new(0, -400, 0.5, -10)
+cmdBar.Size = UDim2.new(0, 200, 0, 20)
+cmdBar.BackgroundColor3 = Color3.fromRGB(0,0,0)
+cmdBar.BorderSizePixel = 1
+cmdBar.BorderColor3 = Color3.fromRGB(255, 125, 0)
+cmdBar.BackgroundTransparency = 0.2
+cmdBar.TextColor3 = Color3.fromRGB(255, 255, 255)
+cmdBar.TextSize = 16
+cmdBar.TextXAlignment = Enum.TextXAlignment.Left
+
+local Commands = {}
+local Prefix = ";"
+
+Mouse.KeyDown:Connect(function(key)
+    if key == Prefix then
+        cmdBar:TweenPosition(UDim2.new(0, 0, 0.5, -10), 1, 0, 0.3, 1)
+    	cmdBar:CaptureFocus()
+    end
+end)
+
+local ScreenUI = Instance.new("ScreenGui", game.CoreGui)
+ScreenUI.Enabled = false
+local BackFrame = Instance.new("Frame", ScreenUI)
+local cmdlistframe = Instance.new("ScrollingFrame", BackFrame)
+local cmdlistLayout = Instance.new("UIListLayout", cmdlistframe)
+
+BackFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+BackFrame.BackgroundTransparency = 0.350
+BackFrame.BorderSizePixel = 0
+BackFrame.Position = UDim2.new(0.5, -100, 0.5, -125)
+BackFrame.Size = UDim2.new(0, 200, 0, 250)
+BackFrame.Active = true
+BackFrame.Draggable = true
+
+cmdlistframe.Active = true
+cmdlistframe.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+cmdlistframe.BackgroundTransparency = 1.000
+cmdlistframe.BorderSizePixel = 0
+cmdlistframe.Size = UDim2.new(0, 200, 0, 250)
+cmdlistframe.CanvasSize = UDim2.new(0, 0, 1, 0)
+cmdlistframe.ScrollBarThickness = 0
+cmdlistframe.AutomaticCanvasSize = Enum.AutomaticSize.Y
+cmdlistLayout.SortOrder = Enum.SortOrder.LayoutOrder
+
+function addCmdtolist(cmdnames, functions)
+   local thing = Instance.new("TextLabel", cmdlistframe)
+    thing.Parent = cmdlistframe
+    thing.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    thing.BackgroundTransparency = 1.000
+    thing.Size = UDim2.new(0, 200, 0, 12)
+    thing.Font = Enum.Font.SourceSans
+    thing.Text = cmdnames .. " - " .. functions
+    thing.TextColor3 = Color3.fromRGB(255, 255, 255)
+    thing.TextSize = 13.000 
+end
+
+local function AddCmd(CmdName, Desc, Func)
+    Commands[#Commands + 1] = {["Name"] = CmdName, ["Description"] = Desc, ["Function"] = Func}
+    addCmdtolist(CmdName, Desc)
+end
+
+local function Search(CmdName)
+    for _, v in pairs(Commands) do 
+        if v.Name == CmdName then 
+            return v.Function 
+        end
+    end
+end
+ 
+local function CheckCmd(Cmd)
+    Cmd = string.lower(Cmd)
+    if Cmd:sub(1, #Prefix) == Prefix then 
+        local Args = string.split(Cmd:sub(#Prefix + 1), " ")
+        local CmdName = Search(table.remove(Args, 1))
+        if CmdName and Args then
+            return CmdName(Args)
+        end
+    end
+end
+
+function notify(ttext, stext)
+    local sgui = Instance.new("ScreenGui", game.CoreGui)
+    game.Debris:AddItem(sgui, 3.6)
+    local Main = Instance.new("Frame", sgui)
+    local ColorFrame = Instance.new("Frame", Main)
+    local TitleText = Instance.new("TextLabel", Main)
+    TitleText.Text = ttext
+    local Subtext = Instance.new("TextLabel", Main)
+    Subtext.Text = stext
+    Main.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    Main.BackgroundTransparency = 0.2
+    Main.Position = UDim2.new(0, -230, 1, -40)
+    Main.Size = UDim2.new(0, 230, 0, 40)
+    ColorFrame.BackgroundColor3 = Color3.fromRGB(255, 125, 0)
+    ColorFrame.BorderSizePixel = 0
+    ColorFrame.Position = UDim2.new(1, 0, 0, -1)
+    ColorFrame.Size = UDim2.new(0, 4, 1, 2)
+    TitleText.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    TitleText.BackgroundTransparency = 1
+    TitleText.Size = UDim2.new(1, 0, 0.5, 0)
+    TitleText.Font = Enum.Font.ArialBold
+    TitleText.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TitleText.TextSize = 20
+    Subtext.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Subtext.BackgroundTransparency = 1
+    Subtext.Position = UDim2.new(0, 0, 0.5, 0)
+    Subtext.Size = UDim2.new(1, 0, 0.5, 0)
+    Subtext.Font = Enum.Font.Arial
+    Subtext.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Subtext.TextSize = 18
+    spawn(function()
+        Main:TweenPosition(UDim2.new(0, 0, 1, -40), "Out", "Linear", 0.5, false)
+        wait(3)
+        Main:TweenPosition(UDim2.new(0, -234, 1, -40), "Out", "Linear", 0.5, false)
+    end)
+end
+
+function gRoot(charmodel)
+	return charmodel:FindFirstChild('HumanoidRootPart') or charmodel:FindFirstChild('Torso') or charmodel:FindFirstChild('UpperTorso')
+end
+
+function gName(nstring)
+	local found
+	for i,v in pairs(Players:GetChildren()) do
+		if string.sub(string.lower(v.Name),1,#nstring) == string.lower(nstring) then
+			found = v
+		end
+	end
+	return found
+end
+
+function gDisplayName(dstring)
+	local found
+	for i,v in pairs(Players:GetChildren()) do
+		if string.sub(string.lower(v.DisplayName),1,#dstring) == string.lower(dstring) then
+			found = v
+		end
+	end
+	return found
+end
+
+function tools(plr)
+	if plr:FindFirstChildOfClass("Backpack"):FindFirstChildOfClass('Tool') or plr.Character:FindFirstChildOfClass('Tool') then
+		return true
+	end
+end
+
+function refresh()
+	refreshCmd = true
+	local Human = LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid", true)
+	local pos = Human and Human.RootPart and Human.RootPart.CFrame
+	local pos1 = CCam.CFrame
+	LocalPlayer.Character:Destroy()
+	spawn(function()
+		LocalPlayer.CharacterAdded:Wait():WaitForChild("Humanoid").RootPart.CFrame, CCam.CFrame = pos, wait() and pos1
+		refreshCmd = false
+	end)
+end
+
+function nocollide(plater)
+	if plater.Character then
+		for _,child in pairs(plater.Character:GetDescendants()) do
+			if child:IsA'BasePart' and child.CanCollide then
+				child.CanCollide = false
+			end
+		end
+	end
+end
+
+function attach(target)
+	if tools(LocalPlayer) then
+		local char = LocalPlayer.Character
+		local tchar = target.Character
+		local hum = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+		local hrp = gRoot(LocalPlayer.Character)
+		local hrp2 = gRoot(target.Character)
+		hum.Name = "1"
+		local newHum = hum:Clone()
+		newHum.Parent = char
+		newHum.Name = "Humanoid"
+		wait()
+		hum:Destroy()
+		CCam.CameraSubject = char
+		newHum.DisplayDistanceType = "None"
+		local tool = LocalPlayer:FindFirstChildOfClass("Backpack"):FindFirstChildOfClass("Tool") or LocalPlayer.Character:FindFirstChildOfClass("Tool")
+		tool.Parent = char
+		hrp.CFrame = hrp2.CFrame * CFrame.new(0, 0, 0) * CFrame.new(math.random(-100, 100)/200,math.random(-100, 100)/200,math.random(-100, 100)/200)
+		local n = 0
+		repeat
+			wait(.1)
+			n = n + 1
+			hrp.CFrame = hrp2.CFrame
+		until (tool.Parent ~= char or not hrp or not hrp2 or not hrp.Parent or not hrp2.Parent or n > 250) and n > 2
+	else
+		notify("tool error","you need a tool")
+	end
+end
+
+AddCmd("prefix", "Changes Prefix", function(Args)
+    if Args[1] and Args[1] ~= "" and Args[1] ~= " " then
+        Prefix = string.lower(Args[1])
+    else
+        notify("argument error", "need second argument")
+    end
+end)
+
+AddCmd("cmds", "Shows Commands Menu", function(Args)
+    ScreenUI.Enabled = not ScreenUI.Enabled
+end)
+
+AddCmd("ws", "WalkSpeed Changer", function(Args)
+    if Args[1] and tonumber(Args[1]) then
+        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+            LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = tonumber(Args[1])
+            notify("walkspeed", "changed walkspeed to " .. tonumber(Args[1]))
+        else
+            notify("character error", "need character")
+        end
+    else
+        notify("argument error", "need second argument")
+    end
+end)
+
+AddCmd("jp", "JumpPower Changer", function(Args)
+    if Args[1] and tonumber(Args[1]) then
+        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+            LocalPlayer.Character:FindFirstChildOfClass("Humanoid").JumpPower = tonumber(Args[1])
+            notify("jumppower", "changed jumppower to " .. tonumber(Args[1]))
+        else
+            notify("character error", "need character")
+        end
+    else
+        notify("argument error", "need second argument")
+    end
+end)
+
+local normgrav = workspace.Gravity
+AddCmd("gravity", "Gravity Changer", function(Args)
+    if Args[1] and tonumber(Args[1]) then
+        if Args[1] == "normal" then
+            workspace.Gravity = tonumber(Args[1])
+            notify("gravity", "changed gravity to " .. tonumber(Args[1]))
+        else
+            workspace.Gravity = normgrav
+            notify("gravity", "changed gravity to normal")
+        end
+    else
+        notify("argument error", "need second argument")
+    end
+end)
+
+local noclip
+AddCmd("noclip", "Disables Collision", function()
+    noclip = RunService.Stepped:Connect(function()
+        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+            for _,z in next, LocalPlayer.Character:GetChildren() do
+                if z:IsA'Part' or z:IsA'MeshPart' then
+                    z.CanCollide = false
+                end
+            end
+        end
+    end)
+    notify("noclip", "Disabling Collision")
+end)
+
+AddCmd("clip", "Enables Collision", function()
+    if noclip then
+        noclip:Disconnect()
+        notify("noclip", "Re-Enabling Collision")
+    end
+end)
+
+local grabtools
+AddCmd("gtools", "Grabs Tools On Ground", function()
+    grabtools = RunService.Stepped:Connect(function()
+        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+            LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):EquipTool(workspace:FindFirstChildOfClass("Tool"))
+        end
+    end)
+    notify("ungtools", "Now Grabbing Tools")
+end)
+
+AddCmd("ungtools", "Stops Grabbing Tools", function()
+    if grabtools then
+        grabtools:Disconnect()
+        notify("grabtools", "Stopped Grabbing Tools")
+    end
+end)
+
+AddCmd("fov", "FieldOfView Changer", function(Args)
+    if Args[1] and tonumber(Args[1]) then
+        if CCam then
+            if tonumber(Args[1]) >= 10 and tonumber(Args[1]) <= 120 then
+                CCam.FieldOfView = tonumber(Args[1])
+                notify("cam-fov", "set to " .. tonumber(Args[1]))
+            else
+                notify("argument error", "need number between 10-120")
+            end
+        else
+            notify("camera error", "no instance: Camera")
+        end
+    else
+        notify("argument error", "need second argument")
+    end
+end)
+
+AddCmd("rejoin", "Rejoins Game", function()
+    notify("rejoining...", "please wait")
+    game:GetService("TeleportService"):Teleport(game.PlaceId,LocalPlayer)
+end)
+
+AddCmd("time", "Shows Os Time", function()
+    notify("time hh:mm AM/PM", os.date("%I") .. ":" .. os.date("%M") .. os.date("%p"))
+end)
+
+AddCmd("fixcam", "Restores Camera", function()
+    CCam:remove()
+    wait(.1)
+    repeat wait() until LocalPlayer.Character ~= nil
+    workspace.CurrentCamera.CameraSubject = LocalPlayer.Character:FindFirstChildWhichIsA('Humanoid')
+    workspace.CurrentCamera.CameraType = "Custom"
+    LocalPlayer.CameraMinZoomDistance = 0.5
+    LocalPlayer.CameraMaxZoomDistance = 400
+    LocalPlayer.CameraMode = "Classic"
+    LocalPlayer.Character.Head.Anchored = false
+    CCam = workspace.CurrentCamera
+    notify("camera", "successfully restored")
+end)
+
+AddCmd("ncc", "Camera Noclip", function()
+    local sc = (debug and debug.setconstant) or setconstant
+	local gc = (debug and debug.getconstants) or getconstants
+	if not sc or not getgc or not gc then
+		return notify('incompatible exploit', 'your exploit does not support this command')
+	end
+	local pop = LocalPlayer.PlayerScripts.PlayerModule.CameraModule.ZoomController.Popper
+	for _, v in pairs(getgc()) do
+		if type(v) == 'function' and getfenv(v).script == pop then
+			for i, v1 in pairs(gc(v)) do
+				if tonumber(v1) == .25 then
+					sc(v, i, 0)
+				elseif tonumber(v1) == 0 then
+					sc(v, i, .25)
+				end
+			end
+		end
+	end
+end)
+
+local smute
+AddCmd("smute", "Server-Mutes Game", function()
+    smute = RunService.Stepped:Connect(function()
+        for _,z in next, Players:GetPlayers() do
+            if z ~= LocalPlayer then
+                if z.Character and z.Character:FindFirstChildOfClass("Tool") then
+                    for _,v in next, z.Character:GetChildren() do
+                        if v:IsA'Tool' then
+                            for _,tool in next, v:GetDescendants() do
+                                if tool:IsA'Sound' then
+                                    tool.Playing = false
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end)
+    notify("server-mute", "successfully server-muted")
+end)
+
+AddCmd("unsmute", "UnServer-Mutes Game", function()
+    if smute then
+        smute:Disconnect()
+        notify("un server-muted", "successfully un server-muted")
+    end
+end)
+
+AddCmd("goto", "Tp's To Player", function(Args)
+    if Args[1] and Args[1] ~= "" and Args[1] ~= " " then
+        if string.lower(Args[1]) == "display" then
+            local plr = gDisplayName(Args[2])
+            if Players:FindFirstChild(plr.Name) and LocalPlayer.Character and gRoot(LocalPlayer.Character) and plr.Character and gRoot(plr.Character) then
+                gRoot(LocalPlayer.Character).CFrame = gRoot(plr.Character).CFrame
+                notify("tp to", "successfully tp'd to plr")
+            else
+                notify("character error", "either player or you have no character")
+            end
+        else
+            local plr = gName(Args[1])
+            if Players:FindFirstChild(plr.Name) and LocalPlayer.Character and gRoot(LocalPlayer.Character) and plr.Character and gRoot(plr.Character) then
+                gRoot(LocalPlayer.Character).CFrame = gRoot(plr.Character).CFrame
+                notify("tp to", "successfully tp'd to plr")
+            else
+                notify("character error", "either player or you have no character")
+            end
+        end
+    end
+end)
+
+AddCmd("cl", "FE-Kills Player", function(Args)
+    if Args[1] and Args[1] ~= "" and Args[1] ~= " " then
+        if string.lower(Args[1]) == "display" then
+            local plr = gDisplayName(Args[2])
+            if Players:FindFirstChild(plr.Name) and LocalPlayer.Character and gRoot(LocalPlayer.Character) and plr.Character and gRoot(plr.Character) then
+                if tools(LocalPlayer) then
+                	if plr ~= nil then
+                		local NormPos = gRoot(LocalPlayer.Character).CFrame
+                		if not fast then
+                			refresh()
+                			wait()
+                			repeat wait() until LocalPlayer.Character ~= nil and gRoot(LocalPlayer.Character)
+                			wait(0.3)
+                		end
+                		local hrp = gRoot(LocalPlayer.Character)
+                		attach(plr)
+                		repeat
+                			wait()
+                			hrp.CFrame = CFrame.new(999999, workspace.FallenPartsDestroyHeight + 5,999999)
+                		until not gRoot(plr.Character) or not gRoot(LocalPlayer.Character)
+                		wait(1)
+                		LocalPlayer.CharacterAdded:Wait():WaitForChild("HumanoidRootPart").CFrame = NormPos
+                	end
+                else
+                	notify("tool error","you need a tool")
+                end
+            else
+                notify("character error", "either player or you have no character")
+            end
+        else
+            local plr = gName(Args[1])
+            if Players:FindFirstChild(plr.Name) and LocalPlayer.Character and gRoot(LocalPlayer.Character) and plr.Character and gRoot(plr.Character) then
+                if tools(LocalPlayer) then
+                	if plr ~= nil then
+                		local NormPos = gRoot(LocalPlayer.Character).CFrame
+                		if not fast then
+                			refresh()
+                			wait()
+                			repeat wait() until LocalPlayer.Character ~= nil and gRoot(LocalPlayer.Character)
+                			wait(0.3)
+                		end
+                		local hrp = gRoot(LocalPlayer.Character)
+                		attach(plr)
+                		repeat
+                			wait()
+                			hrp.CFrame = CFrame.new(999999, workspace.FallenPartsDestroyHeight + 5,999999)
+                		until not gRoot(plr.Character) or not gRoot(LocalPlayer.Character)
+                		wait(1)
+                		LocalPlayer.CharacterAdded:Wait():WaitForChild("HumanoidRootPart").CFrame = NormPos
+                	end
+                else
+                	notify("tool error","you need a tool")
+                end
+            else
+                notify("character error", "either player or you have no character")
+            end
+        end
+    else
+        notify("argument error", "need second argument")
+    end
+end)
+
+AddCmd("setfps", "Sets Fps-Cap To Number", function(Args)
+    if Args[1] and tonumber(Args[1]) then
+        setfpscap(tonumber(Args[1]))
+        notify("fps", "set fps-cap to " .. tonumber(Args[1]))
+    else
+        setfpscap(1e3)
+        notify("fps", "set fps-cap to 1e3")
+    end
+end)
+
+local antifling
+AddCmd("antifling", "Disables Everyone's Collision", function()
+    antifling = RunService.Stepped:Connect(function()
+        for _,z in next, Players:GetPlayers() do
+            if z ~= LocalPlayer then
+                nocollide(z)
+            end
+        end
+    end)
+    notify("antifling", "successfully enabled")
+end)
+
+AddCmd("unantifling", "Re-Enables Everyone's Collision", function()
+    if antifling ~= nil then
+        antifling:Disconnect()
+        notify("antifling", "successfully disabled")
+    end
+end)
+
+AddCmd("etools", "Equips All Tools From Backpack", function(Args)
+    if LocalPlayer.Character then
+        if tools(LocalPlayer) then
+            for _,z in next, LocalPlayer.Backpack:GetChildren() do
+                if z:IsA'Tool' then
+                    if LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+                        LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):EquipTool(z)
+                    else
+                        z.Parent = LocalPlayer.Character 
+                    end
+                end
+            end
+        else
+            notify("tool error","you need a tool")
+        end
+    else
+        notify("character error", "either player or you have no character")
+    end
+end)
+
+cmdBar.FocusLost:Connect(function()
+    cmdBar:TweenPosition(UDim2.new(0, -400, 0.5, -10), 1, 0, 1, 1)
+    CheckCmd(cmdBar.Text)
+end)
