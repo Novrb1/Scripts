@@ -11,7 +11,7 @@ local ILabel = Instance.new("ImageLabel", BFrame)
 local THealth = Instance.new("TextLabel", BFrame)
 local TPosition = Instance.new("TextLabel", BFrame)
 
-ScreenGui.Enabled = false
+ScreenGui.Visible = false
 
 AFrame.Active = true
 AFrame.Draggable = true
