@@ -74,6 +74,10 @@ playerlink.Text = "Copy Player Link"
 playerlink.TextColor3 = Color3.fromRGB(255, 255, 255)
 playerlink.TextSize = 14
 
+playerlink.MouseButton1Click:Connect(function()
+    setclipboard(playerlink.Text)
+end)
+
 BFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 BFrame.BackgroundTransparency = 1
 BFrame.Position = UDim2.new(0, 0, 0.600000024, 0)
