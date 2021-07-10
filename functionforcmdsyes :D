@@ -1,0 +1,107 @@
+local ScreenGui = Instance.new("ScreenGui", game.CoreGui)
+  local Frame = Instance.new("Frame", ScreenGui)
+  local UIListLayout = Instance.new("UIListLayout", Frame)
+  local PName = Instance.new("TextLabel", Frame)
+  local PDisplayName = Instance.new("TextLabel", Frame)
+  local PAccountAge = Instance.new("TextLabel", Frame)
+  local PUserId = Instance.new("TextLabel", Frame)
+  local playerlink = Instance.new("TextButton", Frame)
+  local Frame_2 = Instance.new("Frame", Frame)
+  local ImageLabel = Instance.new("ImageLabel", Frame_2)
+  local THealth = Instance.new("TextLabel", Frame_2)
+  local TPosition = Instance.new("TextLabel", Frame_2)
+
+  Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+  Frame.BackgroundTransparency = 0.2
+  Frame.BorderColor3 = Color3.fromRGB(255, 0, 0)
+  Frame.Position = UDim2.new(0.5, -100, 0.5, -75)
+  Frame.Size = UDim2.new(0, 200, 0, 150)
+
+  UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+  UIListLayout.Padding = UDim.new(0, 1)
+
+  PName.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+  PName.BackgroundTransparency = 0.9
+  PName.BorderColor3 = Color3.fromRGB(255, 0, 0)
+  PName.Size = UDim2.new(0, 200, 0, 17)
+  PName.Text = "Name:"
+  PName.TextColor3 = Color3.fromRGB(255, 255, 255)
+  PName.TextSize = 14
+  PName.TextXAlignment = Enum.TextXAlignment.Left
+
+  PDisplayName.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+  PDisplayName.BackgroundTransparency = 0.9
+  PDisplayName.BorderColor3 = Color3.fromRGB(255, 0, 0)
+  PDisplayName.Size = UDim2.new(0, 200, 0, 17)
+  PDisplayName.Font = Enum.Font.SourceSans
+  PDisplayName.Text = "DisplayName:"
+  PDisplayName.TextColor3 = Color3.fromRGB(255, 255, 255)
+  PDisplayName.TextSize = 14
+  PDisplayName.TextXAlignment = Enum.TextXAlignment.Left
+
+  PAccountAge.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+  PAccountAge.BackgroundTransparency = 0.9
+  PAccountAge.BorderColor3 = Color3.fromRGB(255, 0, 0)
+  PAccountAge.Size = UDim2.new(0, 200, 0, 17)
+  PAccountAge.Font = Enum.Font.SourceSans
+  PAccountAge.Text = "AccountAge:"
+  PAccountAge.TextColor3 = Color3.fromRGB(255, 255, 255)
+  PAccountAge.TextSize = 14
+  PAccountAge.TextXAlignment = Enum.TextXAlignment.Left
+
+  PUserId.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+  PUserId.BackgroundTransparency = 0.9
+  PUserId.BorderColor3 = Color3.fromRGB(255, 0, 0)
+  PUserId.Size = UDim2.new(0, 200, 0, 17)
+  PUserId.Font = Enum.Font.SourceSans
+  PUserId.Text = "UserId:"
+  PUserId.TextColor3 = Color3.fromRGB(255, 255, 255)
+  PUserId.TextSize = 14
+  PUserId.TextXAlignment = Enum.TextXAlignment.Left
+
+  playerlink.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+  playerlink.BackgroundTransparency = 0.9
+  playerlink.BorderColor3 = Color3.fromRGB(255, 0, 0)
+  playerlink.Position = UDim2.new(0, 0, 0.479999989, 0)
+  playerlink.Size = UDim2.new(0, 200, 0, 17)
+  playerlink.AutoButtonColor = false
+  playerlink.Font = Enum.Font.SourceSans
+  playerlink.Text = "Copy Player Link"
+  playerlink.TextColor3 = Color3.fromRGB(255, 255, 255)
+  playerlink.TextSize = 14
+
+  Frame_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+  Frame_2.BackgroundTransparency = 1
+  Frame_2.Position = UDim2.new(0, 0, 0.600000024, 0)
+  Frame_2.Size = UDim2.new(0, 200, 0, 60)
+
+  ImageLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+  ImageLabel.BackgroundTransparency = 1
+  ImageLabel.BorderSizePixel = 0
+  ImageLabel.Position = UDim2.new(0, 0, -0.0166666675, 0)
+  ImageLabel.Size = UDim2.new(0, 61, 0, 61)
+  ImageLabel.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
+
+  THealth.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+  THealth.BackgroundTransparency = 0.9
+  THealth.BorderColor3 = Color3.fromRGB(27, 42, 53)
+  THealth.BorderSizePixel = 0
+  THealth.Position = UDim2.new(0.305000007, 0, -0.0166666675, 0)
+  THealth.Size = UDim2.new(0, 139, 0, 12)
+  THealth.Font = Enum.Font.SourceSans
+  THealth.Text = "Health/Hp:"
+  THealth.TextColor3 = Color3.fromRGB(255, 255, 255)
+  THealth.TextSize = 14
+  THealth.TextXAlignment = Enum.TextXAlignment.Left
+
+  TPosition.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+  TPosition.BackgroundTransparency = 0.9
+  TPosition.BorderColor3 = Color3.fromRGB(27, 42, 53)
+  TPosition.BorderSizePixel = 0
+  TPosition.Position = UDim2.new(0.305000007, 0, 0.800000012, 0)
+  TPosition.Size = UDim2.new(0, 139, 0, 12)
+  TPosition.Font = Enum.Font.SourceSans
+  TPosition.Text = "Studs:"
+  TPosition.TextColor3 = Color3.fromRGB(255, 255, 255)
+  TPosition.TextSize = 14
+  TPosition.TextXAlignment = Enum.TextXAlignment.Left
