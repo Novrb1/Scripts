@@ -250,13 +250,13 @@ end)
 
 local normgrav = workspace.Gravity
 AddCmd("gravity", "Gravity Changer", function(Args)
-    if Args[1] and tonumber(Args[1]) then
-        if Args[1] == "normal" then
-            workspace.Gravity = tonumber(Args[1])
-            notify("gravity", "changed gravity to " .. tonumber(Args[1]))
-        else
+    if Args[1] then
+        if string.lower(Args[1]) == "normal" then
             workspace.Gravity = normgrav
             notify("gravity", "changed gravity to normal")
+        else
+            workspace.Gravity = tonumber(Args[1])
+            notify("gravity", "changed gravity to " .. tonumber(Args[1]))
         end
     else
         notify("argument error", "need second argument")
