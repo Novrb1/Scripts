@@ -419,6 +419,10 @@ AddCmd("cl", "FE-Kills Player", function(Args)
             if Players:FindFirstChild(plr.Name) and LocalPlayer.Character and gRoot(LocalPlayer.Character) and plr.Character and gRoot(plr.Character) then
                 if tools(LocalPlayer) then
                 	if plr ~= nil then
+                	    if novoid then
+                	        novoid:Disconnect()
+                	        notify("anti-void", "successfully disabled novoid")
+                	    end
                 		local NormPos = gRoot(LocalPlayer.Character).CFrame
                 		if not fast then
                 			refresh()
@@ -446,6 +450,10 @@ AddCmd("cl", "FE-Kills Player", function(Args)
             if Players:FindFirstChild(plr.Name) and LocalPlayer.Character and gRoot(LocalPlayer.Character) and plr.Character and gRoot(plr.Character) then
                 if tools(LocalPlayer) then
                 	if plr ~= nil then
+                	    if novoid then
+                	        novoid:Disconnect()
+                	        notify("anti-void", "successfully disabled novoid")
+                	    end
                 		local NormPos = gRoot(LocalPlayer.Character).CFrame
                 		if not fast then
                 			refresh()
@@ -508,11 +516,7 @@ AddCmd("etools", "Equips All Tools From Backpack", function()
         if tools(LocalPlayer) then
             for _,z in next, LocalPlayer.Backpack:GetChildren() do
                 if z:IsA'Tool' then
-                    if LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
-                        LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):EquipTool(z)
-                    else
-                        z.Parent = LocalPlayer.Character 
-                    end
+                    z.Parent = LocalPlayer.Character 
                 end
             end
         else
