@@ -599,6 +599,29 @@ AddCmd("serverhop", "Server Hops (fast, small, large)", function(Args)
     end
 end)
 
+local novoid
+AddCmd("novoid", "Anti Void / Anti Claim", function()
+    novoid = RunService.Stepped:Connect(function()
+        if LocalPlayer and LocalPlayer.Character and gRoot(LocalPlayer.Character) then
+            if gRoot(LocalPlayer.Character).Position.Y <= workspace.FallenPartsDestroyHeight + 150 then
+                for _,z in next, workspace:GetDescendants() do
+                    if z:IsA'SpawnLocation' then
+                        gRoot(LocalPlayer.Character).CFrame = z.CFrame + Vector3.new(0,4,0)
+                    end
+                end
+            end
+        end
+    end)
+    notify("anti-void", "successfully enabled")
+end)
+
+AddCmd("unnovoid", "Stops Anti Void / Anti Claim", function()
+    if novoid then
+        novoid:Disconnect()
+        notify("anti-void", "successfully disabled")
+    end
+end)
+
 cmdBar.FocusLost:Connect(function()
     cmdBar:TweenPosition(UDim2.new(0, -400, 0.5, -10), 1, 0, 1, 1)
     CheckCmd(cmdBar.Text)
