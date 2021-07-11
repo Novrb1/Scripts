@@ -40,6 +40,9 @@ lp.CharacterAdded:Connect(function(model)
 end)
 rservice.Stepped:Connect(function()
     if lp.Character and lp.Character:FindFirstChildOfClass("Humanoid") then
+        if lp.Character:FindFirstChildOfClass("Humanoid").Sit == true then
+            lp.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping")
+        end
         for _,z in next, lp.Character:GetChildren() do
             if z:IsA'Part' or z:IsA'MeshPart' then
                 z.CanCollide = false
