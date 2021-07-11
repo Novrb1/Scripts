@@ -41,8 +41,8 @@ local cmdlistLayout = Instance.new("UIListLayout", cmdlistframe)
 BackFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 BackFrame.BackgroundTransparency = 0.350
 BackFrame.BorderSizePixel = 0
-BackFrame.Position = UDim2.new(0.5, -100, 0.5, -125)
-BackFrame.Size = UDim2.new(0, 200, 0, 250)
+BackFrame.Position = UDim2.new(0.5, -112.5, 0.5, -125)
+BackFrame.Size = UDim2.new(0, 225, 0, 250)
 BackFrame.Active = true
 BackFrame.Draggable = true
 
@@ -50,7 +50,7 @@ cmdlistframe.Active = true
 cmdlistframe.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 cmdlistframe.BackgroundTransparency = 1.000
 cmdlistframe.BorderSizePixel = 0
-cmdlistframe.Size = UDim2.new(0, 200, 0, 250)
+cmdlistframe.Size = UDim2.new(0, 225, 0, 250)
 cmdlistframe.CanvasSize = UDim2.new(0, 0, 1, 0)
 cmdlistframe.ScrollBarThickness = 0
 cmdlistframe.AutomaticCanvasSize = Enum.AutomaticSize.Y
@@ -61,11 +61,11 @@ function addCmdtolist(cmdnames, functions)
     thing.Parent = cmdlistframe
     thing.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     thing.BackgroundTransparency = 1.000
-    thing.Size = UDim2.new(0, 200, 0, 12)
+    thing.Size = UDim2.new(0, 225, 0, 15)
     thing.Font = Enum.Font.SourceSans
     thing.Text = cmdnames .. " - " .. functions
     thing.TextColor3 = Color3.fromRGB(255, 255, 255)
-    thing.TextSize = 13.000 
+    thing.TextSize = 14.3
 end
 
 local function AddCmd(CmdName, Desc, Func)
@@ -231,7 +231,7 @@ AddCmd("ws", "WalkSpeed Changer", function(Args)
             notify("character error", "need character")
         end
     else
-        notify("argument error", "need second argument")
+        notify("argument error", "need second argument num")
     end
 end)
 
@@ -244,7 +244,7 @@ AddCmd("jp", "JumpPower Changer", function(Args)
             notify("character error", "need character")
         end
     else
-        notify("argument error", "need second argument")
+        notify("argument error", "need second argument num")
     end
 end)
 
@@ -259,7 +259,7 @@ AddCmd("gravity", "Gravity Changer", function(Args)
             notify("gravity", "changed gravity to " .. tonumber(Args[1]))
         end
     else
-        notify("argument error", "need second argument")
+        notify("argument error", "need second argument string/num")
     end
 end)
 
@@ -314,7 +314,7 @@ AddCmd("fov", "FieldOfView Changer", function(Args)
             notify("camera error", "no instance: Camera")
         end
     else
-        notify("argument error", "need second argument")
+        notify("argument error", "need second argument num")
     end
 end)
 
@@ -470,7 +470,7 @@ AddCmd("cl", "FE-Kills Player", function(Args)
             end
         end
     else
-        notify("argument error", "need second argument")
+        notify("argument error", "need second argument string")
     end
 end)
 
@@ -503,7 +503,7 @@ AddCmd("unantifling", "Re-Enables Everyone's Collision", function()
     end
 end)
 
-AddCmd("etools", "Equips All Tools From Backpack", function(Args)
+AddCmd("etools", "Equips All Tools From Backpack", function()
     if LocalPlayer.Character then
         if tools(LocalPlayer) then
             for _,z in next, LocalPlayer.Backpack:GetChildren() do
@@ -520,6 +520,82 @@ AddCmd("etools", "Equips All Tools From Backpack", function(Args)
         end
     else
         notify("character error", "either player or you have no character")
+    end
+end)
+local bpsmute
+local bpstime = 1
+AddCmd("bpsmute", "Backpack Mutes Server", function()
+    bpsmute = spawn(function()
+        while wait(bpstime) do
+            for _,z in next, Players:GetPlayers() do
+                if z ~= LocalPlayer then
+                    for _,v in next, z.Backpack:GetDescendants() do
+                        if v:IsA'Sound' then
+                            v.TimePosition = nil
+                        end
+                    end
+                end
+            end
+        end
+    end)
+    notify("backpack-mute", "successfully backpack muted")
+end)
+
+AddCmd("bpstime", "Changes Backpack-Mute Time", function(Args)
+    if Args[1] and tonumber(Args[1]) then
+        if tonumber(Args[1]) <= 0.79 then 
+            bpstime = tonumber(Args[1])
+            notify("warning", "dont put it under 0.8")
+        else
+            bpstime = tonumber(Args[1])
+            notify("bpstime", "successfully changed time to " .. tonumber(Args[1]))
+        end
+    else
+        notify("argument error", "need second argument num")
+    end
+end)
+
+AddCmd("unbpsmute", "UnBackpack Mutes Server", function()
+    if bpsmute then
+        bpsmute:Disconnect()
+        notify("backpack-mute", "successfully stopped backpack muted")
+    end
+end)
+
+AddCmd("serverhop", "Server Hops (fast, small, large)", function(Args)
+    if Args[1] and Args[1] ~= "" and Args[1] ~= " " then
+        local GUIDs = {}
+        local maxPlayers = 0
+        local pagesToSearch = 100
+        local Http =
+            game:GetService("HttpService"):JSONDecode(
+            game:HttpGet(
+                "https://games.roblox.com/v1/games/" ..
+                    game.PlaceId .. "/servers/Public?sortOrder=Asc&limit=100&cursor="
+            )
+        )
+        for i = 1, pagesToSearch do
+            for i, v in next, Http.data do
+                if v.playing ~= v.maxPlayers and v.id ~= game.JobId then
+                    maxPlayers = v.maxPlayers
+                    table.insert(GUIDs, {id = v.id, users = v.playing})
+                end
+            end
+            if Http.nextPageCursor ~= null then
+                Http = game:GetService("HttpService"):JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?sortOrder=Asc&limit=100&cursor=" .. Http.nextPageCursor))
+            else
+                break
+            end
+        end
+        if Args[1] == "fast" then
+            game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, GUIDs[math.random(1,#GUIDs)].id, LocalPlayer)
+        elseif Args[1] == "small" then
+            game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, GUIDs[#GUIDs].id, LocalPlayer)
+        elseif Args[1] == "large" then
+            game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, GUIDs[1].id, LocalPlayer)
+        end
+    else
+        notify("argument error", "need second argument string")
     end
 end)
 
