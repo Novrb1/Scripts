@@ -108,7 +108,7 @@ local Http =
 )
 for i = 1, pagesToSearch do
     for i, v in next, Http.data do
-        if v.playing ~= v.maxPlayers and v.id ~= game.JobId then
+        if v.playing > v.maxPlayers - 1 and v.id ~= game.JobId then
             maxPlayers = v.maxPlayers
             table.insert(GUIDs, {id = v.id, users = v.playing})
         end
