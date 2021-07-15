@@ -47,6 +47,21 @@ local mouse = lp:GetMouse()
 local uis = game:GetService("UserInputService")
 local rservice = game:GetService("RunService")
 local cam = workspace.CurrentCamera
+
+local sg = Instance.new("ScreenGui", game.CoreGui)
+game.Debris:AddItem(sg, 8)
+local fr = Instance.new("Frame", sg)
+fr.Size = UDim2.new(1,0,1,0)
+fr.BackgroundColor3 = Color3.fromRGB(0,0,0)
+fr.BackgroundTransparency = 0.2
+local tlabel = Instance.new("TextLabel", fr)
+tlabel.Size = UDim2.new(1,0,1,0)
+tlabel.BackgroundTransparency = 1
+tlabel.TextScaled = true
+tlabel.TextWrapped = true
+tlabel.TextColor3 = Color3.fromRGB(255,255,255)
+tlabel.Text = "Please Dont Use This Script Anymore It Is Patched"
+
 local NormalGravity = game.Workspace.Gravity
 
 local Raw = getrawmetatable(game)
